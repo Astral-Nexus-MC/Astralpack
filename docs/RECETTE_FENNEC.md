@@ -60,7 +60,8 @@ Suivi du plan de recette (cahier des charges §12). Dernière mise à jour : 202
 - [ ] **Texture haute résolution (×4)** : `fennec.png` fait 256×640 alors que le modèle déclare un espace UV de 64×160 (voir `geo/fennec.geo.json`). Vérifier que la robe, les yeux, les dents et l'armure s'affichent aux bons endroits en jeu. En cas de décalage, revenir au commit `c8cd5c1` (texture 64×160) ou me le signaler.
 - [ ] Deux fines couches de poils entourent le corps, la tête, les pattes et la base de la queue : silhouette légèrement duveteuse, robe et taches toujours visibles dessous.
 - [ ] Les yeux et le museau restent dégagés (pas de poils devant le visage).
-- [ ] Sous une pièce d'armure, les poils de la zone couverte disparaissent (casque, plastron, protège-pattes) : rien ne dépasse à travers l'armure.
+- [ ] L'armure (casque, plastron, protège-pattes, anneau de queue) passe au-dessus des poils : aucun poil ne traverse la plaque, et les poils restent visibles autour et sous les pièces.
+- [ ] La tête est moins fournie que le corps (poils plus clairsemés), le visage reste dégagé.
 - [ ] Aucun scintillement (z-fighting) ni bord transparent anormal, de près comme de loin.
 - [ ] Pas de baisse de FPS sensible avec 20 Fennecs visibles.
 
