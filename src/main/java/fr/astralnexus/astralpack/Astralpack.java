@@ -1,5 +1,6 @@
 package fr.astralnexus.astralpack;
 
+import fr.astralnexus.astralpack.registry.ModBlocks;
 import fr.astralnexus.astralpack.registry.ModCreativeTabs;
 import fr.astralnexus.astralpack.registry.ModEntities;
 import fr.astralnexus.astralpack.registry.ModItems;
@@ -15,6 +16,7 @@ public class Astralpack {
     public Astralpack() {
         IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
 
+        ModBlocks.BLOCKS.register(modBus);
         ModItems.ITEMS.register(modBus);
         ModEntities.ENTITY_TYPES.register(modBus);
         ModSounds.SOUNDS.register(modBus);

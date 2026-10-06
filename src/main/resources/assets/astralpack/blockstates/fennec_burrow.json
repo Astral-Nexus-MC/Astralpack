@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "astralpack:block/fennec_burrow"
+    },
+    "facing=east": {
+      "model": "astralpack:block/fennec_burrow",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "astralpack:block/fennec_burrow",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "astralpack:block/fennec_burrow",
+      "y": 270
+    }
+  }
+}

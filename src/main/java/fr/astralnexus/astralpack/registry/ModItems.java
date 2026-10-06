@@ -4,6 +4,7 @@ import fr.astralnexus.astralpack.Astralpack;
 import fr.astralnexus.astralpack.item.FennecArmorItem;
 import fr.astralnexus.astralpack.item.FennecArmorSlot;
 import fr.astralnexus.astralpack.item.FennecArmorTier;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.common.ForgeSpawnEggItem;
 import net.minecraftforge.registries.DeferredRegister;
@@ -17,6 +18,9 @@ public class ModItems {
     public static final RegistryObject<Item> FENNEC_SPAWN_EGG =
             ITEMS.register("fennec_spawn_egg",
                     () -> new ForgeSpawnEggItem(ModEntities.FENNEC, 0xE8C58A, 0x7A5A3A, new Item.Properties()));
+
+    public static final RegistryObject<Item> FENNEC_BURROW =
+            ITEMS.register("fennec_burrow", () -> new BlockItem(ModBlocks.FENNEC_BURROW.get(), new Item.Properties()));
 
     static {
         for (FennecArmorTier tier : FennecArmorTier.values()) {

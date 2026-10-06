@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "SSS",
+    "SCS",
+    "DDD"
+  ],
+  "key": {
+    "S": {
+      "tag": "minecraft:sand"
+    },
+    "C": {
+      "item": "minecraft:chicken"
+    },
+    "D": {
+      "item": "minecraft:coarse_dirt"
+    }
+  },
+  "result": {
+    "item": "astralpack:fennec_burrow",
+    "count": 1
+  }
+}

@@ -1,0 +1,170 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "#sand",
+    "sand": "astralpack:block/fennec_burrow",
+    "floor": "astralpack:block/fennec_burrow_floor"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        2,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#sand"
+        },
+        "east": {
+          "texture": "#sand"
+        },
+        "south": {
+          "texture": "#sand"
+        },
+        "west": {
+          "texture": "#sand"
+        },
+        "down": {
+          "texture": "#sand"
+        },
+        "up": {
+          "texture": "#floor"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        2,
+        13
+      ],
+      "to": [
+        16,
+        9,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#sand"
+        },
+        "east": {
+          "texture": "#sand"
+        },
+        "south": {
+          "texture": "#sand"
+        },
+        "west": {
+          "texture": "#sand"
+        },
+        "down": {
+          "texture": "#sand"
+        },
+        "up": {
+          "texture": "#sand"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        2,
+        0
+      ],
+      "to": [
+        2,
+        6,
+        13
+      ],
+      "faces": {
+        "north": {
+          "texture": "#sand"
+        },
+        "east": {
+          "texture": "#sand"
+        },
+        "south": {
+          "texture": "#sand"
+        },
+        "west": {
+          "texture": "#sand"
+        },
+        "down": {
+          "texture": "#sand"
+        },
+        "up": {
+          "texture": "#sand"
+        }
+      }
+    },
+    {
+      "from": [
+        14,
+        2,
+        0
+      ],
+      "to": [
+        16,
+        6,
+        13
+      ],
+      "faces": {
+        "north": {
+          "texture": "#sand"
+        },
+        "east": {
+          "texture": "#sand"
+        },
+        "south": {
+          "texture": "#sand"
+        },
+        "west": {
+          "texture": "#sand"
+        },
+        "down": {
+          "texture": "#sand"
+        },
+        "up": {
+          "texture": "#sand"
+        }
+      }
+    },
+    {
+      "from": [
+        2,
+        2,
+        0
+      ],
+      "to": [
+        14,
+        3,
+        2
+      ],
+      "faces": {
+        "north": {
+          "texture": "#sand"
+        },
+        "east": {
+          "texture": "#sand"
+        },
+        "south": {
+          "texture": "#sand"
+        },
+        "west": {
+          "texture": "#sand"
+        },
+        "down": {
+          "texture": "#sand"
+        },
+        "up": {
+          "texture": "#sand"
+        }
+      }
+    }
+  ]
+}

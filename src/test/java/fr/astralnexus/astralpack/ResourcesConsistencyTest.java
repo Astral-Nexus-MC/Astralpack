@@ -62,4 +62,20 @@ class ResourcesConsistencyTest {
         assertTrue(read(dir.resolve("fennec_spawns.json")).contains("#minecraft:is_badlands"));
         assertTrue(read(dir.resolve("fennec_spawns_desert.json")).contains("minecraft:desert"));
     }
+
+    @Test
+    void burrowBlockAssetsArePresent() throws IOException {
+        for (String f : List.of("blockstates/fennec_burrow.json", "models/block/fennec_burrow.json",
+                "models/item/fennec_burrow.json", "textures/block/fennec_burrow.png",
+                "textures/block/fennec_burrow_floor.png")) {
+            assertTrue(Files.exists(RES.resolve(f)), "ressource manquante : " + f);
+        }
+        Path data = Path.of("src/main/resources/data");
+        assertTrue(Files.exists(data.resolve("astralpack/recipes/fennec_burrow.json")));
+        assertTrue(Files.exists(data.resolve("astralpack/loot_tables/blocks/fennec_burrow.json")));
+        for (String lang : List.of("en_us", "fr_fr")) {
+            assertTrue(read(RES.resolve("lang/" + lang + ".json")).contains("\"block.astralpack.fennec_burrow\""),
+                    "nom du terrier manquant (" + lang + ")");
+        }
+    }
 }

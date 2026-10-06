@@ -41,13 +41,16 @@ Suivi du plan de recette (cahier des charges §12). Dernière mise à jour : 202
 - [ ] La nuit : dégâts +25 % et attaque plus rapide (11 ticks). Le jour : dégâts −25 % et attaque plus lente (19 ticks).
 - [ ] Dans une dimension sans cycle jour/nuit (Nether, End), pas de bonus ni de malus.
 
-### Terrier (Fennec sauvage, de jour)
-- [ ] Un Fennec sauvage creuse une petite rampe de 3 blocs dans le sable ou la terre (animation `dig`, particules et bruit de bloc), y entre et s'y endort.
-- [ ] Le plafond sous du sable devient du grès (sinon le sable tomberait dans le tunnel).
-- [ ] Les jours suivants, il retourne dans le même terrier ; la nuit il en ressort.
-- [ ] Il ne creuse jamais près de l'eau ou de la lave, ni dans la pierre, et rien si `mobGriefing` est désactivé (il dort alors sur place).
-- [ ] Le terrier est conservé après déconnexion et redémarrage.
-- [ ] Un Fennec apprivoisé ne creuse pas.
+### Terrier (bloc fabricable)
+Le creusage automatique a été abandonné (le Fennec n'arrivait pas à creuser) : le terrier est maintenant un **bloc** posé par le joueur.
+- [ ] Recette : 3 sable (ou tout bloc de la balise sable) en haut, 1 poulet cru au centre entre 2 sables, 3 terre stérile (coarse dirt) en bas → `Terrier de fennec` (aussi dans l'onglet créatif ; `/give @s astralpack:fennec_burrow`).
+- [ ] Le bloc se pose, son entrée regarde le joueur, il se casse plus vite à la pelle et se récupère (table de butin).
+- [ ] Le Fennec peut y entrer : cuvette de sable bordée de murets, ouverte à l'avant, sans le bloquer ni le coincer.
+- [ ] De jour, un Fennec **sauvage** à moins de 8 blocs va se coucher dans le terrier (animation `sleep`) ; sans terrier à portée il dort sur place.
+- [ ] De jour, un Fennec **apprivoisé** sous l'ordre « errer », à moins de 8 blocs, va se coucher dans le terrier. Sous « suivre » il suit son propriétaire ; sous « rester » il dort sur place.
+- [ ] Un seul Fennec par terrier : un second en choisit un autre ou dort sur place.
+- [ ] La nuit il se réveille et sort ; un joueur debout à moins de 3 blocs réveille un sauvage (pas un apprivoisé).
+- [ ] Aucun effet sur le terrain : plus aucun creusage, quel que soit `mobGriefing`.
 
 ### Objets dans la gueule
 - [ ] Le Fennec ramasse un objet au sol (un seul à la fois) et l'affiche dans la gueule (position à ajuster si besoin dans `FennecMouthItemLayer`).
