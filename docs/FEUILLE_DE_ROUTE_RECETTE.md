@@ -48,7 +48,7 @@ Rejouer les blocs de [RECETTE_FENNEC.md](RECETTE_FENNEC.md). État au 2026-10-06
 | Bébé | Validé | recette 2026-10-06 |
 | Objets dans la gueule (comportement) | Validé | ramassage, lâcher, mort, persistance, interdits |
 | Objets dans la gueule (rendu) | Validé | mâchoire ouverte, objet devant les dents |
-| Ordres (roue Fordix : Suis-moi / Reste ici) | **À revalider** | remplace le clic droit et l'ordre « errer » (0.2.1) |
+| Ordres (roue Fordix : Suis-moi / Reste ici) | Validé | remplace le clic droit et l'ordre « errer » (0.2.1), validé en production |
 | Apparition naturelle | Validé | non-régression 2026-10-06 |
 
 Règle : une case ne se coche que si le test a été fait **sur la version candidate**. Une modification du comportement concerné décoche la case correspondante.
@@ -143,4 +143,4 @@ Anomalies connues :
 
 ## Statut du Fennec
 
-**Fennec v1 validé en production : mod Astralpack 0.2.0 (2026-10-07).** Toutes les portes 0 à 5 sont cochées pour cette version ; aucune case de [RECETTE_FENNEC.md](RECETTE_FENNEC.md) n'est ouverte. Les versions suivantes repartent de cette feuille : toute modification du Fennec rejoue les portes indiquées dans la matrice ci-dessus.
+**Fennec v1 validé en production : mod Astralpack 0.2.0 (2026-10-07), ordres par la roue Fordix en 0.2.1 (validé en production).** Toutes les portes 0 à 5 sont cochées pour cette version ; aucune case de [RECETTE_FENNEC.md](RECETTE_FENNEC.md) n'est ouverte. Les versions suivantes repartent de cette feuille : toute modification du Fennec rejoue les portes indiquées dans la matrice ci-dessus.
