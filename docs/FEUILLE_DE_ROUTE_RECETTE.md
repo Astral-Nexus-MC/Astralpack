@@ -143,6 +143,5 @@ Anomalies connues :
 
 ## Prochaines étapes pour le Fennec (v1 de production)
 
-1. ~~Rendu de l'objet en gueule~~ et ~~porte 2~~ : validés le 2026-10-06.
-2. Dérouler la **porte 3** avec le jar candidat sur un serveur de test.
-3. Accord du responsable → publication (porte 4) → contrôle (porte 5).
+1. ~~Rendu de l'objet en gueule~~, ~~porte 2~~ et ~~porte 3~~ : validés le 2026-10-06.
+2. Accord du responsable donné → publication en 0.1.5 (porte 4) → contrôle (porte 5).
