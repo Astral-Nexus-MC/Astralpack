@@ -6,6 +6,12 @@ import fr.astralnexus.astralpack.item.FennecArmorTier;
 import fr.astralnexus.astralpack.registry.ModEntities;
 import fr.astralnexus.astralpack.registry.ModSounds;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.particles.BlockParticleOption;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.level.levelgen.Heightmap;
+import fr.astralnexus.astralpack.registry.ModBlocks;
 import fr.astralnexus.astralpack.block.FennecBurrowBlock;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -71,6 +77,7 @@ public class FennecEntity extends TamableAnimal implements GeoEntity {
     private static final RawAnimation ATTACK = RawAnimation.begin().thenPlayAndHold("animation.fennec.attack");
     private static final RawAnimation SHAKE = RawAnimation.begin().then("animation.fennec.shake", Animation.LoopType.PLAY_ONCE);
     private static final RawAnimation BITE = RawAnimation.begin().then("animation.fennec.bite", Animation.LoopType.PLAY_ONCE);
+    private static final RawAnimation DIG = RawAnimation.begin().thenLoop("animation.fennec.dig");
     private static final RawAnimation SLEEP = RawAnimation.begin().thenLoop("animation.fennec.sleep");
     private static final RawAnimation BELLY_SCRATCH = RawAnimation.begin().thenLoop("animation.fennec.belly_scratch");
 
@@ -101,6 +108,11 @@ public class FennecEntity extends TamableAnimal implements GeoEntity {
     private static final int BURROW_RANGE = 8;
     private static final int BURROW_RANGE_Y = 3;
 
+    private static final int BURROW_BUILD_TICKS = 40;
+
+    private static final EntityDataAccessor<Boolean> BUILDING =
+            SynchedEntityData.defineId(FennecEntity.class, EntityDataSerializers.BOOLEAN);
+
     private static final EntityDataAccessor<Boolean> DOZING =
             SynchedEntityData.defineId(FennecEntity.class, EntityDataSerializers.BOOLEAN);
 
@@ -121,6 +133,7 @@ public class FennecEntity extends TamableAnimal implements GeoEntity {
     private int pickupCooldown;
     private BlockPos burrowCache;
     private int burrowScanCooldown;
+    private int burrowBuildFailures;
     private boolean wasWet;
     private int scratchTicks;
 
@@ -142,6 +155,7 @@ public class FennecEntity extends TamableAnimal implements GeoEntity {
     protected void registerGoals() {
         this.goalSelector.addGoal(1, new FloatGoal(this));
         this.goalSelector.addGoal(2, new ScratchGoal());
+        this.goalSelector.addGoal(2, new FennecBuildBurrowGoal());
         this.goalSelector.addGoal(2, new FennecRestInBurrowGoal());
         this.goalSelector.addGoal(2, new FennecSleepGoal());
         this.goalSelector.addGoal(3, new SitWhenOrderedToGoal(this));
@@ -166,6 +180,7 @@ public class FennecEntity extends TamableAnimal implements GeoEntity {
         super.defineSynchedData();
         this.entityData.define(SCRATCHING, false);
         this.entityData.define(DOZING, false);
+        this.entityData.define(BUILDING, false);
         for (EntityDataAccessor<ItemStack> accessor : ARMOR) {
             this.entityData.define(accessor, ItemStack.EMPTY);
         }
@@ -307,6 +322,7 @@ public class FennecEntity extends TamableAnimal implements GeoEntity {
             return false;
         }
         this.entityData.set(DOZING, false);
+        this.entityData.set(BUILDING, false);
         if (this.order == FennecOrder.STAY) {
             this.setOrder(FennecOrder.FOLLOW);
         }
@@ -493,6 +509,10 @@ public class FennecEntity extends TamableAnimal implements GeoEntity {
                 && Math.abs(this.getY() - b.getY()) < 0.7D;
     }
 
+    public boolean isBuilding() {
+        return this.entityData.get(BUILDING);
+    }
+
     public boolean isDozing() {
         return this.entityData.get(DOZING);
     }
@@ -504,6 +524,7 @@ public class FennecEntity extends TamableAnimal implements GeoEntity {
             return;
         }
         this.timePhase = phase;
+        this.burrowBuildFailures = 0;
         AttributeInstance damage = this.getAttribute(Attributes.ATTACK_DAMAGE);
         if (damage == null) {
             return;
@@ -521,7 +542,7 @@ public class FennecEntity extends TamableAnimal implements GeoEntity {
                 : this.timePhase == -1 ? DAY_ATTACK_INTERVAL : ATTACK_INTERVAL;
     }
 
-    /** Un sauvage dort le jour (de préférence dans un terrier posé) ; un apprivoisé sous « rester », ou en terrier sous « errer ». */
+    /** Un sauvage dort le jour dans un terrier (qu'il construit au besoin) ; un apprivoisé sous « rester », ou en terrier sous « errer ». */
     private boolean canNap() {
         if (!this.level().isDay() || !this.onGround() || this.isInWaterOrBubble()) {
             return false;
@@ -537,8 +558,9 @@ public class FennecEntity extends TamableAnimal implements GeoEntity {
             }
             return this.order == FennecOrder.WANDER && this.isAtBurrow();
         }
-        // Sauvage : s'il y a un terrier à portée, il va d'abord s'y coucher ; sinon il dort sur place.
-        if (this.burrowCache != null && !this.isAtBurrow()) {
+        // Sauvage : il va d'abord se coucher dans un terrier à portée, ou en construire un ; il dort sur place
+        // seulement si c'est impossible (pas d'emplacement, ou mobGriefing désactivé).
+        if (!this.isAtBurrow() && (this.burrowCache != null || this.burrowBuildFailures < 3)) {
             return false;
         }
         return this.level().getEntitiesOfClass(Player.class, this.getBoundingBox().inflate(3.0D),
@@ -653,6 +675,9 @@ public class FennecEntity extends TamableAnimal implements GeoEntity {
         if (this.isScratching()) {
             return state.setAndContinue(BELLY_SCRATCH);
         }
+        if (this.isBuilding()) {
+            return state.setAndContinue(DIG);
+        }
         if (this.isDozing()) {
             return state.setAndContinue(SLEEP);
         }
@@ -682,6 +707,154 @@ public class FennecEntity extends TamableAnimal implements GeoEntity {
         @Override
         protected int getAttackInterval() {
             return this.adjustedTickDelay(FennecEntity.this.currentAttackInterval());
+        }
+    }
+
+    /**
+     * Le jour, un Fennec sauvage sans terrier à proximité en construit un : il choisit un emplacement dégagé à moins
+     * de 6 blocs, s'y rend, gratte le sol (animation dig, particules, bruits de sable) puis fait apparaître le bloc
+     * « terrier » orienté vers lui. Il s'y couche ensuite (FennecRestInBurrowGoal). Respecte mobGriefing.
+     */
+    private class FennecBuildBurrowGoal extends Goal {
+        private BlockPos site;
+        private Direction facing = Direction.NORTH;
+        private boolean working;
+        private int ticks;
+        private int workTicks;
+
+        FennecBuildBurrowGoal() {
+            this.setFlags(java.util.EnumSet.of(Flag.MOVE, Flag.LOOK, Flag.JUMP));
+        }
+
+        private boolean mayBuild() {
+            FennecEntity f = FennecEntity.this;
+            return !f.isTame() && !f.isBaby() && f.level().isDay() && f.onGround() && !f.isDozing()
+                    && !f.isInWaterOrBubble() && f.getTarget() == null && f.getLastHurtByMob() == null
+                    && !f.isAggressive();
+        }
+
+        @Override
+        public boolean canUse() {
+            FennecEntity f = FennecEntity.this;
+            if (f.level().isClientSide || !this.mayBuild() || f.getRandom().nextInt(60) != 0
+                    || f.nearestBurrow() != null) {
+                return false;
+            }
+            if (!ForgeEventFactory.getMobGriefingEvent(f.level(), f)) {
+                f.burrowBuildFailures = 3;
+                return false;
+            }
+            if (this.planSite()) {
+                return true;
+            }
+            f.burrowBuildFailures++;
+            return false;
+        }
+
+        private boolean planSite() {
+            FennecEntity f = FennecEntity.this;
+            Level level = f.level();
+            for (int attempt = 0; attempt < 10; attempt++) {
+                BlockPos around = f.blockPosition().offset(f.getRandom().nextInt(13) - 6, 0, f.getRandom().nextInt(13) - 6);
+                if (!level.isLoaded(around)) {
+                    continue;
+                }
+                BlockPos pos = level.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, around);
+                Direction dir = Direction.Plane.HORIZONTAL.getRandomDirection(f.getRandom());
+                if (!this.isValid(level, pos, dir)) {
+                    continue;
+                }
+                BlockPos front = pos.relative(dir);
+                if (f.getNavigation().createPath(front, 0) != null) {
+                    this.site = pos;
+                    this.facing = dir;
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private boolean isValid(Level level, BlockPos pos, Direction dir) {
+            if (!level.getBlockState(pos).isAir() || !level.getBlockState(pos.above()).isAir()) {
+                return false;
+            }
+            BlockState below = level.getBlockState(pos.below());
+            if (!below.isFaceSturdy(level, pos.below(), Direction.UP) || !below.getFluidState().isEmpty()
+                    || below.getBlock() instanceof FennecBurrowBlock) {
+                return false;
+            }
+            BlockPos front = pos.relative(dir);
+            return level.getBlockState(front).isAir() && level.getBlockState(front.above()).isAir()
+                    && level.getBlockState(front.below()).isFaceSturdy(level, front.below(), Direction.UP);
+        }
+
+        @Override
+        public boolean canContinueToUse() {
+            return this.site != null && this.ticks < 500 && this.mayBuild();
+        }
+
+        @Override
+        public void start() {
+            this.ticks = 0;
+            this.workTicks = 0;
+            this.working = false;
+            this.walkToFront();
+        }
+
+        private void walkToFront() {
+            BlockPos front = this.site.relative(this.facing);
+            FennecEntity.this.getNavigation().moveTo(front.getX() + 0.5D, front.getY(), front.getZ() + 0.5D, 1.0D);
+        }
+
+        @Override
+        public void tick() {
+            FennecEntity f = FennecEntity.this;
+            Level level = f.level();
+            this.ticks++;
+            if (!this.working) {
+                BlockPos front = this.site.relative(this.facing);
+                if (f.distanceToSqr(front.getX() + 0.5D, f.getY(), front.getZ() + 0.5D) < 1.5D) {
+                    this.working = true;
+                    f.getNavigation().stop();
+                } else if (f.getNavigation().isDone() && this.ticks > 20) {
+                    this.site = null;
+                    f.burrowBuildFailures++;
+                } else if (this.ticks % 20 == 0) {
+                    this.walkToFront();
+                }
+                return;
+            }
+            f.entityData.set(BUILDING, true);
+            f.getNavigation().stop();
+            f.getLookControl().setLookAt(Vec3.atCenterOf(this.site));
+            this.workTicks++;
+            if (this.workTicks % 6 == 0 && level instanceof ServerLevel server) {
+                BlockState ground = level.getBlockState(this.site.below());
+                Vec3 at = Vec3.atCenterOf(this.site);
+                server.sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, ground),
+                        at.x, at.y - 0.3D, at.z, 6, 0.2D, 0.1D, 0.2D, 0.05D);
+                level.playSound(null, this.site, ground.getSoundType().getHitSound(), SoundSource.BLOCKS, 0.5F, 1.0F);
+            }
+            if (this.workTicks >= BURROW_BUILD_TICKS) {
+                BlockState burrow = ModBlocks.FENNEC_BURROW.get().defaultBlockState()
+                        .setValue(FennecBurrowBlock.FACING, this.facing);
+                if (level.getBlockState(this.site).isAir()) {
+                    level.setBlock(this.site, burrow, 3);
+                    level.playSound(null, this.site, burrow.getSoundType().getPlaceSound(), SoundSource.BLOCKS, 1.0F, 0.9F);
+                    f.burrowCache = this.site;
+                    f.burrowScanCooldown = 100;
+                } else {
+                    f.burrowBuildFailures++;
+                }
+                this.site = null;
+            }
+        }
+
+        @Override
+        public void stop() {
+            FennecEntity.this.entityData.set(BUILDING, false);
+            FennecEntity.this.getNavigation().stop();
+            this.site = null;
         }
     }
 
@@ -760,7 +933,7 @@ public class FennecEntity extends TamableAnimal implements GeoEntity {
             }
             if (this.entering) {
                 f.getNavigation().stop();
-                f.getMoveControl().setWantedPosition(this.target.getX() + 0.5D, this.target.getY() + 0.125D,
+                f.getMoveControl().setWantedPosition(this.target.getX() + 0.5D, this.target.getY() + 0.07D,
                         this.target.getZ() + 0.5D, 0.8D);
             }
         }

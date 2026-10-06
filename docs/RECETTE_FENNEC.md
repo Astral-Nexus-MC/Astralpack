@@ -41,16 +41,17 @@ Suivi du plan de recette (cahier des charges §12). Dernière mise à jour : 202
 - [ ] La nuit : dégâts +25 % et attaque plus rapide (11 ticks). Le jour : dégâts −25 % et attaque plus lente (19 ticks).
 - [ ] Dans une dimension sans cycle jour/nuit (Nether, End), pas de bonus ni de malus.
 
-### Terrier (bloc fabricable)
-Le creusage automatique a été abandonné (le Fennec n'arrivait pas à creuser) : le terrier est maintenant un **bloc** posé par le joueur.
-- [ ] Recette : 3 sable (ou tout bloc de la balise sable) en haut, 1 poulet cru au centre entre 2 sables, 3 terre stérile (coarse dirt) en bas → `Terrier de fennec` (aussi dans l'onglet créatif ; `/give @s astralpack:fennec_burrow`).
-- [ ] Le bloc se pose, son entrée regarde le joueur, il se casse plus vite à la pelle et se récupère (table de butin).
-- [ ] Le Fennec peut y entrer : cuvette de sable bordée de murets, ouverte à l'avant, sans le bloquer ni le coincer.
-- [ ] De jour, un Fennec **sauvage** à moins de 8 blocs va se coucher dans le terrier (animation `sleep`) ; sans terrier à portée il dort sur place.
-- [ ] De jour, un Fennec **apprivoisé** sous l'ordre « errer », à moins de 8 blocs, va se coucher dans le terrier. Sous « suivre » il suit son propriétaire ; sous « rester » il dort sur place.
-- [ ] Un seul Fennec par terrier : un second en choisit un autre ou dort sur place.
+### Terrier (bloc en forme de dôme)
+Le terrier est un **bloc** : abri de sable en dôme (intérieur 0,75 × 0,75 bloc), entrée à l'avant. Un Fennec **sauvage** le construit lui-même ; pour un Fennec **apprivoisé**, le joueur le fabrique.
+- [ ] Recette : sable (3) en haut, sable à gauche et à droite avec un poulet cru au centre, terre stérile (3) en bas → `Terrier de fennec` (onglet créatif ; `/give @s astralpack:fennec_burrow`).
+- [ ] Le bloc se pose (l'entrée regarde le joueur), se casse plus vite à la pelle et se récupère.
+- [ ] Le Fennec **entre** dans le bloc et s'y couche sans rester coincé (marge de hauteur faible : 0,75 pour 0,7). Sinon, élargir l'entrée ou relever le toit.
+- [ ] **Sauvage, de jour**, sans terrier à moins de 8 blocs : il choisit un emplacement dégagé à moins de 6 blocs, y gratte le sol (animation `dig`, particules, bruit de sable) puis fait apparaître le terrier, s'y couche (animation `sleep`).
+- [ ] Un sauvage réutilise un terrier existant à portée (le sien, ou un terrier fabriqué par un joueur) au lieu d'en construire un autre ; un seul Fennec par terrier.
+- [ ] Avec `/gamerule mobGriefing false`, il ne construit rien et dort sur place.
+- [ ] **Apprivoisé, de jour**, sous l'ordre « errer », à moins de 8 blocs d'un terrier : il s'y couche. Sous « suivre » il suit son propriétaire ; sous « rester » il dort sur place.
 - [ ] La nuit il se réveille et sort ; un joueur debout à moins de 3 blocs réveille un sauvage (pas un apprivoisé).
-- [ ] Aucun effet sur le terrain : plus aucun creusage, quel que soit `mobGriefing`.
+- [ ] Les terriers construits restent dans le monde après déconnexion et redémarrage (ce sont des blocs).
 
 ### Objets dans la gueule
 - [ ] Le Fennec ramasse un objet au sol (un seul à la fois) et l'affiche dans la gueule (position à ajuster si besoin dans `FennecMouthItemLayer`).

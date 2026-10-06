@@ -18,17 +18,20 @@ import java.util.EnumMap;
 import java.util.Map;
 
 /**
- * Terrier de fennec : une cuvette de sable bordée de murets, ouverte à l'avant. Un Fennec peut y entrer (les murets
- * et le seuil font moins de 0,6 bloc) et s'y coucher le jour. L'entrée regarde le joueur à la pose.
+ * Terrier de fennec : un petit abri de sable en dôme, ouvert à l'avant. L'intérieur fait 0,75 bloc de large et de haut
+ * (le Fennec mesure 0,6 x 0,7) : il y entre et s'y couche le jour. Un Fennec sauvage le construit lui-même ; pour un
+ * Fennec apprivoisé, c'est le joueur qui le fabrique. L'entrée regarde le joueur à la pose.
  */
 public class FennecBurrowBlock extends HorizontalDirectionalBlock {
     /** Boîtes (x1, y1, z1, x2, y2, z2) pour l'orientation NORTH : entrée côté nord, fond côté sud. */
     private static final double[][] BOXES = {
-            {0, 0, 0, 16, 2, 16},
-            {0, 2, 13, 16, 9, 16},
-            {0, 2, 0, 2, 6, 13},
-            {14, 2, 0, 16, 6, 13},
-            {2, 2, 0, 14, 3, 2}
+            {0, 0, 0, 16, 1, 16},
+            {0, 1, 2, 2, 13, 16},
+            {14, 1, 2, 16, 13, 16},
+            {2, 1, 14, 14, 13, 16},
+            {0, 13, 2, 16, 15, 16},
+            {3, 15, 5, 13, 16, 16},
+            {5, 15, 3, 11, 16, 5}
     };
 
     private static final Map<Direction, VoxelShape> SHAPES = new EnumMap<>(Direction.class);
