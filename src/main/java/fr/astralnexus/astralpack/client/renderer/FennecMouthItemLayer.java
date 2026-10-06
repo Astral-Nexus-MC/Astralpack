@@ -2,6 +2,7 @@ package fr.astralnexus.astralpack.client.renderer;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import fr.astralnexus.astralpack.entity.custom.FennecEntity;
+import com.mojang.math.Axis;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
@@ -12,7 +13,7 @@ import software.bernie.geckolib.renderer.layer.BlockAndItemGeoLayer;
 /** Affiche l'objet tenu dans la gueule, accroché à l'os `mouth_item` du modèle. */
 public class FennecMouthItemLayer extends BlockAndItemGeoLayer<FennecEntity> {
     private static final String MOUTH_BONE = "mouth_item";
-    private static final float ITEM_SCALE = 0.5F;
+    private static final float ITEM_SCALE = 0.4F;
 
     public FennecMouthItemLayer(GeoRenderer<FennecEntity> renderer) {
         super(renderer,
@@ -31,6 +32,7 @@ public class FennecMouthItemLayer extends BlockAndItemGeoLayer<FennecEntity> {
                                       MultiBufferSource bufferSource, float partialTick, int packedLight,
                                       int packedOverlay) {
         poseStack.pushPose();
+        poseStack.mulPose(Axis.YP.rotationDegrees(90.0F));
         poseStack.scale(ITEM_SCALE, ITEM_SCALE, ITEM_SCALE);
         super.renderStackForBone(poseStack, bone, stack, animatable, bufferSource, partialTick, packedLight,
                 packedOverlay);

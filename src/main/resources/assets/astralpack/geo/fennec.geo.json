@@ -208,7 +208,7 @@
 				{
 					"name": "mouth_item",
 					"parent": "head_base",
-					"pivot": [0, 8.3, -9.7]
+					"pivot": [0, 8.4, -8.9]
 				},
 				{
 					"name": "fur_head",
