@@ -60,6 +60,7 @@ Suivi du plan de recette (cahier des charges §12). Dernière mise à jour : 202
 - [ ] **Texture haute résolution (×4)** : `fennec.png` fait 256×640 alors que le modèle déclare un espace UV de 64×160 (voir `geo/fennec.geo.json`). Vérifier que la robe, les yeux, les dents et l'armure s'affichent aux bons endroits en jeu. En cas de décalage, revenir au commit `c8cd5c1` (texture 64×160) ou me le signaler.
 - [ ] Deux fines couches de poils entourent le corps, la tête, les pattes et la base de la queue : silhouette légèrement duveteuse, robe et taches toujours visibles dessous.
 - [ ] Les yeux et le museau restent dégagés (pas de poils devant le visage).
+- [ ] Armures retravaillées (texture ×4 : biseaux, reflets, nervures, doublure en cuir ; ceintures en relief sur le plastron ; rivets en 3D sur le plastron, le casque et les protège-pattes) : elles paraissent moins « blocs », sans poils qui les traversent, pour les 4 matériaux.
 - [ ] L'armure de queue (plastron) est faite de 4 plaques articulées qui couvrent presque toute la queue (le bout sombre reste dégagé) et suivent ses mouvements, sans clipping ni poils qui la traversent.
 - [ ] L'armure (casque, plastron, protège-pattes, plaques de queue) passe au-dessus des poils : aucun poil ne traverse la plaque, et les poils restent visibles autour et sous les pièces.
 - [ ] La tête est moins fournie que le corps (poils plus clairsemés), le visage reste dégagé.
