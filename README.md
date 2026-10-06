@@ -6,7 +6,7 @@ Mod **Minecraft 1.20.1 / Forge 47.x** regroupant tous les ajouts personnalisés 
 ## Contenu actuel
 | Ajout | Type | État |
 |-------|------|------|
-| Fennec | Mob apprivoisable (poulet cru) | Validé en jeu (modèle, animations, sons, armure, apparition, serveur dédié). À valider : ordres suivre / rester / errer, rythme nocturne, terrier de jour, objets dans la gueule, apparition dans le désert ; version bébé à tester |
+| Fennec | Mob apprivoisable (poulet cru) | **v1 validée en production** (0.2.0) : modèle, animations, sons, armure, pelage 3D, ordres, rythme jour/nuit, terrier, objets en gueule, apparition, bébé, serveur dédié |
 
 ## Structure
 ```

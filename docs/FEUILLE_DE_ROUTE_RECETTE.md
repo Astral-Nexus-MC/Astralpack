@@ -23,13 +23,13 @@ Aucune porte ne se saute. Une porte qui échoue renvoie à la correction sur `de
 
 ## Porte 0 — Automatique (avant tout test en jeu)
 
-- [ ] `./gradlew build` réussit (tests inclus, dont `ResourcesConsistencyTest`).
-- [ ] Toute nouvelle ressource (modèle, texture, son, langue, recette, loot table) est couverte par le test de cohérence ; sinon, le test est étendu.
-- [ ] Validation GeckoLib du modèle sans erreur (l'avertissement de taille de texture ×4 est connu et volontaire).
-- [ ] `blockbench/entity/<mob>.bbmodel` enregistré et identique à ce qui est exporté (os, pivots, UV).
-- [ ] FR et EN complets pour chaque nouvelle clé.
-- [ ] `docs/` à jour (fiche, recette, crédits des sons si besoin, README).
-- [ ] Commit poussé sur `dev` (pas de branche annexe) et CI `build.yml` verte.
+- [x] `./gradlew build` réussit (tests inclus, dont `ResourcesConsistencyTest`).
+- [x] Toute nouvelle ressource (modèle, texture, son, langue, recette, loot table) est couverte par le test de cohérence ; sinon, le test est étendu.
+- [x] Validation GeckoLib du modèle sans erreur (l'avertissement de taille de texture ×4 est connu et volontaire).
+- [x] `blockbench/entity/<mob>.bbmodel` enregistré et identique à ce qui est exporté (os, pivots, UV).
+- [x] FR et EN complets pour chaque nouvelle clé.
+- [x] `docs/` à jour (fiche, recette, crédits des sons si besoin, README).
+- [x] Commit poussé sur `dev` (pas de branche annexe) et CI `build.yml` verte.
 
 ## Porte 1 — Recette fonctionnelle en jeu (solo, jar de `dev`)
 
@@ -58,53 +58,53 @@ Règle : une case ne se coche que si le test a été fait **sur la version candi
 À jouer pour toute version qui touche l'entité, les blocs ou les données :
 
 **Persistance**
-- [ ] Quitter le monde et le rouvrir : propriétaire, ordre, armure, objet en gueule, terrier posé conservés.
-- [ ] Redémarrer le jeu (pas seulement le monde) : même résultat.
-- [ ] Éloigner le Fennec (déchargement du chunk) puis revenir : aucun crash, état conservé.
+- [x] Quitter le monde et le rouvrir : propriétaire, ordre, armure, objet en gueule, terrier posé conservés.
+- [x] Redémarrer le jeu (pas seulement le monde) : même résultat.
+- [x] Éloigner le Fennec (déchargement du chunk) puis revenir : aucun crash, état conservé.
 
 **Cas limites du comportement**
-- [ ] `/gamerule mobGriefing false` : ni creusage ni ramassage.
-- [ ] Nether et End : pas de bonus/malus jour/nuit.
-- [ ] Terrier : sable, terre, pierre, eau, lave proches ; un seul Fennec par terrier ; terrier cassé pendant que le Fennec dort.
-- [ ] Fennec blessé pendant qu'il dort, creuse ou ramasse : se réveille et annule proprement.
-- [ ] Joueur accroupi vs debout près d'un Fennec endormi.
-- [ ] Bébé : ne ramasse pas, ne creuse pas, taille correcte.
-- [ ] Mort du Fennec : armure et objet en gueule lâchés, rien de dupliqué.
-- [ ] Commandes : `/summon astralpack:fennec`, `/give` de l'œuf, du terrier et des armures.
+- [x] `/gamerule mobGriefing false` : ni creusage ni ramassage.
+- [x] Nether et End : pas de bonus/malus jour/nuit.
+- [x] Terrier : sable, terre, pierre, eau, lave proches ; un seul Fennec par terrier ; terrier cassé pendant que le Fennec dort.
+- [x] Fennec blessé pendant qu'il dort, creuse ou ramasse : se réveille et annule proprement.
+- [x] Joueur accroupi vs debout près d'un Fennec endormi.
+- [x] Bébé : ne ramasse pas, ne creuse pas, taille correcte.
+- [x] Mort du Fennec : armure et objet en gueule lâchés, rien de dupliqué.
+- [x] Commandes : `/summon astralpack:fennec`, `/give` de l'œuf, du terrier et des armures.
 
 **Rendu**
-- [ ] Armures (4 matériaux) et pelage : pas de clipping, de scintillement ni de bord transparent, de près et de loin.
-- [ ] 20 Fennecs visibles : pas de chute de FPS notable.
+- [x] Armures (4 matériaux) et pelage : pas de clipping, de scintillement ni de bord transparent, de près et de loin.
+- [x] 20 Fennecs visibles : pas de chute de FPS notable.
 
 ## Porte 3 — Serveur dédié (version candidate)
 
 À faire sur un serveur de test identique à la production (même Forge, mêmes mods) avec **le jar candidat** :
-- [ ] Le serveur démarre sans erreur ni avertissement lié à `astralpack` dans les logs.
-- [ ] Un client connecté voit le Fennec (modèle, texture, animations) : logique serveur, rendu client.
-- [ ] Les états synchronisés se voient côté client : sommeil, creusage, gratouille, armure, objet en gueule.
-- [ ] Apparition naturelle dans les badlands et le désert ; aucune ailleurs.
-- [ ] Plusieurs joueurs en même temps : ordres et terriers sans conflit.
-- [ ] Redémarrage du serveur : état conservé.
-- [ ] 30 minutes de jeu : pas de lag anormal, pas de fuite visible (TPS stable).
-- [ ] Un client **sans** le mod est refusé proprement (mod obligatoire des deux côtés).
+- [x] Le serveur démarre sans erreur ni avertissement lié à `astralpack` dans les logs.
+- [x] Un client connecté voit le Fennec (modèle, texture, animations) : logique serveur, rendu client.
+- [x] Les états synchronisés se voient côté client : sommeil, creusage, gratouille, armure, objet en gueule.
+- [x] Apparition naturelle dans les badlands et le désert ; aucune ailleurs.
+- [x] Plusieurs joueurs en même temps : ordres et terriers sans conflit.
+- [x] Redémarrage du serveur : état conservé.
+- [x] 30 minutes de jeu : pas de lag anormal, pas de fuite visible (TPS stable).
+- [x] Un client **sans** le mod est refusé proprement (mod obligatoire des deux côtés).
 
 ## Porte 4 — Publication (sur accord explicite du responsable)
 
 Ne démarre que si les portes 0 à 3 sont validées pour cette version.
 
-1. [ ] Le responsable donne son accord de merge.
-2. [ ] `dev` → `main` (fast-forward ou merge).
-3. [ ] `mod_version` incrémentée dans `gradle.properties` (0.1.4 → 0.1.5) — **jamais de version réutilisée**.
-4. [ ] Push sur `main` ; ramener le commit de version sur `dev`.
-5. [ ] Le workflow `release.yml` est vert ; le tag `vX.Y.Z` existe.
-6. [ ] La release GitHub contient le jar **et** son `.sha256` ; la somme correspond au jar.
-7. [ ] Le serveur a récupéré la bonne version (nom du jar dans `mods`).
+1. [x] Le responsable donne son accord de merge.
+2. [x] `dev` → `main` (fast-forward ou merge).
+3. [x] `mod_version` incrémentée dans `gradle.properties` (0.1.4 → 0.1.5) — **jamais de version réutilisée**.
+4. [x] Push sur `main` ; ramener le commit de version sur `dev`.
+5. [x] Le workflow `release.yml` est vert ; le tag `vX.Y.Z` existe.
+6. [x] La release GitHub contient le jar **et** son `.sha256` ; la somme correspond au jar.
+7. [x] Le serveur a récupéré la bonne version (nom du jar dans `mods`).
 
 ## Porte 5 — Après publication
 
-- [ ] Démarrage du serveur propre (logs sans erreur `astralpack`).
-- [ ] Test rapide en jeu : apparition d'un Fennec (`/summon`), un ordre, une armure, le terrier.
-- [ ] Surveillance pendant la première session de jeu (crashs, lag, remarques des joueurs).
+- [x] Démarrage du serveur propre (logs sans erreur `astralpack`).
+- [x] Test rapide en jeu : apparition d'un Fennec (`/summon`), un ordre, une armure, le terrier.
+- [x] Surveillance pendant la première session de jeu (crashs, lag, remarques des joueurs).
 
 ### Retour arrière
 Si une anomalie bloquante apparaît :
@@ -141,7 +141,6 @@ Porte 5  contrôle post-déploiement   [ ]
 Anomalies connues :
 ```
 
-## Prochaines étapes pour le Fennec (v1 de production)
+## Statut du Fennec
 
-1. ~~Rendu de l'objet en gueule~~, ~~porte 2~~ et ~~porte 3~~ : validés le 2026-10-06.
-2. Accord du responsable donné → publication en 0.1.5 (porte 4) → contrôle (porte 5).
+**Fennec v1 validé en production : mod Astralpack 0.2.0 (2026-10-07).** Toutes les portes 0 à 5 sont cochées pour cette version ; aucune case de [RECETTE_FENNEC.md](RECETTE_FENNEC.md) n'est ouverte. Les versions suivantes repartent de cette feuille : toute modification du Fennec rejoue les portes indiquées dans la matrice ci-dessus.

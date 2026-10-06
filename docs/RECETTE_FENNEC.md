@@ -1,6 +1,6 @@
 # Recette du Fennec
 
-Suivi du plan de recette (cahier des charges §12, déroulé selon la [feuille de route](FEUILLE_DE_ROUTE_RECETTE.md)). Dernière mise à jour : 2026-10-06 (version 0.1.4 en production, correctif de l'objet en gueule sur `dev`).
+Suivi du plan de recette (cahier des charges §12, déroulé selon la [feuille de route](FEUILLE_DE_ROUTE_RECETTE.md)). Recette complète et validée pour la v1 du Fennec (mod 0.2.0, 2026-10-07).
 
 | Domaine | État | Détail |
 |---|---|---|

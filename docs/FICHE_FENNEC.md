@@ -1,6 +1,6 @@
 # Fiche de conception — Fennec
 
-Mob de référence du mod. Méthode générale : [CAHIER_DES_CHARGES_MOB.md](CAHIER_DES_CHARGES_MOB.md) · Recette : [RECETTE_FENNEC.md](RECETTE_FENNEC.md). État au 2026-10-06 (version 0.1.4).
+Mob de référence du mod. Méthode générale : [CAHIER_DES_CHARGES_MOB.md](CAHIER_DES_CHARGES_MOB.md) · Recette : [RECETTE_FENNEC.md](RECETTE_FENNEC.md). **v1 validée en production** (mod 0.2.0, 2026-10-07).
 
 ## Identité
 - Identifiant : `fennec` (`astralpack:fennec`). Source : `blockbench/entity/fennec.bbmodel`.
