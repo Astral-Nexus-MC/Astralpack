@@ -26,7 +26,7 @@ docs/                    guides internes (ADDING_CONTENT, cahier des charges mob
 ```
 
 ## Développement
-Java 17 requis. GeckoLib **4.2.4** (la 4.2.5 n'existe pas pour Forge 1.20.1).
+Java 17 requis. GeckoLib **4.8.4**.
 ```
 ./gradlew genIntellijRuns   # ou genEclipseRuns
 ./gradlew runClient

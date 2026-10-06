@@ -5,7 +5,7 @@
 | **Version du document** | 1.0 |
 | **Date** | 2026-10-06 |
 | **Statut** | Brouillon à valider |
-| **Cible technique** | Minecraft Java 1.20.1 · Forge · GeckoLib 4.2.4 |
+| **Cible technique** | Minecraft Java 1.20.1 · Forge · GeckoLib 4.8.4 |
 | **Outil de modélisation** | Blockbench 5.x + plugin GeckoLib |
 | **Mob de référence** | Fennec (voir [annexe A](#annexe-a--mob-de-référence-le-fennec)) |
 
@@ -53,7 +53,7 @@ Si le dépôt du modpack ne doit contenir que de la configuration, placer `mods-
 | Minecraft | 1.20.1 |
 | Forge | Version 47.x correspondant à 1.20.1 (à figer dans `build.gradle`) |
 | Java | 17 |
-| GeckoLib | 4.2.4 (`software.bernie.geckolib:geckolib-forge-1.20.1:4.2.4`) |
+| GeckoLib | 4.8.4 (`software.bernie.geckolib:geckolib-forge-1.20.1:4.8.4`) |
 | Blockbench | 5.x avec plugin GeckoLib, format de projet **GeckoLib Animated Model** |
 | Formats d'export | `*.geo.json`, `*.animation.json`, `*.png` |
 
