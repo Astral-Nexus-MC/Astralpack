@@ -26,7 +26,7 @@ docs/                    guides internes (ADDING_CONTENT, cahier des charges mob
 ```
 
 ## Développement
-Java 17 requis.
+Java 17 requis. GeckoLib **4.2.4** (la 4.2.5 n'existe pas pour Forge 1.20.1).
 ```
 ./gradlew genIntellijRuns   # ou genEclipseRuns
 ./gradlew runClient
@@ -44,4 +44,3 @@ Les modèles sont faits avec Blockbench au format **GeckoLib Animated Model** :
 
 Source du Fennec : `blockbench/entity/fennec.bbmodel` (export dans `geo/`, `animations/` et `textures/entity/`).
 
-> Le wrapper Gradle (`gradlew`, `gradle/wrapper`) n'est pas encore versionné : à générer avec `gradle wrapper --gradle-version 8.1.1`.
