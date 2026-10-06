@@ -30,6 +30,10 @@ Suivi du plan de recette (cahier des charges §12). Dernière mise à jour : 202
 - [ ] Maj + clic main vide lance toujours la gratouille du ventre.
 - [ ] Un Fennec apprivoisé n'a aucun signe distinctif (choix voulu).
 
+### Apparition naturelle
+- [ ] Des groupes de Fennecs apparaissent dans les badlands et dans le désert (sur sable, terre, herbe ou terracotta).
+- [ ] Aucune apparition dans les autres biomes.
+
 ### Rythme jour / nuit
 - [ ] Un Fennec sauvage s'endort le jour (animation `sleep`, plus de cris) et se réveille la nuit.
 - [ ] Il se réveille si on le frappe, ou si un joueur debout s'approche à moins de 3 blocs (un joueur accroupi ne le réveille pas).
@@ -62,4 +66,4 @@ Suivi du plan de recette (cahier des charges §12). Dernière mise à jour : 202
 - [x] Sons de pas et de coup avec armure.
 
 ## Équilibrage (référence : loup 1.20.1)
-Vie 8/20, dégâts 2/4, vitesse 0,38 (loup 0,30), attaque toutes les 14 ticks (loup 20), apparition poids 8 en groupes de 4 dans les badlands. Pas de loot table : le Fennec ne lâche que son armure.
+Vie 8/20, dégâts 2/4, vitesse 0,38 (loup 0,30), attaque toutes les 14 ticks (loup 20), apparition poids 8 en groupes de 4 dans les badlands et le désert. Pas de loot table : le Fennec ne lâche que son armure.

@@ -1,0 +1,10 @@
+{
+  "type": "forge:add_spawns",
+  "biomes": "minecraft:desert",
+  "spawners": {
+    "type": "astralpack:fennec",
+    "weight": 8,
+    "minCount": 4,
+    "maxCount": 4
+  }
+}

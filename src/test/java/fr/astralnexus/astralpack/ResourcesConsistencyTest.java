@@ -55,4 +55,11 @@ class ResourcesConsistencyTest {
             }
         }
     }
+
+    @Test
+    void spawnBiomeModifiersAreDeclared() throws IOException {
+        Path dir = Path.of("src/main/resources/data/astralpack/forge/biome_modifier");
+        assertTrue(read(dir.resolve("fennec_spawns.json")).contains("#minecraft:is_badlands"));
+        assertTrue(read(dir.resolve("fennec_spawns_desert.json")).contains("minecraft:desert"));
+    }
 }
