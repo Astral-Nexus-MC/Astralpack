@@ -20,6 +20,8 @@ public class FennecModel extends GeoModel<FennecEntity> {
     private static final ResourceLocation TEXTURE = new ResourceLocation(Astralpack.MOD_ID, "textures/entity/fennec.png");
     private static final ResourceLocation ANIMATION = new ResourceLocation(Astralpack.MOD_ID, "animations/fennec.animation.json");
 
+    private static final float JAW_OPEN = 0.55F;
+
     private static final Map<FennecArmorSlot, String[]> PIECES = new EnumMap<>(FennecArmorSlot.class);
 
     static {
@@ -47,6 +49,7 @@ public class FennecModel extends GeoModel<FennecEntity> {
     @Override
     public void setCustomAnimations(FennecEntity animatable, long instanceId, AnimationState<FennecEntity> animationState) {
         this.trackHead(animatable, animationState);
+        this.openJaw(animatable);
         for (FennecArmorSlot slot : FennecArmorSlot.values()) {
             FennecArmorTier worn = animatable.getArmorTier(slot);
             for (FennecArmorTier tier : FennecArmorTier.values()) {
@@ -59,6 +62,17 @@ public class FennecModel extends GeoModel<FennecEntity> {
                     }
                 }
             }
+        }
+    }
+
+    /** Gueule ouverte quand le Fennec tient un objet entre ses dents. */
+    private void openJaw(FennecEntity animatable) {
+        if (animatable.getMainHandItem().isEmpty() || animatable.isDozing()) {
+            return;
+        }
+        CoreGeoBone jaw = this.getAnimationProcessor().getBone("jaw");
+        if (jaw != null) {
+            jaw.setRotX(jaw.getRotX() + JAW_OPEN);
         }
     }
 
