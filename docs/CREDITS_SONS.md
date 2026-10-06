@@ -8,10 +8,10 @@ Les fichiers `ambient1.ogg`, `ambient2.ogg`, `ambient3.ogg`, `hurt1.ogg`, `hurt2
 | Champ | Valeur |
 |---|---|
 | Fichier d'origine | `Fennec_Singing.ogg` |
-| Source | Wikimedia Commons — **URL de la page du fichier : à compléter** |
-| Auteur | **à compléter** |
-| Licence | **à compléter** (ex. CC BY-SA 4.0, CC BY 4.0, CC0, domaine public) |
-| Lien vers le texte de la licence | **à compléter** |
+| Source | Wikimedia Commons — <https://commons.wikimedia.org/wiki/File:Fennec_Singing.ogg> |
+| Auteur | Eosin-Y (<https://en.wikipedia.org/wiki/User:Eosin-Y>), enregistrement du 2 octobre 2007 |
+| Licence | Domaine public (modèle `PD-user` : l'auteur a placé l'œuvre dans le domaine public) |
+| Attribution requise | Non (mentionnée ici par courtoisie) |
 
 ### Modifications apportées
 - Découpage en 6 extraits courts.
@@ -25,4 +25,4 @@ Les fichiers `ambient1.ogg`, `ambient2.ogg`, `ambient3.ogg`, `hurt1.ogg`, `hurt2
 - **CC BY-SA** : mêmes obligations que CC BY, et les sons modifiés doivent être redistribués sous la **même licence**.
   Le reste du mod (code, modèle, textures) n'est pas concerné : seuls ces fichiers audio le sont.
 
-> Remplir ce tableau avant toute diffusion du modpack.
+> Informations vérifiées sur la page Commons du fichier le 2026-10-06.
