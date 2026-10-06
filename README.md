@@ -44,3 +44,10 @@ Les modèles sont faits avec Blockbench au format **GeckoLib Animated Model** :
 
 Source du Fennec : `blockbench/entity/fennec.bbmodel` (export dans `geo/`, `animations/` et `textures/entity/`).
 
+
+## Publier une version
+1. Passer `mod_version` à la nouvelle version dans `gradle.properties`, committer, pousser sur `main`.
+2. `.github/workflows/release.yml` voit le `gradle.properties` poussé, crée tout seul le tag `vX.Y.Z`
+   (identique à `mod_version`), construit le jar et publie `astralpack-X.Y.Z.jar` + `.sha256` en release GitHub.
+   Un tag poussé à la main donne le même résultat ; Actions > Release > Run workflow rattrape une version.
+   Les sessions Claude ne peuvent pas pousser de tag (403) : ne pas essayer.
