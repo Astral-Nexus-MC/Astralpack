@@ -14,6 +14,8 @@ import software.bernie.geckolib.renderer.layer.BlockAndItemGeoLayer;
 public class FennecMouthItemLayer extends BlockAndItemGeoLayer<FennecEntity> {
     private static final String MOUTH_BONE = "mouth_item";
     private static final float ITEM_SCALE = 0.4F;
+    /** Rotation dans le plan du sprite : couche à l'horizontale les objets dessinés en diagonale (outils, bâtons). */
+    private static final float ITEM_TILT = -45.0F;
 
     public FennecMouthItemLayer(GeoRenderer<FennecEntity> renderer) {
         super(renderer,
@@ -33,6 +35,7 @@ public class FennecMouthItemLayer extends BlockAndItemGeoLayer<FennecEntity> {
                                       int packedOverlay) {
         poseStack.pushPose();
         poseStack.mulPose(Axis.YP.rotationDegrees(90.0F));
+        poseStack.mulPose(Axis.ZP.rotationDegrees(ITEM_TILT));
         poseStack.scale(ITEM_SCALE, ITEM_SCALE, ITEM_SCALE);
         super.renderStackForBone(poseStack, bone, stack, animatable, bufferSource, partialTick, packedLight,
                 packedOverlay);
