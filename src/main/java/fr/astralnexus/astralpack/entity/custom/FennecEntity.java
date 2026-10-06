@@ -28,7 +28,6 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.Component;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -431,19 +430,11 @@ public class FennecEntity extends TamableAnimal implements GeoEntity {
                 this.dropMouthItem();
                 return InteractionResult.SUCCESS;
             }
-            if (stack.isEmpty() && hand == InteractionHand.MAIN_HAND) {
-                if (player.isShiftKeyDown()) {
-                    if (this.order == FennecOrder.STAY) {
-                        this.setOrder(FennecOrder.FOLLOW);
-                    }
-                    this.startScratching();
-                } else {
-                    this.entityData.set(SCRATCHING, false);
-                    FennecOrder next = this.order.next();
-                    this.setOrder(next);
-                    player.displayClientMessage(
-                            Component.translatable("message.astralpack.fennec.order." + next.getId()), true);
+            if (stack.isEmpty() && hand == InteractionHand.MAIN_HAND && player.isShiftKeyDown()) {
+                if (this.order == FennecOrder.STAY) {
+                    this.setOrder(FennecOrder.FOLLOW);
                 }
+                this.startScratching();
                 return InteractionResult.SUCCESS;
             }
             return super.mobInteract(player, hand);
@@ -557,7 +548,7 @@ public class FennecEntity extends TamableAnimal implements GeoEntity {
                 : this.timePhase == -1 ? DAY_ATTACK_INTERVAL : ATTACK_INTERVAL;
     }
 
-    /** Un sauvage dort le jour dans un terrier (qu'il construit au besoin) ; un apprivoisé sous « rester », ou en terrier sous « errer ». */
+    /** Un sauvage dort le jour dans un terrier (qu'il construit au besoin) ; un apprivoisé sous « Reste ici », en terrier s'il y en a un à portée. */
     private boolean canNap() {
         if (!this.level().isDay() || !this.onGround() || this.isInWaterOrBubble()) {
             return false;
@@ -568,10 +559,10 @@ public class FennecEntity extends TamableAnimal implements GeoEntity {
         }
         this.nearestBurrow();
         if (this.isTame()) {
-            if (this.order == FennecOrder.STAY) {
-                return true;
+            if (this.order != FennecOrder.STAY) {
+                return false;
             }
-            return this.order == FennecOrder.WANDER && this.isAtBurrow();
+            return this.isAtBurrow() || this.burrowCache == null;
         }
         // Sauvage : il va d'abord se coucher dans un terrier à portée, ou en construire un ; il dort sur place
         // seulement si c'est impossible (pas d'emplacement, ou mobGriefing désactivé).
@@ -623,7 +614,7 @@ public class FennecEntity extends TamableAnimal implements GeoEntity {
         return this.order;
     }
 
-    /** Applique un ordre : STAY assoit le Fennec, FOLLOW et WANDER le laissent debout. */
+    /** Applique un ordre : STAY assoit le Fennec, FOLLOW le laisse debout. */
     private void setOrder(FennecOrder newOrder) {
         this.order = newOrder;
         this.setOrderedToSit(newOrder == FennecOrder.STAY);
@@ -631,6 +622,21 @@ public class FennecEntity extends TamableAnimal implements GeoEntity {
         this.navigation.stop();
         if (newOrder == FennecOrder.STAY) {
             this.setTarget(null);
+        }
+    }
+
+    /** La roue Fordix passe par l'état « assis » du jeu : l'ordre du Fennec le suit (assis = « Reste ici »). */
+    @Override
+    public void setOrderedToSit(boolean sit) {
+        super.setOrderedToSit(sit);
+        FennecOrder wanted = sit ? FennecOrder.STAY : FennecOrder.FOLLOW;
+        if (this.order != wanted) {
+            this.order = wanted;
+            this.jumping = false;
+            this.navigation.stop();
+            if (sit) {
+                this.setTarget(null);
+            }
         }
     }
 
@@ -938,7 +944,7 @@ public class FennecEntity extends TamableAnimal implements GeoEntity {
 
     /**
      * Le jour, va se coucher dans un terrier posé par un joueur, à moins de 8 blocs : les Fennecs sauvages comme les
-     * apprivoisés sous l'ordre « errer ». Il contourne le terrier jusqu'à l'entrée puis y entre ; le sommeil
+     * apprivoisés sous l'ordre « Reste ici ». Il contourne le terrier jusqu'à l'entrée puis y entre ; le sommeil
      * lui-même est géré par FennecSleepGoal.
      */
     private class FennecRestInBurrowGoal extends Goal {
@@ -954,7 +960,7 @@ public class FennecEntity extends TamableAnimal implements GeoEntity {
             FennecEntity f = FennecEntity.this;
             return f.level().isDay() && f.getTarget() == null && f.getLastHurtByMob() == null
                     && !f.isAggressive() && !f.isScratching() && !f.isLeashed()
-                    && (!f.isTame() || f.order == FennecOrder.WANDER);
+                    && (!f.isTame() || f.order == FennecOrder.STAY);
         }
 
         @Override
@@ -1106,7 +1112,7 @@ public class FennecEntity extends TamableAnimal implements GeoEntity {
         }
     }
 
-    /** Suit le propriétaire seulement sous l'ordre FOLLOW (en STAY il reste assis, en WANDER il erre). */
+    /** Suit le propriétaire seulement sous l'ordre FOLLOW (en STAY il reste assis). */
     private class FennecFollowGoal extends FollowOwnerGoal {
         FennecFollowGoal() {
             super(FennecEntity.this, 1.1D, 10.0F, 2.0F, false);

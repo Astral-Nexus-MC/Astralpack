@@ -1,6 +1,6 @@
 # Recette du Fennec
 
-Suivi du plan de recette (cahier des charges §12, déroulé selon la [feuille de route](FEUILLE_DE_ROUTE_RECETTE.md)). Recette complète et validée pour la v1 du Fennec (mod 0.2.0, 2026-10-07).
+Suivi du plan de recette (cahier des charges §12, déroulé selon la [feuille de route](FEUILLE_DE_ROUTE_RECETTE.md)). Recette validée pour la v1 du Fennec (mod 0.2.0, 2026-10-07) ; ordres par la roue Fordix à revalider (cases ouvertes).
 
 | Domaine | État | Détail |
 |---|---|---|
@@ -20,15 +20,17 @@ Suivi du plan de recette (cahier des charges §12, déroulé selon la [feuille d
 - [x] `bite` : se joue au moment où le coup touche.
 - [x] `shake` : sortir un Fennec de l'eau ou de la pluie.
 
-### Ordres (propriétaire, clic droit main vide)
-- [x] Le clic fait tourner suivre → rester → errer, avec le message dans la barre d'action.
-- [x] Suivre : le Fennec suit le propriétaire et le rejoint quand il s'éloigne.
-- [x] Rester : il s'assoit (animation `sit`) et ne bouge plus.
-- [x] Errer : il se promène librement sans suivre le propriétaire.
-- [x] Blessé en mode « rester », il se relève et repasse en « suivre ».
-- [x] L'ordre est conservé après déconnexion et redémarrage.
-- [x] Maj + clic main vide lance toujours la gratouille du ventre.
-- [x] Un Fennec apprivoisé n'a aucun signe distinctif (choix voulu).
+### Ordres (roue d'interaction Fordix, touche R maintenue en visant son Fennec)
+Le clic droit main vide ne change plus l'ordre : les ordres passent par la roue du mod Fordix. Il n'y a plus d'ordre « errer ».
+- [ ] La roue s'ouvre sur un Fennec apprivoisé dont on est propriétaire (et pas sur un sauvage ni sur celui d'un autre joueur).
+- [ ] « Suis-moi » : le Fennec se lève et suit le propriétaire, le rejoint quand il s'éloigne.
+- [ ] « Reste ici » : il s'assoit (animation `sit`) et ne bouge plus.
+- [ ] « Nourrir » avec de la viande crue : il se soigne ; « Renommer » avec une étiquette renommée fonctionne.
+- [ ] Blessé en « Reste ici », il se relève et repasse en « Suis-moi ».
+- [ ] L'ordre est conservé après déconnexion et redémarrage (et un Fennec resté en « errer » avant la mise à jour repasse en « Suis-moi »).
+- [ ] Clic droit main vide **sans Maj** : aucun changement d'ordre ; s'il tient un objet en gueule, il le lâche.
+- [ ] Maj + clic droit main vide lance toujours la gratouille du ventre.
+- [ ] Un Fennec apprivoisé n'a aucun signe distinctif (choix voulu).
 
 ### Apparition naturelle
 - [x] Des groupes de Fennecs apparaissent dans les badlands et dans le désert (sur sable, terre, herbe ou terracotta).
@@ -37,7 +39,7 @@ Suivi du plan de recette (cahier des charges §12, déroulé selon la [feuille d
 ### Rythme jour / nuit
 - [x] Un Fennec sauvage s'endort le jour (animation `sleep`, plus de cris) et se réveille la nuit.
 - [x] Il se réveille si on le frappe, ou si un joueur debout s'approche à moins de 3 blocs (un joueur accroupi ne le réveille pas).
-- [x] Un Fennec apprivoisé dort le jour seulement sous l'ordre « rester » ; sous « suivre » ou « errer » il reste éveillé.
+- [ ] Un Fennec apprivoisé dort le jour seulement sous « Reste ici » ; sous « Suis-moi » il reste éveillé.
 - [x] La nuit : dégâts +25 % et attaque plus rapide (11 ticks). Le jour : dégâts −25 % et attaque plus lente (19 ticks).
 - [x] Dans une dimension sans cycle jour/nuit (Nether, End), pas de bonus ni de malus.
 
@@ -50,7 +52,7 @@ Le terrier est un **bloc** : abri de sable en dôme (intérieur 0,75 × 0,75 blo
 - [x] Le trou est bien de 2 blocs alignés (entrée devant, chambre derrière), sans eau ni lave adjacente, sans gravats ni objets au sol, et le Fennec peut ressortir de la fosse (une marche d'un bloc).
 - [x] Un sauvage réutilise un terrier existant à portée (le sien, ou un terrier fabriqué par un joueur) au lieu d'en construire un autre ; un seul Fennec par terrier.
 - [x] Avec `/gamerule mobGriefing false`, il ne creuse rien et dort sur place. Sur de la pierre, de l'eau ou près de la lave, il ne creuse pas non plus (il dort sur place).
-- [x] **Apprivoisé, de jour**, sous l'ordre « errer », à moins de 8 blocs d'un terrier : il s'y couche. Sous « suivre » il suit son propriétaire ; sous « rester » il dort sur place.
+- [ ] **Apprivoisé, de jour**, sous « Reste ici », à moins de 8 blocs d'un terrier : il se lève, va s'y coucher et y dort. Sans terrier à portée il dort sur place, assis. Sous « Suis-moi » il suit son propriétaire.
 - [x] La nuit il se réveille et sort ; un joueur debout à moins de 3 blocs réveille un sauvage (pas un apprivoisé).
 - [x] Les terriers construits restent dans le monde après déconnexion et redémarrage (ce sont des blocs).
 

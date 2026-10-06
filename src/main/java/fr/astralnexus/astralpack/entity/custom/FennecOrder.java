@@ -1,10 +1,9 @@
 package fr.astralnexus.astralpack.entity.custom;
 
-/** Ordre donné à un Fennec apprivoisé (clic main vide du propriétaire : suivre, rester, errer). */
+/** Ordre donné à un Fennec apprivoisé par la roue d'interaction Fordix (« Suis-moi » / « Reste ici »). */
 public enum FennecOrder {
     FOLLOW("follow"),
-    STAY("stay"),
-    WANDER("wander");
+    STAY("stay");
 
     private final String id;
 
@@ -14,11 +13,6 @@ public enum FennecOrder {
 
     public String getId() {
         return id;
-    }
-
-    public FennecOrder next() {
-        FennecOrder[] all = values();
-        return all[(ordinal() + 1) % all.length];
     }
 
     public static FennecOrder byOrdinal(int ordinal) {

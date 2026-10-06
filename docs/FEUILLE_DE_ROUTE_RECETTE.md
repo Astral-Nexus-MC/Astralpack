@@ -48,7 +48,7 @@ Rejouer les blocs de [RECETTE_FENNEC.md](RECETTE_FENNEC.md). État au 2026-10-06
 | Bébé | Validé | recette 2026-10-06 |
 | Objets dans la gueule (comportement) | Validé | ramassage, lâcher, mort, persistance, interdits |
 | Objets dans la gueule (rendu) | Validé | mâchoire ouverte, objet devant les dents |
-| Ordres (suivre / rester / errer) | Validé | non-régression 2026-10-06 |
+| Ordres (roue Fordix : Suis-moi / Reste ici) | **À revalider** | remplace le clic droit et l'ordre « errer » (0.2.1) |
 | Apparition naturelle | Validé | non-régression 2026-10-06 |
 
 Règle : une case ne se coche que si le test a été fait **sur la version candidate**. Une modification du comportement concerné décoche la case correspondante.

@@ -17,8 +17,5 @@
   "item.astralpack.fennec_netherite_helmet": "Netherite Fennec Helmet",
   "item.astralpack.fennec_netherite_chestplate": "Netherite Fennec Chestplate",
   "item.astralpack.fennec_netherite_boots": "Netherite Fennec Paw Guards",
-  "message.astralpack.fennec.order.follow": "Fennec: following you",
-  "message.astralpack.fennec.order.stay": "Fennec: staying here",
-  "message.astralpack.fennec.order.wander": "Fennec: roaming freely",
   "block.astralpack.fennec_burrow": "Fennec Burrow"
 }

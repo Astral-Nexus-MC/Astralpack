@@ -46,17 +46,6 @@ class ResourcesConsistencyTest {
     }
 
     @Test
-    void orderMessagesAreTranslated() throws IOException {
-        for (String lang : List.of("en_us", "fr_fr")) {
-            String json = read(RES.resolve("lang/" + lang + ".json"));
-            for (String order : List.of("follow", "stay", "wander")) {
-                assertTrue(json.contains("\"message.astralpack.fennec.order." + order + "\""),
-                        "message d'ordre manquant (" + lang + ") : " + order);
-            }
-        }
-    }
-
-    @Test
     void spawnBiomeModifiersAreDeclared() throws IOException {
         Path dir = Path.of("src/main/resources/data/astralpack/forge/biome_modifier");
         assertTrue(read(dir.resolve("fennec_spawns.json")).contains("#minecraft:is_badlands"));

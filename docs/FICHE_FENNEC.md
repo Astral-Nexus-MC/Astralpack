@@ -10,12 +10,12 @@ Mob de référence du mod. Méthode générale : [CAHIER_DES_CHARGES_MOB.md](CAH
 ## Comportement
 - **Carnivore** : chasse poules et lapins ; neutre envers le joueur.
 - **Apprivoisable** : poulet cru ou lapin cru, 1 chance sur 3. Aucun signe distinctif visuel (choix voulu).
-- **Ordres** (clic droit main vide, propriétaire) : suivre → rester → errer. Maj + clic main vide : gratouille du ventre.
+- **Ordres** : par la roue d'interaction du mod Fordix (touche R maintenue), « Suis-moi » / « Reste ici » ; il n'y a plus d'ordre « errer ». Clic droit main vide : lâche l'objet en gueule. Maj + clic droit main vide : gratouille du ventre.
 - **Rythme jour/nuit** : dort le jour, actif la nuit. Actif le jour : dégâts −25 % et attaque lente (19 ticks) ; la nuit : dégâts +25 % et attaque rapide (11 ticks). Aucun effet dans une dimension sans cycle.
 - **Objets en gueule** : ramasse un objet à la fois, l'affiche dans la gueule (mâchoire ouverte), le lâche sur clic droit main vide (puis pause de 20 s) ou à sa mort.
 - **Terrier** : bloc en dôme (`fennec_burrow`).
   - *Sauvage* : de jour, sans terrier à moins de 8 blocs, il creuse 2 blocs (entrée puis chambre) dans du sable ou de la terre tendre, le bloc terrier apparaît dans le trou, il s'y couche. Respecte `mobGriefing`, évite fluides et blocs-entités.
-  - *Apprivoisé* : le joueur fabrique le terrier ; sous l'ordre « errer », à moins de 8 blocs, il s'y couche le jour.
+  - *Apprivoisé* : le joueur fabrique le terrier ; sous « Reste ici », à moins de 8 blocs, il va s'y coucher le jour (sinon il dort sur place).
 
 ## Statistiques (référence : loup 1.20.1)
 
