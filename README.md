@@ -22,7 +22,7 @@ src/main/resources/
 ├── assets/astralpack/   lang, geo, animations, textures, models, blockstates
 └── data/astralpack/     loot tables, recipes, tags, biome modifiers
 blockbench/              sources .bbmodel (non chargées par le jeu)
-docs/                    guides internes (ADDING_CONTENT, cahier des charges mob, crédits sons)
+docs/                    guides internes (ADDING_CONTENT, cahier des charges mob, fiche et recette du Fennec, feuille de route de mise en production, crédits sons)
 ```
 
 ## Développement
