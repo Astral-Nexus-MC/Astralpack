@@ -20,7 +20,7 @@ class ResourcesConsistencyTest {
     @Test
     void animationsUsedByEntityExist() throws IOException {
         String anims = read(RES.resolve("animations/fennec.animation.json"));
-        for (String n : List.of("idle", "walk", "sit", "shake", "attack", "belly_scratch", "bite", "sleep")) {
+        for (String n : List.of("idle", "walk", "sit", "shake", "attack", "belly_scratch", "bite", "sleep", "dig")) {
             assertTrue(anims.contains("\"animation.fennec." + n + "\""), "animation manquante : " + n);
         }
     }

@@ -41,6 +41,14 @@ Suivi du plan de recette (cahier des charges §12). Dernière mise à jour : 202
 - [ ] La nuit : dégâts +25 % et attaque plus rapide (11 ticks). Le jour : dégâts −25 % et attaque plus lente (19 ticks).
 - [ ] Dans une dimension sans cycle jour/nuit (Nether, End), pas de bonus ni de malus.
 
+### Terrier (Fennec sauvage, de jour)
+- [ ] Un Fennec sauvage creuse une petite rampe de 3 blocs dans le sable ou la terre (animation `dig`, particules et bruit de bloc), y entre et s'y endort.
+- [ ] Le plafond sous du sable devient du grès (sinon le sable tomberait dans le tunnel).
+- [ ] Les jours suivants, il retourne dans le même terrier ; la nuit il en ressort.
+- [ ] Il ne creuse jamais près de l'eau ou de la lave, ni dans la pierre, et rien si `mobGriefing` est désactivé (il dort alors sur place).
+- [ ] Le terrier est conservé après déconnexion et redémarrage.
+- [ ] Un Fennec apprivoisé ne creuse pas.
+
 ### Objets dans la gueule
 - [ ] Le Fennec ramasse un objet au sol (un seul à la fois) et l'affiche dans la gueule (position à ajuster si besoin dans `FennecMouthItemLayer`).
 - [ ] Il va chercher les objets proches ; un Fennec apprivoisé reste à moins de 12 blocs de son propriétaire.
