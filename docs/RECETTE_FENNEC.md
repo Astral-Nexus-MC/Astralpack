@@ -46,9 +46,10 @@ Le terrier est un **bloc** : abri de sable en dôme (intérieur 0,75 × 0,75 blo
 - [ ] Recette : sable (3) en haut, sable à gauche et à droite avec un poulet cru au centre, terre stérile (3) en bas → `Terrier de fennec` (onglet créatif ; `/give @s astralpack:fennec_burrow`).
 - [ ] Le bloc se pose (l'entrée regarde le joueur), se casse plus vite à la pelle et se récupère.
 - [ ] Le Fennec **entre** dans le bloc et s'y couche sans rester coincé (marge de hauteur faible : 0,75 pour 0,7). Sinon, élargir l'entrée ou relever le toit.
-- [ ] **Sauvage, de jour**, sans terrier à moins de 8 blocs : il choisit un emplacement dégagé à moins de 6 blocs, y gratte le sol (animation `dig`, particules, bruit de sable) puis fait apparaître le terrier, s'y couche (animation `sleep`).
+- [ ] **Sauvage, de jour**, sans terrier à moins de 8 blocs : il choisit du sable ou de la terre tendre à moins de 6 blocs, **creuse d'abord l'entrée** (un bloc, animation `dig`, particules, bruit), y descend, **creuse la chambre** (le bloc d'à côté), puis le bloc terrier apparaît dans ce trou de deux blocs, entrée tournée vers la fosse, et il s'y couche (animation `sleep`).
+- [ ] Le trou est bien de 2 blocs alignés (entrée devant, chambre derrière), sans eau ni lave adjacente, sans gravats ni objets au sol, et le Fennec peut ressortir de la fosse (une marche d'un bloc).
 - [ ] Un sauvage réutilise un terrier existant à portée (le sien, ou un terrier fabriqué par un joueur) au lieu d'en construire un autre ; un seul Fennec par terrier.
-- [ ] Avec `/gamerule mobGriefing false`, il ne construit rien et dort sur place.
+- [ ] Avec `/gamerule mobGriefing false`, il ne creuse rien et dort sur place. Sur de la pierre, de l'eau ou près de la lave, il ne creuse pas non plus (il dort sur place).
 - [ ] **Apprivoisé, de jour**, sous l'ordre « errer », à moins de 8 blocs d'un terrier : il s'y couche. Sous « suivre » il suit son propriétaire ; sous « rester » il dort sur place.
 - [ ] La nuit il se réveille et sort ; un joueur debout à moins de 3 blocs réveille un sauvage (pas un apprivoisé).
 - [ ] Les terriers construits restent dans le monde après déconnexion et redémarrage (ce sont des blocs).
