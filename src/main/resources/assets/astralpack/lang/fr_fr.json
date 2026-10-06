@@ -1,5 +1,20 @@
 {
   "itemGroup.astralpack.main": "Astralpack",
   "entity.astralpack.fennec": "Fennec",
-  "item.astralpack.fennec_spawn_egg": "Œuf d'apparition de Fennec"
+  "item.astralpack.fennec_spawn_egg": "Œuf d'apparition de Fennec",
+  "subtitles.entity.fennec.ambient": "Le fennec glapit",
+  "subtitles.entity.fennec.hurt": "Le fennec est blessé",
+  "subtitles.entity.fennec.death": "Le fennec meurt",
+  "item.astralpack.fennec_iron_helmet": "Casque de fennec en fer",
+  "item.astralpack.fennec_iron_chestplate": "Plastron de fennec en fer",
+  "item.astralpack.fennec_iron_boots": "Protège-pattes de fennec en fer",
+  "item.astralpack.fennec_gold_helmet": "Casque de fennec en or",
+  "item.astralpack.fennec_gold_chestplate": "Plastron de fennec en or",
+  "item.astralpack.fennec_gold_boots": "Protège-pattes de fennec en or",
+  "item.astralpack.fennec_diamond_helmet": "Casque de fennec en diamant",
+  "item.astralpack.fennec_diamond_chestplate": "Plastron de fennec en diamant",
+  "item.astralpack.fennec_diamond_boots": "Protège-pattes de fennec en diamant",
+  "item.astralpack.fennec_netherite_helmet": "Casque de fennec en netherite",
+  "item.astralpack.fennec_netherite_chestplate": "Plastron de fennec en netherite",
+  "item.astralpack.fennec_netherite_boots": "Protège-pattes de fennec en netherite"
 }

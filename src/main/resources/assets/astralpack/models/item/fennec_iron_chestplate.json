@@ -1,0 +1,4 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": { "layer0": "astralpack:item/fennec_iron_chestplate" }
+}

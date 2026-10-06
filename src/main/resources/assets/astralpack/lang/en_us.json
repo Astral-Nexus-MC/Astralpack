@@ -1,5 +1,20 @@
 {
   "itemGroup.astralpack.main": "Astralpack",
   "entity.astralpack.fennec": "Fennec",
-  "item.astralpack.fennec_spawn_egg": "Fennec Spawn Egg"
+  "item.astralpack.fennec_spawn_egg": "Fennec Spawn Egg",
+  "subtitles.entity.fennec.ambient": "Fennec chirps",
+  "subtitles.entity.fennec.hurt": "Fennec hurts",
+  "subtitles.entity.fennec.death": "Fennec dies",
+  "item.astralpack.fennec_iron_helmet": "Iron Fennec Helmet",
+  "item.astralpack.fennec_iron_chestplate": "Iron Fennec Chestplate",
+  "item.astralpack.fennec_iron_boots": "Iron Fennec Paw Guards",
+  "item.astralpack.fennec_gold_helmet": "Golden Fennec Helmet",
+  "item.astralpack.fennec_gold_chestplate": "Golden Fennec Chestplate",
+  "item.astralpack.fennec_gold_boots": "Golden Fennec Paw Guards",
+  "item.astralpack.fennec_diamond_helmet": "Diamond Fennec Helmet",
+  "item.astralpack.fennec_diamond_chestplate": "Diamond Fennec Chestplate",
+  "item.astralpack.fennec_diamond_boots": "Diamond Fennec Paw Guards",
+  "item.astralpack.fennec_netherite_helmet": "Netherite Fennec Helmet",
+  "item.astralpack.fennec_netherite_chestplate": "Netherite Fennec Chestplate",
+  "item.astralpack.fennec_netherite_boots": "Netherite Fennec Paw Guards"
 }

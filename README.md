@@ -6,7 +6,7 @@ Mod **Minecraft 1.20.1 / Forge 47.x** regroupant tous les ajouts personnalisés 
 ## Contenu actuel
 | Ajout | Type | État |
 |-------|------|------|
-| Fennec | Mob apprivoisable (poulet cru) | IA + apprivoisement OK, modèle/texture maison à intégrer |
+| Fennec | Mob apprivoisable (poulet cru) | Modèle, texture, 7 animations, sons, armure en 3 pièces × 4 matériaux, œuf et apparition naturelle : intégrés, à tester en jeu |
 
 ## Structure
 ```
@@ -22,7 +22,7 @@ src/main/resources/
 ├── assets/astralpack/   lang, geo, animations, textures, models, blockstates
 └── data/astralpack/     loot tables, recipes, tags, biome modifiers
 blockbench/              sources .bbmodel (non chargées par le jeu)
-docs/                    guides internes
+docs/                    guides internes (ADDING_CONTENT, cahier des charges mob, crédits sons)
 ```
 
 ## Développement
@@ -42,7 +42,6 @@ Les modèles sont faits avec Blockbench au format **GeckoLib Animated Model** :
    (noms `animation.xxx.idle`, `.walk`, `.sit`).
 4. Texture : `assets/astralpack/textures/entity/xxx.png`.
 
-`geo/fennec.geo.json` et `animations/fennec.animation.json` sont des **placeholders** à remplacer par l'export Blockbench.
+Source du Fennec : `blockbench/entity/fennec.bbmodel` (export dans `geo/`, `animations/` et `textures/entity/`).
 
 > Le wrapper Gradle (`gradlew`, `gradle/wrapper`) n'est pas encore versionné : à générer avec `gradle wrapper --gradle-version 8.1.1`.
-> `textures/entity/fennec.png` est à ajouter.

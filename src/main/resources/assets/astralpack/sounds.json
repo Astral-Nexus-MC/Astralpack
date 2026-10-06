@@ -1,0 +1,23 @@
+{
+  "entity.fennec.ambient": {
+    "subtitle": "subtitles.entity.fennec.ambient",
+    "sounds": [
+      { "name": "astralpack:mob/fennec/ambient1", "volume": 0.7 },
+      { "name": "astralpack:mob/fennec/ambient2", "volume": 0.7 },
+      { "name": "astralpack:mob/fennec/ambient3", "volume": 0.8 }
+    ]
+  },
+  "entity.fennec.hurt": {
+    "subtitle": "subtitles.entity.fennec.hurt",
+    "sounds": [
+      { "name": "astralpack:mob/fennec/hurt1", "volume": 0.9 },
+      { "name": "astralpack:mob/fennec/hurt2", "volume": 0.9 }
+    ]
+  },
+  "entity.fennec.death": {
+    "subtitle": "subtitles.entity.fennec.death",
+    "sounds": [
+      { "name": "astralpack:mob/fennec/death", "volume": 0.9 }
+    ]
+  }
+}
