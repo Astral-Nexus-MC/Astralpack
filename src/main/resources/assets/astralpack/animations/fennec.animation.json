@@ -1,0 +1,26 @@
+{
+  "format_version": "1.8.0",
+  "animations": {
+    "animation.fennec.idle": {
+      "loop": true,
+      "animation_length": 2,
+      "bones": {
+        "head": {"rotation": {"0.0": [0, 0, 0], "1.0": [2, 0, 0], "2.0": [0, 0, 0]}}
+      }
+    },
+    "animation.fennec.walk": {
+      "loop": true,
+      "animation_length": 1,
+      "bones": {
+        "body": {"position": {"0.0": [0, 0, 0], "0.5": [0, 0.5, 0], "1.0": [0, 0, 0]}}
+      }
+    },
+    "animation.fennec.sit": {
+      "loop": true,
+      "animation_length": 1,
+      "bones": {
+        "body": {"position": [0, -1.5, 0], "rotation": [-15, 0, 0]}
+      }
+    }
+  }
+}

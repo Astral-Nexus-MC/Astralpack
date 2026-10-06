@@ -4,9 +4,9 @@
 1. `entity/custom/XxxEntity.java` : la logique (IA, attributs, apprivoisement).
 2. `registry/ModEntities.java` : enregistrer l'`EntityType`.
 3. `registry/ModEvents.java` : enregistrer les attributs.
-4. `client/renderer/XxxRenderer.java` + `client/ClientSetup.java` : rendu côté client.
+4. `client/model/XxxModel.java` (GeoModel), `client/renderer/XxxRenderer.java` (GeoEntityRenderer), puis `client/ClientSetup.java`. L'entité implémente `GeoEntity`.
 5. `ModItems.java` : œuf d'apparition.
-6. Ressources : `textures/entity/xxx.png`, `lang/*.json`, `loot_tables/entities/xxx.json`,
+6. Ressources : `geo/xxx.geo.json`, `animations/xxx.animation.json` (exports Blockbench), `textures/entity/xxx.png`, `lang/*.json`, `loot_tables/entities/xxx.json`,
    `forge/biome_modifier/xxx_spawns.json` pour le spawn naturel.
 
 ## Nouvel item / bloc

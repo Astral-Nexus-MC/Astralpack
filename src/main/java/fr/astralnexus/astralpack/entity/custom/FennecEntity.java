@@ -17,9 +17,18 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.crafting.Ingredient;
 import org.jetbrains.annotations.Nullable;
+import software.bernie.geckolib.animatable.GeoEntity;
+import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
+import software.bernie.geckolib.core.animation.AnimatableManager;
+import software.bernie.geckolib.core.animation.AnimationController;
+import software.bernie.geckolib.core.animation.AnimationState;
+import software.bernie.geckolib.core.animation.RawAnimation;
+import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.util.GeckoLibUtil;
 
 /** Fennec apprivoisable (se dompte avec du poulet cru). */
-public class FennecEntity extends TamableAnimal {
+public class FennecEntity extends TamableAnimal implements GeoEntity {
+    private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
     private static final Ingredient TEMPT_ITEMS = Ingredient.of(Items.CHICKEN, Items.RABBIT);
 
     public FennecEntity(EntityType<? extends TamableAnimal> type, Level level) {
@@ -98,5 +107,20 @@ public class FennecEntity extends TamableAnimal {
         }
         this.setOrderedToSit(false);
         return super.hurt(source, amount);
+    }
+
+    @Override
+    public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
+        controllers.add(new AnimationController<>(this, "main", 5, this::animate));
+    }
+
+    private PlayState animate(AnimationState<FennecEntity> state) {
+        String name = this.isInSittingPose() ? "sit" : state.isMoving() ? "walk" : "idle";
+        return state.setAndContinue(RawAnimation.begin().thenLoop("animation.fennec." + name));
+    }
+
+    @Override
+    public AnimatableInstanceCache getAnimatableInstanceCache() {
+        return cache;
     }
 }
