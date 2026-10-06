@@ -21,18 +21,18 @@ Suivi du plan de recette (cahier des charges §12, déroulé selon la [feuille d
 - [x] `shake` : sortir un Fennec de l'eau ou de la pluie.
 
 ### Ordres (propriétaire, clic droit main vide)
-- [ ] Le clic fait tourner suivre → rester → errer, avec le message dans la barre d'action.
-- [ ] Suivre : le Fennec suit le propriétaire et le rejoint quand il s'éloigne.
-- [ ] Rester : il s'assoit (animation `sit`) et ne bouge plus.
-- [ ] Errer : il se promène librement sans suivre le propriétaire.
-- [ ] Blessé en mode « rester », il se relève et repasse en « suivre ».
-- [ ] L'ordre est conservé après déconnexion et redémarrage.
-- [ ] Maj + clic main vide lance toujours la gratouille du ventre.
-- [ ] Un Fennec apprivoisé n'a aucun signe distinctif (choix voulu).
+- [x] Le clic fait tourner suivre → rester → errer, avec le message dans la barre d'action.
+- [x] Suivre : le Fennec suit le propriétaire et le rejoint quand il s'éloigne.
+- [x] Rester : il s'assoit (animation `sit`) et ne bouge plus.
+- [x] Errer : il se promène librement sans suivre le propriétaire.
+- [x] Blessé en mode « rester », il se relève et repasse en « suivre ».
+- [x] L'ordre est conservé après déconnexion et redémarrage.
+- [x] Maj + clic main vide lance toujours la gratouille du ventre.
+- [x] Un Fennec apprivoisé n'a aucun signe distinctif (choix voulu).
 
 ### Apparition naturelle
-- [ ] Des groupes de Fennecs apparaissent dans les badlands et dans le désert (sur sable, terre, herbe ou terracotta).
-- [ ] Aucune apparition dans les autres biomes.
+- [x] Des groupes de Fennecs apparaissent dans les badlands et dans le désert (sur sable, terre, herbe ou terracotta).
+- [x] Aucune apparition dans les autres biomes.
 
 ### Rythme jour / nuit
 - [x] Un Fennec sauvage s'endort le jour (animation `sleep`, plus de cris) et se réveille la nuit.
@@ -54,12 +54,12 @@ Le terrier est un **bloc** : abri de sable en dôme (intérieur 0,75 × 0,75 blo
 - [x] La nuit il se réveille et sort ; un joueur debout à moins de 3 blocs réveille un sauvage (pas un apprivoisé).
 - [x] Les terriers construits restent dans le monde après déconnexion et redémarrage (ce sont des blocs).
 
-### Objets dans la gueule (à revalider : mâchoire ouverte, objet devant les dents)
+### Objets dans la gueule (reste à revalider : rendu mâchoire ouverte, objet devant les dents)
 - [ ] Le Fennec ramasse un objet au sol (un seul à la fois) et l'affiche dans la gueule (position à ajuster si besoin dans `FennecMouthItemLayer`).
-- [ ] Il va chercher les objets proches ; un Fennec apprivoisé reste à moins de 12 blocs de son propriétaire.
-- [ ] Clic droit main vide du propriétaire : il lâche l'objet (puis ne ramasse plus pendant 20 s).
-- [ ] L'objet tombe à sa mort, et reste dans la gueule après déconnexion et redémarrage.
-- [ ] Il ne ramasse rien assis, endormi, bébé, ni si `mobGriefing` est désactivé.
+- [x] Il va chercher les objets proches ; un Fennec apprivoisé reste à moins de 12 blocs de son propriétaire.
+- [x] Clic droit main vide du propriétaire : il lâche l'objet (puis ne ramasse plus pendant 20 s).
+- [x] L'objet tombe à sa mort, et reste dans la gueule après déconnexion et redémarrage.
+- [x] Il ne ramasse rien assis, endormi, bébé, ni si `mobGriefing` est désactivé.
 
 ### Pelage en relief (poils 3D)
 - [x] **Texture haute résolution (×4)** : `fennec.png` fait 256×640 alors que le modèle déclare un espace UV de 64×160 (voir `geo/fennec.geo.json`). Vérifier que la robe, les yeux, les dents et l'armure s'affichent aux bons endroits en jeu. En cas de décalage, revenir au commit `c8cd5c1` (texture 64×160) ou me le signaler.
@@ -91,5 +91,3 @@ Le terrier est un **bloc** : abri de sable en dôme (intérieur 0,75 × 0,75 blo
 
 ## Équilibrage (référence : loup 1.20.1)
 Vie 8/20, dégâts 2/4, vitesse 0,38 (loup 0,30), attaque toutes les 14 ticks (loup 20), apparition poids 8 en groupes de 4 dans les badlands et le désert. Pas de loot table : le Fennec ne lâche que son armure.
-
-> Ordres et Apparition naturelle : cases non cochées, à reconfirmer en non-régression avant la v1 (voir la feuille de route).

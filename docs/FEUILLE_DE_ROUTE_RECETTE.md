@@ -46,9 +46,10 @@ Rejouer les blocs de [RECETTE_FENNEC.md](RECETTE_FENNEC.md). État au 2026-10-06
 | Rythme jour/nuit | Validé | recette 2026-10-06 |
 | Pelage en relief, texture ×4, FPS | Validé | recette 2026-10-06 |
 | Bébé | Validé | recette 2026-10-06 |
-| **Objets dans la gueule** | **À revalider** | correctif 0.1.5 : mâchoire ouverte, objet devant les dents |
-| Ordres (suivre / rester / errer) | À reconfirmer | case non cochée dans la recette ; à rejouer en non-régression |
-| Apparition naturelle | À reconfirmer | idem |
+| Objets dans la gueule (comportement) | Validé | ramassage, lâcher, mort, persistance, interdits |
+| **Objets dans la gueule (rendu)** | **À revalider** | correctif : mâchoire ouverte, objet devant les dents |
+| Ordres (suivre / rester / errer) | Validé | non-régression 2026-10-06 |
+| Apparition naturelle | Validé | non-régression 2026-10-06 |
 
 Règle : une case ne se coche que si le test a été fait **sur la version candidate**. Une modification du comportement concerné décoche la case correspondante.
 
@@ -142,8 +143,7 @@ Anomalies connues :
 
 ## Prochaines étapes pour le Fennec (v1 de production)
 
-1. Valider **Objets dans la gueule** (correctif sur `dev`).
-2. Rejouer en non-régression **Ordres** et **Apparition naturelle**.
-3. Dérouler la **porte 2** complète (jamais faite de bout en bout : persistance du terrier, objet en gueule après redémarrage, déchargement de chunks).
-4. Dérouler la **porte 3** avec le jar candidat sur un serveur de test.
-5. Accord du responsable → publication (porte 4) → contrôle (porte 5).
+1. Valider le **rendu** de l'objet en gueule (mâchoire ouverte, objet devant les dents).
+2. Dérouler la **porte 2** complète (jamais faite de bout en bout : persistance du terrier, objet en gueule après redémarrage, déchargement de chunks).
+3. Dérouler la **porte 3** avec le jar candidat sur un serveur de test.
+4. Accord du responsable → publication (porte 4) → contrôle (porte 5).
