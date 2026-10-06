@@ -65,14 +65,17 @@ public class FennecModel extends GeoModel<FennecEntity> {
         }
     }
 
-    /** Gueule ouverte quand le Fennec tient un objet entre ses dents. */
+    /**
+     * Gueule ouverte quand le Fennec tient un objet entre ses dents. Angle absolu depuis la pose de repos : la mâchoire
+     * n'a pas de keyframes au repos, un ajout relatif s'accumulerait à chaque image et la ferait sauter.
+     */
     private void openJaw(FennecEntity animatable) {
         if (animatable.getMainHandItem().isEmpty() || animatable.isDozing()) {
             return;
         }
         CoreGeoBone jaw = this.getAnimationProcessor().getBone("jaw");
         if (jaw != null) {
-            jaw.setRotX(jaw.getRotX() + JAW_OPEN);
+            jaw.setRotX(jaw.getInitialSnapshot().getRotX() + JAW_OPEN);
         }
     }
 
