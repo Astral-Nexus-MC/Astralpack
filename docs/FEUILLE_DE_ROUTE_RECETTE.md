@@ -47,7 +47,7 @@ Rejouer les blocs de [RECETTE_FENNEC.md](RECETTE_FENNEC.md). État au 2026-10-06
 | Pelage en relief, texture ×4, FPS | Validé | recette 2026-10-06 |
 | Bébé | Validé | recette 2026-10-06 |
 | Objets dans la gueule (comportement) | Validé | ramassage, lâcher, mort, persistance, interdits |
-| **Objets dans la gueule (rendu)** | **À revalider** | correctif : mâchoire ouverte, objet devant les dents |
+| Objets dans la gueule (rendu) | Validé | mâchoire ouverte, objet devant les dents |
 | Ordres (suivre / rester / errer) | Validé | non-régression 2026-10-06 |
 | Apparition naturelle | Validé | non-régression 2026-10-06 |
 
@@ -143,7 +143,6 @@ Anomalies connues :
 
 ## Prochaines étapes pour le Fennec (v1 de production)
 
-1. Valider le **rendu** de l'objet en gueule (mâchoire ouverte, objet devant les dents).
-2. Dérouler la **porte 2** complète (jamais faite de bout en bout : persistance du terrier, objet en gueule après redémarrage, déchargement de chunks).
-3. Dérouler la **porte 3** avec le jar candidat sur un serveur de test.
-4. Accord du responsable → publication (porte 4) → contrôle (porte 5).
+1. ~~Rendu de l'objet en gueule~~ et ~~porte 2~~ : validés le 2026-10-06.
+2. Dérouler la **porte 3** avec le jar candidat sur un serveur de test.
+3. Accord du responsable → publication (porte 4) → contrôle (porte 5).

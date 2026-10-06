@@ -54,8 +54,8 @@ Le terrier est un **bloc** : abri de sable en dôme (intérieur 0,75 × 0,75 blo
 - [x] La nuit il se réveille et sort ; un joueur debout à moins de 3 blocs réveille un sauvage (pas un apprivoisé).
 - [x] Les terriers construits restent dans le monde après déconnexion et redémarrage (ce sont des blocs).
 
-### Objets dans la gueule (reste à revalider : rendu mâchoire ouverte, objet devant les dents)
-- [ ] Le Fennec ramasse un objet au sol (un seul à la fois) et l'affiche dans la gueule (position à ajuster si besoin dans `FennecMouthItemLayer`).
+### Objets dans la gueule
+- [x] Le Fennec ramasse un objet au sol (un seul à la fois) et l'affiche dans la gueule (position à ajuster si besoin dans `FennecMouthItemLayer`).
 - [x] Il va chercher les objets proches ; un Fennec apprivoisé reste à moins de 12 blocs de son propriétaire.
 - [x] Clic droit main vide du propriétaire : il lâche l'objet (puis ne ramasse plus pendant 20 s).
 - [x] L'objet tombe à sa mort, et reste dans la gueule après déconnexion et redémarrage.
