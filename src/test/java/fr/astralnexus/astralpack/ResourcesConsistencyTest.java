@@ -44,4 +44,15 @@ class ResourcesConsistencyTest {
         assertTrue(sounds.contains("mob/fennec"));
         assertTrue(Files.exists(RES.resolve("textures/entity/fennec.png")));
     }
+
+    @Test
+    void orderMessagesAreTranslated() throws IOException {
+        for (String lang : List.of("en_us", "fr_fr")) {
+            String json = read(RES.resolve("lang/" + lang + ".json"));
+            for (String order : List.of("follow", "stay", "wander")) {
+                assertTrue(json.contains("\"message.astralpack.fennec.order." + order + "\""),
+                        "message d'ordre manquant (" + lang + ") : " + order);
+            }
+        }
+    }
 }

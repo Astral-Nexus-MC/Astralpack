@@ -16,5 +16,8 @@
   "item.astralpack.fennec_diamond_boots": "Protège-pattes de fennec en diamant",
   "item.astralpack.fennec_netherite_helmet": "Casque de fennec en netherite",
   "item.astralpack.fennec_netherite_chestplate": "Plastron de fennec en netherite",
-  "item.astralpack.fennec_netherite_boots": "Protège-pattes de fennec en netherite"
+  "item.astralpack.fennec_netherite_boots": "Protège-pattes de fennec en netherite",
+  "message.astralpack.fennec.order.follow": "Le Fennec vous suit",
+  "message.astralpack.fennec.order.stay": "Le Fennec reste ici",
+  "message.astralpack.fennec.order.wander": "Le Fennec se promène librement"
 }

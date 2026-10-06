@@ -16,6 +16,7 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -93,6 +94,7 @@ public class FennecEntity extends TamableAnimal implements GeoEntity {
     private static final EntityDataAccessor<ItemStack>[] ARMOR = new EntityDataAccessor[]{ARMOR_HEAD, ARMOR_BODY, ARMOR_FEET};
 
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
+    private FennecOrder order = FennecOrder.FOLLOW;
     private boolean wasWet;
     private int scratchTicks;
 
@@ -115,7 +117,7 @@ public class FennecEntity extends TamableAnimal implements GeoEntity {
         this.goalSelector.addGoal(3, new SitWhenOrderedToGoal(this));
         this.goalSelector.addGoal(4, new LeapAtTargetGoal(this, 0.4F));
         this.goalSelector.addGoal(5, new FennecMeleeGoal());
-        this.goalSelector.addGoal(6, new FollowOwnerGoal(this, 1.1D, 10.0F, 2.0F, false));
+        this.goalSelector.addGoal(6, new FennecFollowGoal());
         this.goalSelector.addGoal(7, new BreedGoal(this, 1.0D));
         this.goalSelector.addGoal(8, new TemptGoal(this, 1.1D, TEMPT_ITEMS, false));
         this.goalSelector.addGoal(9, new WaterAvoidingRandomStrollGoal(this, 1.0D));
@@ -272,7 +274,9 @@ public class FennecEntity extends TamableAnimal implements GeoEntity {
         if (this.isInvulnerableTo(source)) {
             return false;
         }
-        this.setOrderedToSit(false);
+        if (this.order == FennecOrder.STAY) {
+            this.setOrder(FennecOrder.FOLLOW);
+        }
         return super.hurt(source, amount);
     }
 
@@ -353,14 +357,16 @@ public class FennecEntity extends TamableAnimal implements GeoEntity {
             }
             if (stack.isEmpty() && hand == InteractionHand.MAIN_HAND) {
                 if (player.isShiftKeyDown()) {
-                    this.setOrderedToSit(false);
+                    if (this.order == FennecOrder.STAY) {
+                        this.setOrder(FennecOrder.FOLLOW);
+                    }
                     this.startScratching();
                 } else {
                     this.entityData.set(SCRATCHING, false);
-                    this.setOrderedToSit(!this.isOrderedToSit());
-                    this.jumping = false;
-                    this.navigation.stop();
-                    this.setTarget(null);
+                    FennecOrder next = this.order.next();
+                    this.setOrder(next);
+                    player.displayClientMessage(
+                            Component.translatable("message.astralpack.fennec.order." + next.getId()), true);
                 }
                 return InteractionResult.SUCCESS;
             }
@@ -375,7 +381,7 @@ public class FennecEntity extends TamableAnimal implements GeoEntity {
                 this.tame(player);
                 this.navigation.stop();
                 this.setTarget(null);
-                this.setOrderedToSit(true);
+                this.setOrder(FennecOrder.STAY);
                 this.level().broadcastEntityEvent(this, (byte) 7);
             } else {
                 this.level().broadcastEntityEvent(this, (byte) 6);
@@ -393,6 +399,21 @@ public class FennecEntity extends TamableAnimal implements GeoEntity {
         this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(tamed ? TAMED_DAMAGE : WILD_DAMAGE);
         if (tamed) {
             this.setHealth((float) maxHealth);
+        }
+    }
+
+    public FennecOrder getOrder() {
+        return this.order;
+    }
+
+    /** Applique un ordre : STAY assoit le Fennec, FOLLOW et WANDER le laissent debout. */
+    private void setOrder(FennecOrder newOrder) {
+        this.order = newOrder;
+        this.setOrderedToSit(newOrder == FennecOrder.STAY);
+        this.jumping = false;
+        this.navigation.stop();
+        if (newOrder == FennecOrder.STAY) {
+            this.setTarget(null);
         }
     }
 
@@ -414,6 +435,7 @@ public class FennecEntity extends TamableAnimal implements GeoEntity {
     @Override
     public void addAdditionalSaveData(CompoundTag tag) {
         super.addAdditionalSaveData(tag);
+        tag.putInt("FennecOrder", this.order.ordinal());
         for (FennecArmorSlot slot : FennecArmorSlot.values()) {
             ItemStack armor = this.entityData.get(ARMOR[slot.ordinal()]);
             if (!armor.isEmpty()) {
@@ -425,6 +447,11 @@ public class FennecEntity extends TamableAnimal implements GeoEntity {
     @Override
     public void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
+        if (tag.contains("FennecOrder")) {
+            this.order = FennecOrder.byOrdinal(tag.getInt("FennecOrder"));
+        } else {
+            this.order = this.isOrderedToSit() ? FennecOrder.STAY : FennecOrder.FOLLOW;
+        }
         for (FennecArmorSlot slot : FennecArmorSlot.values()) {
             String key = "FennecArmor" + slot.name();
             if (tag.contains(key)) {
@@ -472,6 +499,23 @@ public class FennecEntity extends TamableAnimal implements GeoEntity {
         @Override
         protected int getAttackInterval() {
             return this.adjustedTickDelay(ATTACK_INTERVAL);
+        }
+    }
+
+    /** Suit le propriétaire seulement sous l'ordre FOLLOW (en STAY il reste assis, en WANDER il erre). */
+    private class FennecFollowGoal extends FollowOwnerGoal {
+        FennecFollowGoal() {
+            super(FennecEntity.this, 1.1D, 10.0F, 2.0F, false);
+        }
+
+        @Override
+        public boolean canUse() {
+            return FennecEntity.this.order == FennecOrder.FOLLOW && super.canUse();
+        }
+
+        @Override
+        public boolean canContinueToUse() {
+            return FennecEntity.this.order == FennecOrder.FOLLOW && super.canContinueToUse();
         }
     }
 

@@ -20,6 +20,20 @@ Suivi du plan de recette (cahier des charges §12). Dernière mise à jour : 202
 - [x] `bite` : se joue au moment où le coup touche.
 - [x] `shake` : sortir un Fennec de l'eau ou de la pluie.
 
+### Ordres (propriétaire, clic droit main vide)
+- [ ] Le clic fait tourner suivre → rester → errer, avec le message dans la barre d'action.
+- [ ] Suivre : le Fennec suit le propriétaire et le rejoint quand il s'éloigne.
+- [ ] Rester : il s'assoit (animation `sit`) et ne bouge plus.
+- [ ] Errer : il se promène librement sans suivre le propriétaire.
+- [ ] Blessé en mode « rester », il se relève et repasse en « suivre ».
+- [ ] L'ordre est conservé après déconnexion et redémarrage.
+- [ ] Maj + clic main vide lance toujours la gratouille du ventre.
+- [ ] Un Fennec apprivoisé n'a aucun signe distinctif (choix voulu).
+
+### Bébé
+- [ ] Taille du bébé : GeckoLib réduit peut-être déjà les bébés ; si le bébé est trop petit, mettre `BABY_SCALE` à 1 dans `FennecRenderer`.
+- [ ] Hitbox du bébé cohérente avec le modèle.
+
 ### Équipement
 - [x] Équiper chaque pièce (casque, plastron, protège-pattes) : clic droit avec l'objet.
 - [x] Les 4 matériaux (fer, or, diamant, netherite) s'affichent sur le modèle.

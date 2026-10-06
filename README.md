@@ -6,7 +6,7 @@ Mod **Minecraft 1.20.1 / Forge 47.x** regroupant tous les ajouts personnalisés 
 ## Contenu actuel
 | Ajout | Type | État |
 |-------|------|------|
-| Fennec | Mob apprivoisable (poulet cru) | Modèle, texture, 7 animations, sons, armure en 3 pièces × 4 matériaux, œuf et apparition naturelle : intégrés, à tester en jeu |
+| Fennec | Mob apprivoisable (poulet cru) | Validé en jeu (modèle, 7 animations, sons, armure, apparition, serveur dédié). Ordres suivre / rester / errer à valider ; version bébé à tester |
 
 ## Structure
 ```
