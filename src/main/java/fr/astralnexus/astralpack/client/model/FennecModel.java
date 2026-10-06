@@ -20,7 +20,7 @@ public class FennecModel extends GeoModel<FennecEntity> {
     private static final ResourceLocation TEXTURE = new ResourceLocation(Astralpack.MOD_ID, "textures/entity/fennec.png");
     private static final ResourceLocation ANIMATION = new ResourceLocation(Astralpack.MOD_ID, "animations/fennec.animation.json");
 
-    private static final float JAW_OPEN = 0.9F;
+    private static final float JAW_OPEN = -0.9F;
 
     private static final Map<FennecArmorSlot, String[]> PIECES = new EnumMap<>(FennecArmorSlot.class);
 
