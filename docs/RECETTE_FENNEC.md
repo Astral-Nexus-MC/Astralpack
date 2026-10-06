@@ -56,6 +56,13 @@ Suivi du plan de recette (cahier des charges §12). Dernière mise à jour : 202
 - [ ] L'objet tombe à sa mort, et reste dans la gueule après déconnexion et redémarrage.
 - [ ] Il ne ramasse rien assis, endormi, bébé, ni si `mobGriefing` est désactivé.
 
+### Pelage en relief (poils 3D)
+- [ ] Deux fines couches de poils entourent le corps, la tête, les pattes et la base de la queue : silhouette légèrement duveteuse, robe et taches toujours visibles dessous.
+- [ ] Les yeux et le museau restent dégagés (pas de poils devant le visage).
+- [ ] Sous une pièce d'armure, les poils de la zone couverte disparaissent (casque, plastron, protège-pattes) : rien ne dépasse à travers l'armure.
+- [ ] Aucun scintillement (z-fighting) ni bord transparent anormal, de près comme de loin.
+- [ ] Pas de baisse de FPS sensible avec 20 Fennecs visibles.
+
 ### Bébé
 - [ ] Taille du bébé : GeckoLib réduit peut-être déjà les bébés ; si le bébé est trop petit, mettre `BABY_SCALE` à 1 dans `FennecRenderer`.
 - [ ] Hitbox du bébé cohérente avec le modèle.

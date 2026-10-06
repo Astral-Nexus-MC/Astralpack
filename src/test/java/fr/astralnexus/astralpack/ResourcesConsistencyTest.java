@@ -30,7 +30,7 @@ class ResourcesConsistencyTest {
         String geo = read(RES.resolve("geo/fennec.geo.json"));
         assertTrue(geo.contains("\"geometry.fennec\""));
         for (String b : List.of("body", "head", "leg_front_left", "leg_front_right", "leg_back_left",
-                "leg_back_right", "tail", "jaw", "mouth_item", "armor_helmet_iron", "armor_chest_netherite")) {
+                "leg_back_right", "tail", "jaw", "mouth_item", "fur_torso", "fur_head", "fur_tail", "fur_leg_front_left", "armor_helmet_iron", "armor_chest_netherite")) {
             assertTrue(geo.contains("\"name\": \"" + b + "\""), "bone manquant : " + b);
         }
     }

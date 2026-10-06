@@ -21,11 +21,18 @@ public class FennecModel extends GeoModel<FennecEntity> {
     private static final ResourceLocation ANIMATION = new ResourceLocation(Astralpack.MOD_ID, "animations/fennec.animation.json");
 
     private static final Map<FennecArmorSlot, String[]> PIECES = new EnumMap<>(FennecArmorSlot.class);
+    /** Couches de poils en 3D : masquées sous une pièce d'armure pour ne pas dépasser à travers. */
+    private static final Map<FennecArmorSlot, String[]> FUR_BONES = new EnumMap<>(FennecArmorSlot.class);
 
     static {
         PIECES.put(FennecArmorSlot.HEAD, new String[]{"helmet"});
         PIECES.put(FennecArmorSlot.BODY, new String[]{"chest", "tail"});
         PIECES.put(FennecArmorSlot.FEET, new String[]{"leg_front_left", "leg_front_right", "leg_back_left", "leg_back_right"});
+
+        FUR_BONES.put(FennecArmorSlot.HEAD, new String[]{"fur_head"});
+        FUR_BONES.put(FennecArmorSlot.BODY, new String[]{"fur_torso", "fur_tail"});
+        FUR_BONES.put(FennecArmorSlot.FEET, new String[]{"fur_leg_front_left", "fur_leg_front_right",
+                "fur_leg_back_left", "fur_leg_back_right"});
     }
 
     @Override
@@ -48,6 +55,13 @@ public class FennecModel extends GeoModel<FennecEntity> {
         this.trackHead(animatable, animationState);
         for (FennecArmorSlot slot : FennecArmorSlot.values()) {
             FennecArmorTier worn = animatable.getArmorTier(slot);
+            for (String furName : FUR_BONES.get(slot)) {
+                CoreGeoBone fur = this.getAnimationProcessor().getBone(furName);
+                if (fur != null) {
+                    fur.setHidden(worn != null);
+                    fur.setChildrenHidden(worn != null);
+                }
+            }
             for (FennecArmorTier tier : FennecArmorTier.values()) {
                 boolean hidden = worn != tier;
                 for (String piece : PIECES.get(slot)) {
@@ -62,7 +76,7 @@ public class FennecModel extends GeoModel<FennecEntity> {
     }
 
     private void trackHead(FennecEntity animatable, AnimationState<FennecEntity> animationState) {
-        if (animatable.isScratching() || animatable.isDozing()) {
+        if (animatable.isScratching() || animatable.isDozing() || animatable.isDigging()) {
             return;
         }
         CoreGeoBone head = this.getAnimationProcessor().getBone("head");
