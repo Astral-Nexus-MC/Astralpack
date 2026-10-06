@@ -13,6 +13,7 @@ public class FennecRenderer extends GeoEntityRenderer<FennecEntity> {
     public FennecRenderer(EntityRendererProvider.Context context) {
         super(context, new FennecModel());
         this.shadowRadius = 0.3F;
+        this.addRenderLayer(new FennecMouthItemLayer(this));
     }
 
     @Override

@@ -206,6 +206,11 @@
 					]
 				},
 				{
+					"name": "mouth_item",
+					"parent": "head_base",
+					"pivot": [0, 8.3, -9.7]
+				},
+				{
 					"name": "armor_helmet_iron",
 					"parent": "head",
 					"pivot": [0, 9, -4],

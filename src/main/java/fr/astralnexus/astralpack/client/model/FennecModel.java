@@ -62,7 +62,7 @@ public class FennecModel extends GeoModel<FennecEntity> {
     }
 
     private void trackHead(FennecEntity animatable, AnimationState<FennecEntity> animationState) {
-        if (animatable.isScratching()) {
+        if (animatable.isScratching() || animatable.isDozing()) {
             return;
         }
         CoreGeoBone head = this.getAnimationProcessor().getBone("head");

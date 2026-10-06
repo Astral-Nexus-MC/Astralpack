@@ -11,6 +11,9 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Blocks;
@@ -65,6 +68,7 @@ public class FennecEntity extends TamableAnimal implements GeoEntity {
     private static final RawAnimation ATTACK = RawAnimation.begin().thenPlayAndHold("animation.fennec.attack");
     private static final RawAnimation SHAKE = RawAnimation.begin().then("animation.fennec.shake", Animation.LoopType.PLAY_ONCE);
     private static final RawAnimation BITE = RawAnimation.begin().then("animation.fennec.bite", Animation.LoopType.PLAY_ONCE);
+    private static final RawAnimation SLEEP = RawAnimation.begin().thenLoop("animation.fennec.sleep");
     private static final RawAnimation BELLY_SCRATCH = RawAnimation.begin().thenLoop("animation.fennec.belly_scratch");
 
     private static final Ingredient FOOD = Ingredient.of(Items.CHICKEN, Items.RABBIT);
@@ -82,6 +86,17 @@ public class FennecEntity extends TamableAnimal implements GeoEntity {
     private static final double CHASE_SPEED = 1.8D;
     private static final int ATTACK_INTERVAL = 14;
 
+    // Rythme nocturne : actif la nuit (bonus), endormi puis affaibli le jour (malus).
+    private static final double NIGHT_DAMAGE_BONUS = 0.25D;
+    private static final double DAY_DAMAGE_MALUS = -0.25D;
+    private static final int NIGHT_ATTACK_INTERVAL = 11;
+    private static final int DAY_ATTACK_INTERVAL = 19;
+    private static final UUID NOCTURNAL_UUID = UUID.fromString("3c8f1b52-7d0e-4a9b-b6c4-1e5f2a7d9c30");
+    private static final int PICKUP_COOLDOWN_AFTER_DROP = 400;
+
+    private static final EntityDataAccessor<Boolean> DOZING =
+            SynchedEntityData.defineId(FennecEntity.class, EntityDataSerializers.BOOLEAN);
+
     private static final EntityDataAccessor<Boolean> SCRATCHING =
             SynchedEntityData.defineId(FennecEntity.class, EntityDataSerializers.BOOLEAN);
 
@@ -95,11 +110,15 @@ public class FennecEntity extends TamableAnimal implements GeoEntity {
 
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
     private FennecOrder order = FennecOrder.FOLLOW;
+    private int timePhase = 99;
+    private int pickupCooldown;
     private boolean wasWet;
     private int scratchTicks;
 
     public FennecEntity(EntityType<? extends FennecEntity> type, Level level) {
         super(type, level);
+        this.setCanPickUpLoot(true);
+        this.setDropChance(EquipmentSlot.MAINHAND, 2.0F);
     }
 
     public static AttributeSupplier.Builder createAttributes() {
@@ -114,12 +133,14 @@ public class FennecEntity extends TamableAnimal implements GeoEntity {
     protected void registerGoals() {
         this.goalSelector.addGoal(1, new FloatGoal(this));
         this.goalSelector.addGoal(2, new ScratchGoal());
+        this.goalSelector.addGoal(2, new FennecSleepGoal());
         this.goalSelector.addGoal(3, new SitWhenOrderedToGoal(this));
         this.goalSelector.addGoal(4, new LeapAtTargetGoal(this, 0.4F));
         this.goalSelector.addGoal(5, new FennecMeleeGoal());
         this.goalSelector.addGoal(6, new FennecFollowGoal());
         this.goalSelector.addGoal(7, new BreedGoal(this, 1.0D));
         this.goalSelector.addGoal(8, new TemptGoal(this, 1.1D, TEMPT_ITEMS, false));
+        this.goalSelector.addGoal(8, new FennecSearchItemsGoal());
         this.goalSelector.addGoal(9, new WaterAvoidingRandomStrollGoal(this, 1.0D));
         this.goalSelector.addGoal(10, new LookAtPlayerGoal(this, Player.class, 8.0F));
         this.goalSelector.addGoal(11, new RandomLookAroundGoal(this));
@@ -134,6 +155,7 @@ public class FennecEntity extends TamableAnimal implements GeoEntity {
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(SCRATCHING, false);
+        this.entityData.define(DOZING, false);
         for (EntityDataAccessor<ItemStack> accessor : ARMOR) {
             this.entityData.define(accessor, ItemStack.EMPTY);
         }
@@ -256,7 +278,7 @@ public class FennecEntity extends TamableAnimal implements GeoEntity {
 
     @Override
     protected SoundEvent getAmbientSound() {
-        return ModSounds.FENNEC_AMBIENT.get();
+        return this.isDozing() ? null : ModSounds.FENNEC_AMBIENT.get();
     }
 
     @Override
@@ -274,6 +296,7 @@ public class FennecEntity extends TamableAnimal implements GeoEntity {
         if (this.isInvulnerableTo(source)) {
             return false;
         }
+        this.entityData.set(DOZING, false);
         if (this.order == FennecOrder.STAY) {
             this.setOrder(FennecOrder.FOLLOW);
         }
@@ -308,6 +331,12 @@ public class FennecEntity extends TamableAnimal implements GeoEntity {
         if (this.level().isClientSide) {
             return;
         }
+        if (this.pickupCooldown > 0) {
+            this.pickupCooldown--;
+        }
+        if (this.tickCount % 20 == 0) {
+            this.updateNocturnalPhase();
+        }
         boolean wet = this.isInWaterOrRain();
         if (this.wasWet && !wet && !this.isScratching()) {
             this.triggerAnim("action", "shake");
@@ -329,6 +358,8 @@ public class FennecEntity extends TamableAnimal implements GeoEntity {
             boolean canInteract = this.isTame() ? this.isOwnedBy(player) : stack.is(Items.CHICKEN);
             return canInteract ? InteractionResult.CONSUME : InteractionResult.PASS;
         }
+
+        this.entityData.set(DOZING, false);
 
         if (this.isTame()) {
             if (!this.isOwnedBy(player)) {
@@ -353,6 +384,10 @@ public class FennecEntity extends TamableAnimal implements GeoEntity {
                     stack.shrink(1);
                 }
                 this.heal(4.0F);
+                return InteractionResult.SUCCESS;
+            }
+            if (stack.isEmpty() && hand == InteractionHand.MAIN_HAND && !this.getMainHandItem().isEmpty()) {
+                this.dropMouthItem();
                 return InteractionResult.SUCCESS;
             }
             if (stack.isEmpty() && hand == InteractionHand.MAIN_HAND) {
@@ -400,6 +435,87 @@ public class FennecEntity extends TamableAnimal implements GeoEntity {
         if (tamed) {
             this.setHealth((float) maxHealth);
         }
+    }
+
+    public boolean isDozing() {
+        return this.entityData.get(DOZING);
+    }
+
+    /** Bonus la nuit, malus le jour (dégâts et cadence d'attaque) ; neutre sans cycle jour/nuit. */
+    private void updateNocturnalPhase() {
+        int phase = this.level().isNight() ? 1 : this.level().isDay() ? -1 : 0;
+        if (phase == this.timePhase) {
+            return;
+        }
+        this.timePhase = phase;
+        AttributeInstance damage = this.getAttribute(Attributes.ATTACK_DAMAGE);
+        if (damage == null) {
+            return;
+        }
+        damage.removeModifier(NOCTURNAL_UUID);
+        if (phase != 0) {
+            double amount = phase > 0 ? NIGHT_DAMAGE_BONUS : DAY_DAMAGE_MALUS;
+            damage.addTransientModifier(new AttributeModifier(NOCTURNAL_UUID, "Fennec nocturnal",
+                    amount, AttributeModifier.Operation.MULTIPLY_BASE));
+        }
+    }
+
+    private int currentAttackInterval() {
+        return this.timePhase == 1 ? NIGHT_ATTACK_INTERVAL
+                : this.timePhase == -1 ? DAY_ATTACK_INTERVAL : ATTACK_INTERVAL;
+    }
+
+    /** Un Fennec sauvage dort le jour ; un Fennec apprivoisé seulement sous l'ordre « rester ». */
+    private boolean canNap() {
+        if (!this.level().isDay() || !this.onGround() || this.isInWaterOrBubble()) {
+            return false;
+        }
+        if (this.getTarget() != null || this.getLastHurtByMob() != null || this.isAggressive()
+                || this.isScratching() || this.isLeashed()) {
+            return false;
+        }
+        if (this.isTame()) {
+            return this.order == FennecOrder.STAY;
+        }
+        return this.level().getEntitiesOfClass(Player.class, this.getBoundingBox().inflate(3.0D),
+                p -> !p.isSpectator() && !p.isCrouching()).isEmpty();
+    }
+
+    @Override
+    public boolean wantsToPickUp(ItemStack stack) {
+        return this.canHoldItem(stack);
+    }
+
+    @Override
+    public boolean canHoldItem(ItemStack stack) {
+        return this.getMainHandItem().isEmpty() && this.pickupCooldown <= 0 && !this.isDozing()
+                && !this.isScratching() && !this.isOrderedToSit() && !this.isBaby();
+    }
+
+    /** Prend un seul objet dans la gueule ; le reste de la pile reste au sol. */
+    @Override
+    protected void pickUpItem(ItemEntity itemEntity) {
+        ItemStack stack = itemEntity.getItem();
+        if (!this.canHoldItem(stack)) {
+            return;
+        }
+        this.onItemPickup(itemEntity);
+        this.setItemSlot(EquipmentSlot.MAINHAND, stack.split(1));
+        this.setDropChance(EquipmentSlot.MAINHAND, 2.0F);
+        this.take(itemEntity, 1);
+        if (stack.isEmpty()) {
+            itemEntity.discard();
+        }
+    }
+
+    private void dropMouthItem() {
+        ItemStack held = this.getMainHandItem();
+        if (held.isEmpty()) {
+            return;
+        }
+        this.setItemSlot(EquipmentSlot.MAINHAND, ItemStack.EMPTY);
+        this.pickupCooldown = PICKUP_COOLDOWN_AFTER_DROP;
+        this.spawnAtLocation(held);
     }
 
     public FennecOrder getOrder() {
@@ -473,6 +589,9 @@ public class FennecEntity extends TamableAnimal implements GeoEntity {
         if (this.isScratching()) {
             return state.setAndContinue(BELLY_SCRATCH);
         }
+        if (this.isDozing()) {
+            return state.setAndContinue(SLEEP);
+        }
         if (this.isInSittingPose()) {
             return state.setAndContinue(SIT);
         }
@@ -498,7 +617,90 @@ public class FennecEntity extends TamableAnimal implements GeoEntity {
 
         @Override
         protected int getAttackInterval() {
-            return this.adjustedTickDelay(ATTACK_INTERVAL);
+            return this.adjustedTickDelay(FennecEntity.this.currentAttackInterval());
+        }
+    }
+
+    /** Dort quand les conditions de sommeil sont réunies (voir canNap). */
+    private class FennecSleepGoal extends Goal {
+        FennecSleepGoal() {
+            this.setFlags(java.util.EnumSet.of(Flag.MOVE, Flag.LOOK, Flag.JUMP));
+        }
+
+        @Override
+        public boolean canUse() {
+            return FennecEntity.this.canNap() && FennecEntity.this.getRandom().nextInt(20) == 0;
+        }
+
+        @Override
+        public boolean canContinueToUse() {
+            return FennecEntity.this.canNap();
+        }
+
+        @Override
+        public void start() {
+            FennecEntity.this.getNavigation().stop();
+            FennecEntity.this.entityData.set(DOZING, true);
+        }
+
+        @Override
+        public void stop() {
+            FennecEntity.this.entityData.set(DOZING, false);
+        }
+    }
+
+    /** Va chercher un objet au sol pour le prendre dans la gueule. */
+    private class FennecSearchItemsGoal extends Goal {
+        private ItemEntity target;
+        private int ticks;
+
+        FennecSearchItemsGoal() {
+            this.setFlags(java.util.EnumSet.of(Flag.MOVE));
+        }
+
+        @Override
+        public boolean canUse() {
+            FennecEntity fennec = FennecEntity.this;
+            if (!fennec.getMainHandItem().isEmpty() || fennec.pickupCooldown > 0 || fennec.isDozing()
+                    || fennec.isOrderedToSit() || fennec.isBaby() || fennec.getTarget() != null
+                    || fennec.getRandom().nextInt(10) != 0
+                    || !ForgeEventFactory.getMobGriefingEvent(fennec.level(), fennec)) {
+                return false;
+            }
+            if (fennec.isTame() && (fennec.getOwner() == null || fennec.distanceToSqr(fennec.getOwner()) > 144.0D)) {
+                return false;
+            }
+            this.target = fennec.level().getEntitiesOfClass(ItemEntity.class,
+                            fennec.getBoundingBox().inflate(8.0D, 4.0D, 8.0D),
+                            e -> e.isAlive() && !e.hasPickUpDelay() && fennec.canHoldItem(e.getItem()))
+                    .stream().min(java.util.Comparator.comparingDouble(fennec::distanceToSqr)).orElse(null);
+            return this.target != null;
+        }
+
+        @Override
+        public boolean canContinueToUse() {
+            return this.target != null && this.target.isAlive() && this.ticks < 200
+                    && FennecEntity.this.getMainHandItem().isEmpty() && !FennecEntity.this.isDozing();
+        }
+
+        @Override
+        public void start() {
+            this.ticks = 0;
+            FennecEntity.this.getNavigation().moveTo(this.target, 1.2D);
+        }
+
+        @Override
+        public void tick() {
+            this.ticks++;
+            if (this.ticks % 20 == 0) {
+                FennecEntity.this.getNavigation().moveTo(this.target, 1.2D);
+            }
+        }
+
+        @Override
+        public void stop() {
+            this.target = null;
+            FennecEntity.this.getNavigation().stop();
         }
     }
 

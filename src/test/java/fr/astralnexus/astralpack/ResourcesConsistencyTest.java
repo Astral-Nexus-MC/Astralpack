@@ -20,7 +20,7 @@ class ResourcesConsistencyTest {
     @Test
     void animationsUsedByEntityExist() throws IOException {
         String anims = read(RES.resolve("animations/fennec.animation.json"));
-        for (String n : List.of("idle", "walk", "sit", "shake", "attack", "belly_scratch", "bite")) {
+        for (String n : List.of("idle", "walk", "sit", "shake", "attack", "belly_scratch", "bite", "sleep")) {
             assertTrue(anims.contains("\"animation.fennec." + n + "\""), "animation manquante : " + n);
         }
     }
@@ -30,7 +30,7 @@ class ResourcesConsistencyTest {
         String geo = read(RES.resolve("geo/fennec.geo.json"));
         assertTrue(geo.contains("\"geometry.fennec\""));
         for (String b : List.of("body", "head", "leg_front_left", "leg_front_right", "leg_back_left",
-                "leg_back_right", "tail", "armor_helmet_iron", "armor_chest_netherite")) {
+                "leg_back_right", "tail", "jaw", "mouth_item", "armor_helmet_iron", "armor_chest_netherite")) {
             assertTrue(geo.contains("\"name\": \"" + b + "\""), "bone manquant : " + b);
         }
     }

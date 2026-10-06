@@ -30,6 +30,20 @@ Suivi du plan de recette (cahier des charges §12). Dernière mise à jour : 202
 - [ ] Maj + clic main vide lance toujours la gratouille du ventre.
 - [ ] Un Fennec apprivoisé n'a aucun signe distinctif (choix voulu).
 
+### Rythme jour / nuit
+- [ ] Un Fennec sauvage s'endort le jour (animation `sleep`, plus de cris) et se réveille la nuit.
+- [ ] Il se réveille si on le frappe, ou si un joueur debout s'approche à moins de 3 blocs (un joueur accroupi ne le réveille pas).
+- [ ] Un Fennec apprivoisé dort le jour seulement sous l'ordre « rester » ; sous « suivre » ou « errer » il reste éveillé.
+- [ ] La nuit : dégâts +25 % et attaque plus rapide (11 ticks). Le jour : dégâts −25 % et attaque plus lente (19 ticks).
+- [ ] Dans une dimension sans cycle jour/nuit (Nether, End), pas de bonus ni de malus.
+
+### Objets dans la gueule
+- [ ] Le Fennec ramasse un objet au sol (un seul à la fois) et l'affiche dans la gueule (position à ajuster si besoin dans `FennecMouthItemLayer`).
+- [ ] Il va chercher les objets proches ; un Fennec apprivoisé reste à moins de 12 blocs de son propriétaire.
+- [ ] Clic droit main vide du propriétaire : il lâche l'objet (puis ne ramasse plus pendant 20 s).
+- [ ] L'objet tombe à sa mort, et reste dans la gueule après déconnexion et redémarrage.
+- [ ] Il ne ramasse rien assis, endormi, bébé, ni si `mobGriefing` est désactivé.
+
 ### Bébé
 - [ ] Taille du bébé : GeckoLib réduit peut-être déjà les bébés ; si le bébé est trop petit, mettre `BABY_SCALE` à 1 dans `FennecRenderer`.
 - [ ] Hitbox du bébé cohérente avec le modèle.
