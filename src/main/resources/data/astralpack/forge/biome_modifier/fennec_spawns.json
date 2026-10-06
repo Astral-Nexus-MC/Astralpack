@@ -3,8 +3,8 @@
   "biomes": "#minecraft:is_badlands",
   "spawners": {
     "type": "astralpack:fennec",
-    "weight": 6,
-    "minCount": 1,
-    "maxCount": 3
+    "weight": 8,
+    "minCount": 4,
+    "maxCount": 4
   }
 }

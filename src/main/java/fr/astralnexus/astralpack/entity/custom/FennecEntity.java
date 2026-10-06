@@ -71,6 +71,16 @@ public class FennecEntity extends TamableAnimal implements GeoEntity {
     private static final Predicate<LivingEntity> PREY = e -> e instanceof Chicken || e instanceof Rabbit;
     private static final int SCRATCH_DURATION = 100;
 
+    // Équilibrage : références du loup (vie 8/20, dégâts 2/4, vitesse 0,3, poursuite x1,5, délai d'attaque 20 ticks).
+    // Le Fennec a la même vie et les mêmes dégâts, mais se déplace et attaque plus vite.
+    private static final double WILD_HEALTH = 8.0D;
+    private static final double TAMED_HEALTH = 20.0D;
+    private static final double WILD_DAMAGE = 2.0D;
+    private static final double TAMED_DAMAGE = 4.0D;
+    private static final double MOVEMENT_SPEED = 0.38D;
+    private static final double CHASE_SPEED = 1.8D;
+    private static final int ATTACK_INTERVAL = 14;
+
     private static final EntityDataAccessor<Boolean> SCRATCHING =
             SynchedEntityData.defineId(FennecEntity.class, EntityDataSerializers.BOOLEAN);
 
@@ -92,9 +102,9 @@ public class FennecEntity extends TamableAnimal implements GeoEntity {
 
     public static AttributeSupplier.Builder createAttributes() {
         return TamableAnimal.createMobAttributes()
-                .add(Attributes.MAX_HEALTH, 10.0D)
-                .add(Attributes.MOVEMENT_SPEED, 0.32D)
-                .add(Attributes.ATTACK_DAMAGE, 2.0D)
+                .add(Attributes.MAX_HEALTH, WILD_HEALTH)
+                .add(Attributes.MOVEMENT_SPEED, MOVEMENT_SPEED)
+                .add(Attributes.ATTACK_DAMAGE, WILD_DAMAGE)
                 .add(Attributes.FOLLOW_RANGE, 16.0D);
     }
 
@@ -104,7 +114,7 @@ public class FennecEntity extends TamableAnimal implements GeoEntity {
         this.goalSelector.addGoal(2, new ScratchGoal());
         this.goalSelector.addGoal(3, new SitWhenOrderedToGoal(this));
         this.goalSelector.addGoal(4, new LeapAtTargetGoal(this, 0.4F));
-        this.goalSelector.addGoal(5, new MeleeAttackGoal(this, 1.2D, true));
+        this.goalSelector.addGoal(5, new FennecMeleeGoal());
         this.goalSelector.addGoal(6, new FollowOwnerGoal(this, 1.1D, 10.0F, 2.0F, false));
         this.goalSelector.addGoal(7, new BreedGoal(this, 1.0D));
         this.goalSelector.addGoal(8, new TemptGoal(this, 1.1D, TEMPT_ITEMS, false));
@@ -378,8 +388,9 @@ public class FennecEntity extends TamableAnimal implements GeoEntity {
     @Override
     public void setTame(boolean tamed) {
         super.setTame(tamed);
-        double maxHealth = tamed ? 20.0D : 10.0D;
+        double maxHealth = tamed ? TAMED_HEALTH : WILD_HEALTH;
         this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(maxHealth);
+        this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(tamed ? TAMED_DAMAGE : WILD_DAMAGE);
         if (tamed) {
             this.setHealth((float) maxHealth);
         }
@@ -450,6 +461,18 @@ public class FennecEntity extends TamableAnimal implements GeoEntity {
     @Override
     public AnimatableInstanceCache getAnimatableInstanceCache() {
         return this.cache;
+    }
+
+    /** Attaque au corps à corps plus rapide que le loup (14 ticks au lieu de 20). */
+    private class FennecMeleeGoal extends MeleeAttackGoal {
+        FennecMeleeGoal() {
+            super(FennecEntity.this, CHASE_SPEED, true);
+        }
+
+        @Override
+        protected int getAttackInterval() {
+            return this.adjustedTickDelay(ATTACK_INTERVAL);
+        }
     }
 
     private class ScratchGoal extends Goal {
