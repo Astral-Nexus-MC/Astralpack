@@ -4,7 +4,10 @@ import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import fr.astralnexus.astralpack.client.renderer.DeathScytheRenderer;
 import net.minecraft.ChatFormatting;
+import fr.astralnexus.astralpack.client.pose.TwoHandedPose;
+import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.network.chat.Component;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
@@ -98,6 +101,14 @@ public class DeathScytheItem extends SwordItem implements GeoItem, TwoHanded {
     public void initializeClient(Consumer<IClientItemExtensions> consumer) {
         consumer.accept(new IClientItemExtensions() {
             private DeathScytheRenderer renderer;
+
+            @Override
+            public HumanoidModel.ArmPose getArmPose(LivingEntity entity, InteractionHand hand, ItemStack stack) {
+                if (hand == InteractionHand.MAIN_HAND) {
+                    return TwoHandedPose.POSE;
+                }
+                return null;
+            }
 
             @Override
             public BlockEntityWithoutLevelRenderer getCustomRenderer() {
