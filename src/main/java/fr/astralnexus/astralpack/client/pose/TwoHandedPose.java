@@ -30,6 +30,10 @@ public final class TwoHandedPose {
                 }
             });
 
+    /** Force le chargement de la classe, donc la création de la pose. */
+    public static void register() {
+    }
+
     private TwoHandedPose() {
     }
 }
