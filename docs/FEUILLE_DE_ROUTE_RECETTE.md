@@ -144,3 +144,7 @@ Anomalies connues :
 ## Statut du Fennec
 
 **Fennec v1 validé en production : mod Astralpack 0.2.0 (2026-10-07), ordres par la roue Fordix en 0.2.1 (validé en production).** Toutes les portes 0 à 5 sont cochées pour cette version ; aucune case de [RECETTE_FENNEC.md](RECETTE_FENNEC.md) n'est ouverte. Les versions suivantes repartent de cette feuille : toute modification du Fennec rejoue les portes indiquées dans la matrice ci-dessus.
+
+## Statut de la Death Scythe
+
+**Death Scythe validée définitivement, publiée dans Astralpack 0.3.0 (2026-10-08).** Portes 0 à 3 validées sur confirmation du responsable (tout a été testé en jeu), version dernier réglage 0.2.7 ; toutes les cases de [RECETTE_DEATH_SCYTHE.md](RECETTE_DEATH_SCYTHE.md) sont cochées. Leçons retenues : une pose de bras (valeur d'enum vanilla) doit être créée au chargement du mod (crash en 0.2.3, corrigé en 0.2.4) ; une arme à deux mains libère la main secondaire côté serveur (0.2.5).
