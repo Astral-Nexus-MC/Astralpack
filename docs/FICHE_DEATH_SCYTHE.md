@@ -1,6 +1,6 @@
 # Fiche de conception — Death Scythe
 
-Arme de référence du mod. Méthode générale : [CAHIER_DES_CHARGES_ARME.md](CAHIER_DES_CHARGES_ARME.md) · Recette : [RECETTE_DEATH_SCYTHE.md](RECETTE_DEATH_SCYTHE.md). Statut : **fiche à valider** (2026-10-08). Les valeurs chiffrées sont des points de départ, à régler en jeu.
+Arme de référence du mod. Méthode générale (armes et outils) : [CAHIER_DES_CHARGES_ARME_OUTIL.md](CAHIER_DES_CHARGES_ARME_OUTIL.md) · Recette : [RECETTE_DEATH_SCYTHE.md](RECETTE_DEATH_SCYTHE.md). Statut : **fiche à valider** (2026-10-08). Les valeurs chiffrées sont des points de départ, à régler en jeu.
 
 ## Identité
 - Identifiant : `death_scythe` (`astralpack:death_scythe`). Nom FR : « Faux de la Mort » ; nom EN : « Death Scythe ».

@@ -1,6 +1,6 @@
 # Recette de la Death Scythe
 
-Suivi du plan de recette ([cahier des charges des armes](CAHIER_DES_CHARGES_ARME.md) §8), déroulé selon la [feuille de route](FEUILLE_DE_ROUTE_RECETTE.md). Fiche : [FICHE_DEATH_SCYTHE.md](FICHE_DEATH_SCYTHE.md). Statut : **pas encore développée** (2026-10-08) ; toutes les cases sont ouvertes.
+Suivi du plan de recette ([cahier des charges des armes et outils](CAHIER_DES_CHARGES_ARME_OUTIL.md) §8), déroulé selon la [feuille de route](FEUILLE_DE_ROUTE_RECETTE.md). Fiche : [FICHE_DEATH_SCYTHE.md](FICHE_DEATH_SCYTHE.md). Statut : **pas encore développée** (2026-10-08) ; toutes les cases sont ouvertes.
 
 ## Obtention
 - [ ] La recette (grille de la fiche) donne une Death Scythe ; l'objet apparaît dans l'onglet créatif ; `/give @s astralpack:death_scythe` fonctionne.

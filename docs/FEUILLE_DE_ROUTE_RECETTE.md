@@ -2,7 +2,7 @@
 
 Objectif : s'assurer que **chaque test est fait avant qu'une version arrive en production**, pour ne pas casser le serveur ni les joueurs.
 
-Bases : [CAHIER_DES_CHARGES_MOB.md](CAHIER_DES_CHARGES_MOB.md) (§12 recette, §13 critères, §14 livraison) et [RECETTE_FENNEC.md](RECETTE_FENNEC.md) (liste de contrôle du Fennec). Pour un nouveau mob ou une nouvelle arme ([cahier des armes](CAHIER_DES_CHARGES_ARME.md)), la même feuille s'applique avec sa propre recette.
+Bases : [CAHIER_DES_CHARGES_MOB.md](CAHIER_DES_CHARGES_MOB.md) (§12 recette, §13 critères, §14 livraison) et [RECETTE_FENNEC.md](RECETTE_FENNEC.md) (liste de contrôle du Fennec). Pour un nouveau mob ou une nouvelle arme ou un nouvel outil ([cahier des armes et outils](CAHIER_DES_CHARGES_ARME_OUTIL.md)), la même feuille s'applique avec sa propre recette.
 
 > **Rappel :** un push sur `main` qui change `mod_version` publie une release, et le serveur la récupère. **Tout ce qui est mergé avec une nouvelle version est en production.** La validation se fait donc *avant* le merge.
 
