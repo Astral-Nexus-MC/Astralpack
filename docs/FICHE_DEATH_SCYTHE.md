@@ -1,6 +1,6 @@
 # Fiche de conception — Death Scythe
 
-Arme de référence du mod. Méthode générale (armes et outils) : [CAHIER_DES_CHARGES_ARME_OUTIL.md](CAHIER_DES_CHARGES_ARME_OUTIL.md) · Recette : [RECETTE_DEATH_SCYTHE.md](RECETTE_DEATH_SCYTHE.md). Statut : **fiche validée, arme développée sur `dev`, à tester en jeu** (2026-10-08). Les valeurs chiffrées sont des points de départ, à régler en jeu.
+Arme de référence du mod. Méthode générale (armes et outils) : [CAHIER_DES_CHARGES_ARME_OUTIL.md](CAHIER_DES_CHARGES_ARME_OUTIL.md) · Recette : [RECETTE_DEATH_SCYTHE.md](RECETTE_DEATH_SCYTHE.md). Statut : **validée en jeu avec la version 0.2.5** (2026-10-08), recette comprise.
 
 ## Identité
 - Identifiant : `death_scythe` (`astralpack:death_scythe`). Nom FR : « Faux de la Mort » ; nom EN : « Death Scythe ».
@@ -42,7 +42,7 @@ Appliqués **côté serveur**, seulement à pleine puissance (main secondaire vi
 1. **Attaque en arc** : le coup balaye comme l'épée (action `SWORD_SWEEP`), touchant les ennemis proches de la cible. Compatible avec l'enchantement Affilage.
 2. **Wither léger** : la cible touchée reçoit **Wither I pendant 3 secondes** (60 ticks). Ignoré par les créatures immunisées (Wither, Wither Squelette, etc.). Aucun effet sur le porteur.
 
-## Recette (provisoire, à équilibrer)
+## Recette (validée : l'objet doit rester difficile à obtenir)
 
 ```
 N N .
