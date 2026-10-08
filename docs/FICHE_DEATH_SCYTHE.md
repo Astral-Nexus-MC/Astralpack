@@ -72,6 +72,11 @@ Fabrication uniquement ; aucune présence dans les coffres ou les butins pour l'
 ## Fichiers prévus
 `DeathScytheItem`, `ModTiers`, `DeathScytheModel`, `DeathScytheRenderer`, `TwoHandedEvents`, `ModItems`, `ModSounds` (si besoin), `geo/death_scythe.geo.json`, `textures/item/death_scythe.png`, `models/item/death_scythe.json`, `data/astralpack/recipes/death_scythe.json`, langues FR et EN.
 
+## Lumières et effets visuels
+- **Brillance dans le noir** : les croix blanches des deux anneaux, le tranchant de la lame (violet clair) et les bagues du manche (violet) sont « émissifs » (couche `AutoGlowingGeoLayer` et texture `death_scythe_glowmask.png`) : ils restent lumineux même dans l'obscurité, en main, au sol et en inventaire.
+- **Âmes** : chaque coup à pleine puissance fait jaillir des particules d'âme sur la cible, en plus du Wither.
+- Pas de lumière dynamique autour du joueur (il faudrait un mod tiers).
+
 ## Réalisation
 - Code : `DeathScytheItem` (SwordItem + GeoItem + `TwoHanded`), `ModTiers.DEATH`, `TwoHandedEvents` (malus côté serveur), `DeathScytheModel` et `DeathScytheRenderer`, enregistrement dans `ModItems`.
 - Ressources : `geo/death_scythe.geo.json` (9 os, 84 cubes), `textures/item/death_scythe.png` (128×128), `animations/death_scythe.animation.json` (vide), `models/item/death_scythe.json` (réglages d'affichage provisoires), recette, langues FR et EN, test de cohérence.

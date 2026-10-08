@@ -14,7 +14,7 @@ import zlib
 RES = 'src/main/resources/assets/astralpack/'
 TEX_W = TEX_H = 128
 
-UV = {'dark': (0, 0), 'edge': (64, 0), 'white': (96, 0)}
+UV = {'dark': (0, 0), 'edge': (64, 0), 'white': (96, 0), 'violet': (64, 32)}
 
 bones = {}
 
@@ -65,7 +65,9 @@ bone('handle', 'weapon', (0, 0, 0))
 cube('handle', (-1, -15, -1), (1, 15, 1))
 for i in range(8):
     y = -14 + i * 4
-    cube('handle', (-1.25, y, -1.25), (1.25, y + 1, 1.25))
+    cube('handle', (-1.25, y, -1.25), (1.25, y + 1, 1.25), 'violet' if i % 2 == 0 else 'dark')
+cube('handle', (-1.5, -16, -1.5), (1.5, -14.8, 1.5))
+cube('handle', (-1.5, 14.2, -1.5), (1.5, 15.4, 1.5), 'violet')
 bone('hook', 'weapon', (0, -15, 0))
 chain('hook', 0, -15, [180, 200, 225, 250], [2.5, 2.5, 2.5, 2.2], [1.9, 1.6, 1.3, 1.0], 1.9)
 
@@ -104,10 +106,12 @@ sx, sy = TOP_X + 4.2, TOP_Y + 0.6
 headings = [8, 2, -6, -14, -22, -30, -40, -50, -60, -70]
 lengths = [4.2, 4.2, 4.2, 4.0, 4.0, 3.8, 3.6, 3.4, 3.0, 2.6]
 up_w = [4.6, 5.2, 4.4, 3.8, 3.2, 2.7, 2.2, 1.7, 1.1, 0.5]
+low_w = [3.4, 3.1, 2.5, 1.8, 1.2, 0.8, 0.6, 0.5, 0.45, 0.4]
 for i, (h, length, uw) in enumerate(zip(headings, lengths, up_w)):
-    cube('blade', (sx, sy - 0.5, -0.55), (sx + length, sy + uw, 0.55), angle=h, pivot=(sx, sy, 0))
-    cube('blade', (sx + 0.2, sy - 1.15, -0.5), (sx + length - 0.1, sy - 0.45, 0.5), 'edge', angle=h, pivot=(sx, sy, 0))
-    if i in (1, 2, 3):
+    lw = low_w[i]
+    cube('blade', (sx, sy - lw, -0.55), (sx + length, sy + uw, 0.55), angle=h, pivot=(sx, sy, 0))
+    cube('blade', (sx + 0.2, sy - lw - 0.7, -0.45), (sx + length - 0.1, sy - lw + 0.05, 0.45), 'edge', angle=h, pivot=(sx, sy, 0))
+    if i in (0, 1, 2, 3, 4):
         cube('blade', (sx + 1.0, sy + uw - 0.4, -0.4), (sx + 2.4, sy + uw + 2.2 - i * 0.5, 0.4), angle=h - 12,
              pivot=(sx + 1.0, sy + uw - 0.4, 0))
     rad = math.radians(h)
@@ -155,20 +159,27 @@ def clamp(v):
 
 
 rnd = random.Random(7)
+REGIONS = (((64, 0, 96, 32), (176, 150, 240), 14, True),
+           ((96, 0, 128, 32), (240, 234, 255), 8, True),
+           ((64, 32, 96, 64), (112, 64, 200), 12, True))
 pixels = []
+glow = []
 for y in range(TEX_H):
     row = []
+    grow = []
     for x in range(TEX_W):
-        if 64 <= x < 96 and y < 32:
-            base, spread = (172, 174, 184), 14
-        elif x >= 96 and y < 32:
-            base, spread = (236, 236, 240), 8
-        else:
-            base, spread = (26, 26, 32), 7
-            if (x * 7 + y * 3) % 11 == 0:
-                base = (46, 46, 56)
+        base, spread, emissive = (24, 24, 34), 7, False
+        for (x0, y0, x1, y1), col, spr, em in REGIONS:
+            if x0 <= x < x1 and y0 <= y < y1:
+                base, spread, emissive = col, spr, em
+        if not emissive and (x * 7 + y * 3) % 11 == 0:
+            base = (46, 44, 62)
         k = rnd.uniform(-spread, spread)
-        row.append([clamp(base[0] + k), clamp(base[1] + k), clamp(base[2] + k), 255])
+        c = [clamp(base[0] + k), clamp(base[1] + k), clamp(base[2] + k)]
+        row.append(c + [255])
+        grow.append(c + [255] if emissive else [0, 0, 0, 0])
     pixels.append(row)
+    glow.append(grow)
 write_png(RES + 'textures/item/death_scythe.png', pixels)
+write_png(RES + 'textures/item/death_scythe_glowmask.png', glow)
 print('death_scythe: %d os, %d cubes' % (len(bones), sum(len(b['cubes']) for b in bones.values())))

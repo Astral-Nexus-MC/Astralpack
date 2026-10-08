@@ -14,6 +14,11 @@ Suivi du plan de recette ([cahier des charges des armes et outils](CAHIER_DES_CH
 - [ ] Texture sans décalage (anneaux, croix blanches, lame) ; aucun scintillement.
 - [ ] Pas de baisse de FPS notable avec plusieurs joueurs portant la faux.
 
+## Lumières
+- [ ] Dans une grotte ou la nuit, les croix blanches, le tranchant de la lame et les bagues du manche brillent (pas d'ombrage), en main, au sol et en inventaire.
+- [ ] Le reste de la faux reste sombre et subit l'éclairage normal.
+- [ ] Les coups à pleine puissance font jaillir des particules d'âme sur la cible ; pas de particules avec la main secondaire occupée.
+
 ## Combat
 - [ ] Dégâts conformes : 9 à pleine puissance, 3 avec la main secondaire occupée (balayage compris).
 - [ ] Cadence lente (1,0 attaque/s) et allonge +1 bloc.

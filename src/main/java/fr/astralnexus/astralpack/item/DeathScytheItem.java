@@ -6,6 +6,8 @@ import fr.astralnexus.astralpack.client.renderer.DeathScytheRenderer;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.network.chat.Component;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -76,6 +78,10 @@ public class DeathScytheItem extends SwordItem implements GeoItem, TwoHanded {
             if (target.addEffect(new MobEffectInstance(MobEffects.WITHER, WITHER_TICKS, 0), attacker)) {
                 player.level().playSound(null, target.blockPosition(), SoundEvents.WITHER_SHOOT, SoundSource.PLAYERS,
                         0.4F, 1.4F);
+            }
+            if (player.level() instanceof ServerLevel server) {
+                server.sendParticles(ParticleTypes.SOUL, target.getX(), target.getY(0.6D), target.getZ(), 8, 0.3D, 0.4D,
+                        0.3D, 0.03D);
             }
         }
         return hit;
