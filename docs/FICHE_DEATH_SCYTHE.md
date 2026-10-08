@@ -6,7 +6,7 @@ Arme de référence du mod. Méthode générale (armes et outils) : [CAHIER_DES_
 - Identifiant : `death_scythe` (`astralpack:death_scythe`). Nom FR : « Faux de la Mort » ; nom EN : « Death Scythe ».
 - Concept : grande faux gothique noire, arme à deux mains.
 - Référence visuelle : image fournie par le responsable (faux noire, longue lame courbe vers la droite, deux anneaux ornés avec une croix blanche, manche segmenté et épineux, pointe recourbée en bas).
-- Source : première version générée par `blockbench/item/generate_death_scythe.py` (géométrie et texture) ; à reprendre dans Blockbench (`blockbench/item/death_scythe.bbmodel`) pour le polissage.
+- Source : première version générée par `blockbench/item/generate_death_scythe.py` (géométrie et texture) ; importée dans Blockbench le 2026-10-08 (`blockbench/item/death_scythe.bbmodel`, 84 cubes, validation GeckoLib sans erreur) pour le polissage.
 
 ## Silhouette du modèle
 | Pièce | Description |
