@@ -17,5 +17,8 @@
   "item.astralpack.fennec_netherite_helmet": "Casque de fennec en netherite",
   "item.astralpack.fennec_netherite_chestplate": "Plastron de fennec en netherite",
   "item.astralpack.fennec_netherite_boots": "Protège-pattes de fennec en netherite",
-  "block.astralpack.fennec_burrow": "Terrier de fennec"
+  "block.astralpack.fennec_burrow": "Terrier de fennec",
+  "item.astralpack.death_scythe": "Faux de la Mort",
+  "item.astralpack.death_scythe.two_handed": "Deux mains : main secondaire vide",
+  "item.astralpack.death_scythe.wither": "Flétrit sa cible pendant 3 secondes"
 }

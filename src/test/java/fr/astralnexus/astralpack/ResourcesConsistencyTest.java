@@ -46,6 +46,22 @@ class ResourcesConsistencyTest {
     }
 
     @Test
+    void deathScytheResourcesArePresent() throws IOException {
+        assertTrue(read(RES.resolve("geo/death_scythe.geo.json")).contains("\"geometry.death_scythe\""));
+        assertTrue(Files.exists(RES.resolve("textures/item/death_scythe.png")));
+        assertTrue(Files.exists(RES.resolve("animations/death_scythe.animation.json")));
+        assertTrue(read(RES.resolve("models/item/death_scythe.json")).contains("builtin/entity"));
+        assertTrue(Files.exists(Path.of("src/main/resources/data/astralpack/recipes/death_scythe.json")));
+        for (String lang : List.of("en_us", "fr_fr")) {
+            String json = read(RES.resolve("lang/" + lang + ".json"));
+            for (String key : List.of("item.astralpack.death_scythe", "item.astralpack.death_scythe.two_handed",
+                    "item.astralpack.death_scythe.wither")) {
+                assertTrue(json.contains("\"" + key + "\""), "clé manquante (" + lang + ") : " + key);
+            }
+        }
+    }
+
+    @Test
     void spawnBiomeModifiersAreDeclared() throws IOException {
         Path dir = Path.of("src/main/resources/data/astralpack/forge/biome_modifier");
         assertTrue(read(dir.resolve("fennec_spawns.json")).contains("#minecraft:is_badlands"));

@@ -1,11 +1,13 @@
 package fr.astralnexus.astralpack.registry;
 
 import fr.astralnexus.astralpack.Astralpack;
+import fr.astralnexus.astralpack.item.DeathScytheItem;
 import fr.astralnexus.astralpack.item.FennecArmorItem;
 import fr.astralnexus.astralpack.item.FennecArmorSlot;
 import fr.astralnexus.astralpack.item.FennecArmorTier;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Rarity;
 import net.minecraftforge.common.ForgeSpawnEggItem;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -21,6 +23,10 @@ public class ModItems {
 
     public static final RegistryObject<Item> FENNEC_BURROW =
             ITEMS.register("fennec_burrow", () -> new BlockItem(ModBlocks.FENNEC_BURROW.get(), new Item.Properties()));
+
+    public static final RegistryObject<Item> DEATH_SCYTHE =
+            ITEMS.register("death_scythe",
+                    () -> new DeathScytheItem(new Item.Properties().rarity(Rarity.EPIC).fireResistant()));
 
     static {
         for (FennecArmorTier tier : FennecArmorTier.values()) {

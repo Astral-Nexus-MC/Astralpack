@@ -1,12 +1,12 @@
 # Fiche de conception — Death Scythe
 
-Arme de référence du mod. Méthode générale (armes et outils) : [CAHIER_DES_CHARGES_ARME_OUTIL.md](CAHIER_DES_CHARGES_ARME_OUTIL.md) · Recette : [RECETTE_DEATH_SCYTHE.md](RECETTE_DEATH_SCYTHE.md). Statut : **fiche à valider** (2026-10-08). Les valeurs chiffrées sont des points de départ, à régler en jeu.
+Arme de référence du mod. Méthode générale (armes et outils) : [CAHIER_DES_CHARGES_ARME_OUTIL.md](CAHIER_DES_CHARGES_ARME_OUTIL.md) · Recette : [RECETTE_DEATH_SCYTHE.md](RECETTE_DEATH_SCYTHE.md). Statut : **fiche validée, arme développée sur `dev`, à tester en jeu** (2026-10-08). Les valeurs chiffrées sont des points de départ, à régler en jeu.
 
 ## Identité
 - Identifiant : `death_scythe` (`astralpack:death_scythe`). Nom FR : « Faux de la Mort » ; nom EN : « Death Scythe ».
 - Concept : grande faux gothique noire, arme à deux mains.
 - Référence visuelle : image fournie par le responsable (faux noire, longue lame courbe vers la droite, deux anneaux ornés avec une croix blanche, manche segmenté et épineux, pointe recourbée en bas).
-- Source : `blockbench/item/death_scythe.bbmodel`.
+- Source : première version générée par `blockbench/item/generate_death_scythe.py` (géométrie et texture) ; à reprendre dans Blockbench (`blockbench/item/death_scythe.bbmodel`) pour le polissage.
 
 ## Silhouette du modèle
 | Pièce | Description |
@@ -21,7 +21,7 @@ Arme de référence du mod. Méthode générale (armes et outils) : [CAHIER_DES_
 Palette : noir, gris très sombre, blanc cassé pour les croix. Aucune animation obligatoire ; légère oscillation au repos facultative.
 
 ## Mains
-**Deux mains.** Pleins dégâts uniquement si la **main secondaire est vide** ; sinon dégâts divisés par trois et effets désactivés. L'infobulle indique « Deux mains : main secondaire vide ». Aucun blocage de la main secondaire.
+**Deux mains.** Pleins dégâts uniquement si la **main secondaire est vide** ; sinon tous les dégâts de l'arme (balayage compris) sont divisés par trois et le Wither est désactivé. L'infobulle indique « Deux mains : main secondaire vide ». Aucun blocage de la main secondaire.
 
 ## Statistiques (référence : épée en netherite)
 
@@ -72,8 +72,8 @@ Fabrication uniquement ; aucune présence dans les coffres ou les butins pour l'
 ## Fichiers prévus
 `DeathScytheItem`, `ModTiers`, `DeathScytheModel`, `DeathScytheRenderer`, `TwoHandedEvents`, `ModItems`, `ModSounds` (si besoin), `geo/death_scythe.geo.json`, `textures/item/death_scythe.png`, `models/item/death_scythe.json`, `data/astralpack/recipes/death_scythe.json`, langues FR et EN.
 
-## Points à valider avant de coder
-- [ ] Dégâts, cadence, allonge et durabilité ci-dessus.
-- [ ] Recette (crâne de Wither Squelette : très rare, à confirmer).
-- [ ] Wither I pendant 3 secondes.
-- [ ] Malus avec main secondaire occupée (÷3).
+## Réalisation
+- Code : `DeathScytheItem` (SwordItem + GeoItem + `TwoHanded`), `ModTiers.DEATH`, `TwoHandedEvents` (malus côté serveur), `DeathScytheModel` et `DeathScytheRenderer`, enregistrement dans `ModItems`.
+- Ressources : `geo/death_scythe.geo.json` (9 os, 84 cubes), `textures/item/death_scythe.png` (128×128), `animations/death_scythe.animation.json` (vide), `models/item/death_scythe.json` (réglages d'affichage provisoires), recette, langues FR et EN, test de cohérence.
+- À régler en jeu : la tenue en main (échelle, rotation, position) pour la première et la troisième personne, la taille de l'icône d'inventaire.
+- À reprendre dans Blockbench : import de la géométrie, polissage de la lame, tenue des deux mains.

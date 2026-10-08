@@ -17,5 +17,8 @@
   "item.astralpack.fennec_netherite_helmet": "Netherite Fennec Helmet",
   "item.astralpack.fennec_netherite_chestplate": "Netherite Fennec Chestplate",
   "item.astralpack.fennec_netherite_boots": "Netherite Fennec Paw Guards",
-  "block.astralpack.fennec_burrow": "Fennec Burrow"
+  "block.astralpack.fennec_burrow": "Fennec Burrow",
+  "item.astralpack.death_scythe": "Death Scythe",
+  "item.astralpack.death_scythe.two_handed": "Two-handed: off hand must be empty",
+  "item.astralpack.death_scythe.wither": "Withers its target for 3 seconds"
 }
