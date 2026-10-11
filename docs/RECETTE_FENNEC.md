@@ -34,8 +34,8 @@ Le clic droit main vide ne change plus l'ordre : les ordres passent par la roue 
 
 ### Apparition naturelle
 - [x] Des groupes de Fennecs apparaissent dans les badlands et dans le désert (sur sable, terre, herbe ou terracotta).
-- [ ] 0.3.1 : avec Biomes O' Plenty et Oh The Biomes We've Gone, des Fennecs apparaissent dans les déserts et savanes sèches listées dans la fiche (`/locate biome`), et plus rarement sur les plages de sable ; aucun dans les biomes froids, humides ou volcaniques.
-- [ ] 0.3.1 : sans ces mods, le jeu démarre sans erreur et l'apparition vanilla (badlands, désert) est inchangée.
+- [x] 0.3.1 : avec Biomes O' Plenty et Oh The Biomes We've Gone, des Fennecs apparaissent dans les déserts et savanes sèches listées dans la fiche (`/locate biome`), et plus rarement sur les plages de sable ; aucun dans les biomes froids, humides ou volcaniques.
+- [x] 0.3.1 : sans ces mods, le jeu démarre sans erreur et l'apparition vanilla (badlands, désert) est inchangée.
 - [x] Aucune apparition dans les autres biomes.
 
 ### Rythme jour / nuit
