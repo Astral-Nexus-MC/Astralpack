@@ -1,0 +1,10 @@
+{
+  "type": "forge:add_spawns",
+  "biomes": "#astralpack:has_fennec_beach",
+  "spawners": {
+    "type": "astralpack:fennec",
+    "weight": 2,
+    "minCount": 2,
+    "maxCount": 3
+  }
+}

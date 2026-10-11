@@ -65,8 +65,13 @@ class ResourcesConsistencyTest {
     @Test
     void spawnBiomeModifiersAreDeclared() throws IOException {
         Path dir = Path.of("src/main/resources/data/astralpack/forge/biome_modifier");
-        assertTrue(read(dir.resolve("fennec_spawns.json")).contains("#minecraft:is_badlands"));
-        assertTrue(read(dir.resolve("fennec_spawns_desert.json")).contains("minecraft:desert"));
+        assertTrue(read(dir.resolve("fennec_spawns.json")).contains("#astralpack:has_fennec"));
+        assertTrue(read(dir.resolve("fennec_spawns_beach.json")).contains("#astralpack:has_fennec_beach"));
+        Path tags = Path.of("src/main/resources/data/astralpack/tags/worldgen/biome");
+        String main = read(tags.resolve("has_fennec.json"));
+        assertTrue(main.contains("#minecraft:is_badlands") && main.contains("minecraft:desert"));
+        assertTrue(main.contains("biomesoplenty:dryland") && main.contains("biomeswevegone:mojave_desert"));
+        assertTrue(read(tags.resolve("has_fennec_beach.json")).contains("minecraft:beach"));
     }
 
     @Test

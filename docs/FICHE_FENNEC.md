@@ -27,7 +27,7 @@ Mob de référence du mod. Méthode générale : [CAHIER_DES_CHARGES_MOB.md](CAH
 | Cadence d'attaque | 14 ticks (loup 20) | idem |
 | Portée de suivi | 16 blocs | 16 blocs |
 
-Apparition : badlands et désert, poids 8, groupes de 4 (`forge/biome_modifier/fennec_spawns*.json`). Pas de loot table : il ne lâche que son armure.
+Apparition (0.3.1) : biomes de la liste `astralpack:has_fennec` (badlands, déserts, dont ceux de Biomes O' Plenty et Oh The Biomes We've Gone : `dryland`, `lush_desert`, `scrubland`, `atacama_outback`, `mojave_desert`, `windswept_desert`, `firecracker_chaparral`), poids 8, groupes de 4 ; plages (`astralpack:has_fennec_beach` : `minecraft:beach`, `dune_beach`, `rainbow_beach`), poids 2, groupes de 2 à 3 (`forge/biome_modifier/fennec_spawns*.json`, `tags/worldgen/biome/has_fennec*.json`). Les entrées des mods sont facultatives (`required: false`). Pas de loot table : il ne lâche que son armure.
 
 ## Armure (casque, plastron, protège-pattes)
 

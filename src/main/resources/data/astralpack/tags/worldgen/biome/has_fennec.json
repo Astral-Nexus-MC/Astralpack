@@ -1,0 +1,14 @@
+{
+  "values": [
+    "#minecraft:is_badlands",
+    "#forge:is_desert",
+    "minecraft:desert",
+    { "id": "biomesoplenty:dryland", "required": false },
+    { "id": "biomesoplenty:lush_desert", "required": false },
+    { "id": "biomesoplenty:scrubland", "required": false },
+    { "id": "biomeswevegone:atacama_outback", "required": false },
+    { "id": "biomeswevegone:mojave_desert", "required": false },
+    { "id": "biomeswevegone:windswept_desert", "required": false },
+    { "id": "biomeswevegone:firecracker_chaparral", "required": false }
+  ]
+}

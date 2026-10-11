@@ -34,6 +34,8 @@ Le clic droit main vide ne change plus l'ordre : les ordres passent par la roue 
 
 ### Apparition naturelle
 - [x] Des groupes de Fennecs apparaissent dans les badlands et dans le désert (sur sable, terre, herbe ou terracotta).
+- [ ] 0.3.1 : avec Biomes O' Plenty et Oh The Biomes We've Gone, des Fennecs apparaissent dans les déserts et savanes sèches listées dans la fiche (`/locate biome`), et plus rarement sur les plages de sable ; aucun dans les biomes froids, humides ou volcaniques.
+- [ ] 0.3.1 : sans ces mods, le jeu démarre sans erreur et l'apparition vanilla (badlands, désert) est inchangée.
 - [x] Aucune apparition dans les autres biomes.
 
 ### Rythme jour / nuit
@@ -92,4 +94,4 @@ Le terrier est un **bloc** : abri de sable en dôme (intérieur 0,75 × 0,75 blo
 - [x] Sons de pas et de coup avec armure.
 
 ## Équilibrage (référence : loup 1.20.1)
-Vie 8/20, dégâts 2/4, vitesse 0,38 (loup 0,30), attaque toutes les 14 ticks (loup 20), apparition poids 8 en groupes de 4 dans les badlands et le désert. Pas de loot table : le Fennec ne lâche que son armure.
+Vie 8/20, dégâts 2/4, vitesse 0,38 (loup 0,30), attaque toutes les 14 ticks (loup 20), apparition poids 8 en groupes de 4 dans les badlands, les déserts et savanes sèches (poids 2, groupes de 2 à 3 sur les plages). Pas de loot table : le Fennec ne lâche que son armure.
