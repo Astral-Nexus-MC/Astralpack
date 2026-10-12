@@ -20,5 +20,9 @@
   "block.astralpack.fennec_burrow": "Fennec Burrow",
   "item.astralpack.death_scythe": "Death Scythe",
   "item.astralpack.death_scythe.two_handed": "Two-handed: off hand must be empty",
-  "item.astralpack.death_scythe.wither": "Withers its target for 3 seconds"
+  "item.astralpack.death_scythe.wither": "Withers its target for 3 seconds",
+  "commands.astralpack.nexus.entered": "Welcome to the Astral Nexus",
+  "commands.astralpack.nexus.left": "Back to the Overworld",
+  "commands.astralpack.nexus.missing": "The Astral Nexus dimension is not loaded",
+  "message.astralpack.nexus.rescued": "The Nexus brings you back to the central island"
 }

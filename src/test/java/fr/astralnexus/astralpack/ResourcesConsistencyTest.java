@@ -63,6 +63,28 @@ class ResourcesConsistencyTest {
     }
 
     @Test
+    void nexusDimensionFilesArePresent() throws IOException {
+        Path data = Path.of("src/main/resources/data/astralpack");
+        for (String f : List.of("dimension/nexus.json", "dimension/nexus_b.json", "dimension_type/nexus.json",
+                "dimension_type/nexus_b.json", "worldgen/noise_settings/nexus.json",
+                "worldgen/biome/nexus_hub.json", "worldgen/biome/astral_isles.json",
+                "worldgen/biome/crystal_reef.json")) {
+            assertTrue(Files.exists(data.resolve(f)), "fichier manquant : " + f);
+        }
+        String dimension = read(data.resolve("dimension/nexus.json"));
+        for (String biome : List.of("nexus_hub", "astral_isles", "crystal_reef")) {
+            assertTrue(dimension.contains("astralpack:" + biome), "biome absent de la dimension : " + biome);
+        }
+        for (String lang : List.of("en_us", "fr_fr")) {
+            String json = read(RES.resolve("lang/" + lang + ".json"));
+            for (String key : List.of("commands.astralpack.nexus.entered", "commands.astralpack.nexus.left",
+                    "commands.astralpack.nexus.missing", "message.astralpack.nexus.rescued")) {
+                assertTrue(json.contains("\"" + key + "\""), "clé manquante (" + lang + ") : " + key);
+            }
+        }
+    }
+
+    @Test
     void spawnBiomeModifiersAreDeclared() throws IOException {
         Path dir = Path.of("src/main/resources/data/astralpack/forge/biome_modifier");
         assertTrue(read(dir.resolve("fennec_spawns.json")).contains("#astralpack:has_fennec"));
