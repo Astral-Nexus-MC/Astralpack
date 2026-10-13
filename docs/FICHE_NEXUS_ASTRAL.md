@@ -1,6 +1,6 @@
 # Fiche — Dimension « Nexus Astral »
 
-Dimension hub du serveur Astral Nexus. Statut : **v1 (0.4.0) validée en jeu** (2026-10-13), lumière choisie : ciel du monde principal à minuit fixe (variante A) ; terrain vérifié aussi sur un serveur de développement (3 600 chunks, voir « Réalisation »). Recette : [RECETTE_NEXUS_ASTRAL.md](RECETTE_NEXUS_ASTRAL.md). Méthode : même circuit que les mobs et les armes ([FEUILLE_DE_ROUTE_RECETTE.md](FEUILLE_DE_ROUTE_RECETTE.md)) ; une recette dédiée sera créée avec la v1.
+Dimension hub du serveur Astral Nexus. Statut : **0.4.0 validée en jeu ; 0.5.0 (portail) développée sur `dev`, non testée en jeu** (2026-10-13), lumière choisie : ciel du monde principal à minuit fixe (variante A) ; terrain vérifié aussi sur un serveur de développement (3 600 chunks, voir « Réalisation »). Recette : [RECETTE_NEXUS_ASTRAL.md](RECETTE_NEXUS_ASTRAL.md). Méthode : même circuit que les mobs et les armes ([FEUILLE_DE_ROUTE_RECETTE.md](FEUILLE_DE_ROUTE_RECETTE.md)) ; une recette dédiée sera créée avec la v1.
 
 ## Intention
 
@@ -36,9 +36,9 @@ Décisions du responsable (2026-10-13) :
 - Identifiant : `astralpack:nexus`. Fichiers de données : type de dimension, réglages de bruit, biomes.
 - **Terrain** : partir des réglages de bruit de l'End (île centrale + îles autour) avec nos propres biomes et blocs de surface. Blocs vanilla en attendant les blocs du mod (0.5.0).
 - **Biomes** : `nexus_hub` (île centrale, aucun monstre), `astral_isles` (îles satellites, endermen), `crystal_reef` (récif de cristal, endermen plus rares). `void_fringe` (bordure) est reporté : le terrain n'a pas de repère de distance utilisable en données seules.
-- **Lumière** : nuit fixe, lumière ambiante relevée, couleurs de ciel et de brouillard violet nuit, particules ambiantes. **Choix validé en jeu : effets du monde principal + minuit fixe** (la variante à ciel de l'End a été comparée puis retirée).
+- **Lumière** : nuit fixe, lumière ambiante relevée, couleurs de ciel et de brouillard violet nuit, particules ambiantes. **Choix validé en jeu : effets du monde principal + minuit fixe** (la variante à ciel de l'End a été comparée puis abandonnée).
 - **Vie de hub** : lits fonctionnels (pas d'ancre de réapparition). Chute dans le vide : retour sur l'île centrale sans dégâts (code, v1).
-- **Accès v1** : commandes (niveau opérateur) `/nexus` (arrivée sur l'île centrale), `/nexus retour` (point d'apparition du monde principal). La variante de comparaison à ciel de l'End a été retirée en 0.4.1.
+- **Accès v1** : commandes (niveau opérateur) `/nexus` (arrivée sur l'île centrale), `/nexus retour` (point d'apparition du monde principal). La variante de comparaison à ciel de l'End n'a plus de commande ; sa dimension héritée `astralpack:nexus_b` est conservée (voir « Compatibilité des mondes »).
 - Hors v1 : ciel avec galaxie et nébuleuses dessinées (code client), blocs du mod, minerai, équipement, créatures, boss, structures.
 
 ## Ressources exclusives (v2)
@@ -50,7 +50,7 @@ Minerai « fragment astral », cristaux de nébuleuse, poussière stellaire. Ser
 | Version | Contenu |
 |---|---|
 | 0.4.0 | Dimension seule, accès par commande, retour du vide |
-| 0.5.0 | Blocs du mod, portail en anneau et pupitre à la Death Scythe |
+| 0.5.0 | Blocs du mod, anneau 13 × 13, pupitre à la Death Scythe, portail de retour, une seule faux par serveur |
 | 0.6.0 | Ressources exclusives, équipement |
 | 0.7.0 | Créatures, structures, boss |
 | Plus tard | Ciel sur mesure (galaxie, nébuleuses) |
@@ -71,3 +71,18 @@ Portes 0 à 3 de la feuille de route, plus :
 - **Relief** : base de l'End vanilla (île centrale) fusionnée avec des îles satellites faites d'un bruit large, à dessus plat et dessous effilé. Blocs vanilla provisoires : mousse et tuf (hub), calcite et tuf (îles), basalte lisse et ardoise des abysses (récif).
 - **Mesures sur 960 × 960 blocs** (serveur de développement, 3 600 chunks) : île centrale d'environ 220 blocs de large (≈ 37 500 blocs² de surface), sol à y 62–63 (médiane) avec des bosses jusqu'à y 70 ; une centaine d'îles satellites de 20 à 120 blocs de large, 12,5 % de colonnes pleines, dessus à y ≤ 74 ; le biome `nexus_hub` couvre toute l'île centrale. La génération de masse a provoqué un seul retard de 2 s côté serveur.
 - **Validé en jeu par le responsable (2026-10-13)** : accès, rendu, île centrale, îles satellites, retour du vide. Intention : « une vraie nuit galactique ».
+
+## Compatibilité des mondes
+
+**Ne jamais supprimer une dimension déjà publiée.** Un monde enregistre ses dimensions ; si l'une d'elles disparaît d'une version à l'autre, le serveur refuse de charger le monde (erreur « Failed to get element … dimension_type »). C'est pourquoi `astralpack:nexus_b` (variante de lumière de la 0.4.0, abandonnée) reste dans le mod : sans commande, sans usage, mais présente. Découvert pendant la préparation de la 0.5.0 sur un serveur de développement. Même règle pour `astralpack:nexus`, ses types et ses biomes.
+
+## Réalisation du portail (0.5.0)
+
+- **Blocs** : `astral_ring_block` (segment ; recette : 4 par fabrication avec obsidienne, éclats d'améthyste, perle de l'Ender), `nexus_console` (pupitre ; recette : blocs d'anneau, œil de l'Ender, dalles d'ardoise, lingot de netherite), `nexus_portal` (surface, sans objet, indestructible). Recettes **provisoires**, à équilibrer.
+- **Anneau** : cercle de rayon 6 (13 × 13), 36 cases pour l'anneau et 97 pour la surface (`world/RingGeometry`, `world/NexusRing`). Le pupitre cherche l'anneau complet et dégagé le plus proche dans un rayon de 10 blocs, dans les deux orientations. Si l'anneau est cassé, le portail se ferme tout seul ; réparé, il se rouvre (contrôle toutes les 2 secondes tant que la faux est plantée).
+- **Pupitre** (`block/NexusConsoleBlock`, `block/entity/NexusConsoleBlockEntity`) : clic droit avec la faux pour la planter, à main vide pour la reprendre. La faux est conservée telle quelle (durabilité, enchantements). Casser le pupitre rend la faux. Inactif dans le Nexus.
+- **Trajets** (`world/NexusTravel`) : entrer dans la surface mène au hub et mémorise l'origine (dimension, position, côté d'entrée) dans les données persistantes du joueur ; le portail de retour ramène à ce point, sinon au point d'apparition du monde principal. Délai de 5 secondes entre deux trajets.
+- **Portail de retour** : généré une seule fois à 14 blocs au sud de l'arrivée, reconstruit au même endroit s'il est abîmé ; sa position est enregistrée (`NexusData`).
+- **Une seule faux par serveur** : type de recette `astralpack:unique_shaped` (`recipe/UniqueShapedRecipe`) ; la première fabrication enregistre le verrou dans le monde. Une faux obtenue par `/give` ne verrouille rien : utiliser `/nexus faux bloquer`.
+- **Vérifié sur un serveur de développement** : chargement du type de recette ; détection de l'anneau dans les deux orientations (centre exact), ouverture de 97 cases sur 97, fermeture complète, anneau cassé ou surface obstruée non détectés ; génération du portail de retour (97 cases sur 97) ; recette de la faux acceptée avant la première fabrication, refusée après, acceptée après un `reset`.
+- **Non vérifié** (demande un joueur ou un client) : rendu des blocs, textures, animation et transparence du portail, particules, plantage de la faux dans le pupitre, trajets aller et retour, messages.

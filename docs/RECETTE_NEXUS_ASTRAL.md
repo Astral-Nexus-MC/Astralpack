@@ -37,3 +37,51 @@ Terrain
 - [x] Un client connecté voit le Nexus (ciel, couleurs, particules) et y circule.
 - [x] Génération des chunks sans lag anormal, TPS stable.
 - [x] Redémarrage du serveur : constructions conservées.
+
+---
+
+# Portail de la Death Scythe (0.5.0)
+
+Statut : **développé sur `dev`, non testé en jeu** (2026-10-13). Vérifications automatiques déjà faites : voir « Réalisation du portail » dans la fiche.
+
+## Porte 0 — Automatique
+- [x] `./gradlew build` réussit (tests inclus : `RingGeometryTest`, `nexusPortalResourcesArePresent`).
+- [x] Le serveur de développement démarre sans erreur ; détection de l'anneau, ouverture et fermeture, portail de retour et règle d'unicité vérifiés sans joueur.
+- [x] FR et EN complets.
+
+## Porte 1 — En jeu (solo)
+Fabrication
+- [ ] Les recettes du bloc d'anneau (par 4) et du pupitre sont fabricables ; les objets apparaissent dans l'onglet créatif ; les blocs se cassent à la pioche (fer minimum) et rendent leur objet.
+- [ ] Le modèle et la texture du pupitre (vide, puis faux plantée) s'affichent correctement ; le bloc d'anneau a une texture lisible.
+
+Portail
+- [ ] Un anneau 13 × 13 complet, avec le pupitre à moins de 10 blocs : clic droit avec la faux la plante, le portail s'ouvre (surface translucide animée, particules).
+- [ ] Fonctionne dans les deux orientations de l'anneau (est-ouest et nord-sud) et à différentes hauteurs.
+- [ ] Anneau incomplet ou obstrué : message « aucun anneau complet et dégagé », la faux n'est pas plantée.
+- [ ] Clic droit à main vide sur le pupitre : la faux est reprise (durabilité et enchantements intacts), le portail se ferme.
+- [ ] Casser un bloc de l'anneau ferme le portail ; le réparer le rouvre.
+- [ ] Casser le pupitre rend la faux et ferme le portail.
+- [ ] Entrer dans le portail mène sur l'île centrale du Nexus ; un délai évite les allers-retours en boucle.
+- [ ] Le pupitre ne fonctionne pas dans le Nexus (message).
+
+Retour
+- [ ] Le portail de retour existe au hub (14 blocs au sud de l'arrivée), toujours ouvert, bien posé sur le sol.
+- [ ] Le prendre ramène à l'endroit d'où on est parti, du côté d'où on est entré, sans retraverser le portail en boucle.
+- [ ] Sans origine connue (arrivé par `/nexus`), il ramène au point d'apparition du monde principal.
+
+Une seule faux
+- [ ] Après la première fabrication, la grille ne donne plus de Death Scythe (pour tous les joueurs).
+- [ ] `/nexus faux` indique l'état ; `/nexus faux reset` autorise un nouveau craft ; `/nexus faux bloquer` verrouille (après un `/give`).
+
+## Porte 2 — Persistance et cas limites
+- [ ] Quitter et rouvrir le monde, faux plantée : portail toujours ouvert, faux toujours dans le pupitre.
+- [ ] Redémarrer le serveur : portail et pupitre conservés.
+- [ ] Un deuxième pupitre près du premier ne duplique pas la faux (il n'y en a qu'une).
+- [ ] Le verrou de la faux survit au redémarrage du serveur.
+- [ ] Mort ou déconnexion dans le Nexus : l'origine est conservée, le retour fonctionne.
+
+## Porte 3 — Serveur dédié (mêmes mods)
+- [ ] Le serveur démarre sans erreur ni avertissement `astralpack` avec les mods du serveur.
+- [ ] **Un monde déjà utilisé en 0.4.0 charge sans erreur** (dimension `astralpack:nexus_b` conservée).
+- [ ] Un client connecté voit le portail, les blocs et leurs textures, sans erreur de modèle dans les logs.
+- [ ] Plusieurs joueurs : un seul portail ouvrable (une seule faux) ; passages simultanés sans conflit.

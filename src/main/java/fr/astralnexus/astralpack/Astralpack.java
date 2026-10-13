@@ -1,9 +1,11 @@
 package fr.astralnexus.astralpack;
 
+import fr.astralnexus.astralpack.registry.ModBlockEntities;
 import fr.astralnexus.astralpack.registry.ModBlocks;
 import fr.astralnexus.astralpack.registry.ModCreativeTabs;
 import fr.astralnexus.astralpack.registry.ModEntities;
 import fr.astralnexus.astralpack.registry.ModItems;
+import fr.astralnexus.astralpack.registry.ModRecipeSerializers;
 import fr.astralnexus.astralpack.registry.ModSounds;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -17,6 +19,8 @@ public class Astralpack {
         IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
 
         ModBlocks.BLOCKS.register(modBus);
+        ModBlockEntities.BLOCK_ENTITIES.register(modBus);
+        ModRecipeSerializers.SERIALIZERS.register(modBus);
         ModItems.ITEMS.register(modBus);
         ModEntities.ENTITY_TYPES.register(modBus);
         ModSounds.SOUNDS.register(modBus);

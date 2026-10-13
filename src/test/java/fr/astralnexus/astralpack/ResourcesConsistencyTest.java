@@ -66,6 +66,8 @@ class ResourcesConsistencyTest {
     void nexusDimensionFilesArePresent() throws IOException {
         Path data = Path.of("src/main/resources/data/astralpack");
         for (String f : List.of("dimension/nexus.json", "dimension_type/nexus.json", "worldgen/noise_settings/nexus.json",
+                // Dimension héritée de la 0.4.0 : ne jamais la supprimer (elle est enregistrée dans les mondes).
+                "dimension/nexus_b.json", "dimension_type/nexus_b.json",
                 "worldgen/biome/nexus_hub.json", "worldgen/biome/astral_isles.json",
                 "worldgen/biome/crystal_reef.json")) {
             assertTrue(Files.exists(data.resolve(f)), "fichier manquant : " + f);
@@ -78,6 +80,36 @@ class ResourcesConsistencyTest {
             String json = read(RES.resolve("lang/" + lang + ".json"));
             for (String key : List.of("commands.astralpack.nexus.entered", "commands.astralpack.nexus.left",
                     "commands.astralpack.nexus.missing", "message.astralpack.nexus.rescued")) {
+                assertTrue(json.contains("\"" + key + "\""), "clé manquante (" + lang + ") : " + key);
+            }
+        }
+    }
+
+    @Test
+    void nexusPortalResourcesArePresent() throws IOException {
+        for (String f : List.of("blockstates/astral_ring_block.json", "blockstates/nexus_console.json",
+                "blockstates/nexus_portal.json", "models/block/astral_ring_block.json",
+                "models/block/nexus_console.json", "models/block/nexus_console_planted.json",
+                "models/block/nexus_portal.json", "models/item/astral_ring_block.json",
+                "models/item/nexus_console.json", "textures/block/astral_ring_block.png",
+                "textures/block/nexus_console.png", "textures/block/nexus_portal.png",
+                "textures/block/nexus_portal.png.mcmeta")) {
+            assertTrue(Files.exists(RES.resolve(f)), "ressource manquante : " + f);
+        }
+        Path data = Path.of("src/main/resources/data");
+        for (String f : List.of("astralpack/recipes/astral_ring_block.json", "astralpack/recipes/nexus_console.json",
+                "astralpack/loot_tables/blocks/astral_ring_block.json",
+                "astralpack/loot_tables/blocks/nexus_console.json")) {
+            assertTrue(Files.exists(data.resolve(f)), "fichier manquant : " + f);
+        }
+        assertTrue(read(data.resolve("minecraft/tags/blocks/mineable/pickaxe.json")).contains("astralpack:nexus_console"));
+        // La Death Scythe ne se fabrique qu'une fois par serveur : sa recette passe par le type dédié.
+        assertTrue(read(data.resolve("astralpack/recipes/death_scythe.json")).contains("astralpack:unique_shaped"));
+        for (String lang : List.of("en_us", "fr_fr")) {
+            String json = read(RES.resolve("lang/" + lang + ".json"));
+            for (String key : List.of("block.astralpack.astral_ring_block", "block.astralpack.nexus_console",
+                    "block.astralpack.nexus_portal", "message.astralpack.nexus.console.no_ring",
+                    "message.astralpack.nexus.console.opened", "commands.astralpack.nexus.scythe.crafted")) {
                 assertTrue(json.contains("\"" + key + "\""), "clé manquante (" + lang + ") : " + key);
             }
         }

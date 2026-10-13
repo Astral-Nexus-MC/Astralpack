@@ -24,6 +24,12 @@ public class ModItems {
     public static final RegistryObject<Item> FENNEC_BURROW =
             ITEMS.register("fennec_burrow", () -> new BlockItem(ModBlocks.FENNEC_BURROW.get(), new Item.Properties()));
 
+    public static final RegistryObject<Item> ASTRAL_RING_BLOCK = ITEMS.register("astral_ring_block",
+            () -> new BlockItem(ModBlocks.ASTRAL_RING_BLOCK.get(), new Item.Properties()));
+
+    public static final RegistryObject<Item> NEXUS_CONSOLE = ITEMS.register("nexus_console",
+            () -> new BlockItem(ModBlocks.NEXUS_CONSOLE.get(), new Item.Properties().rarity(Rarity.RARE)));
+
     public static final RegistryObject<Item> DEATH_SCYTHE =
             ITEMS.register("death_scythe",
                     () -> new DeathScytheItem(new Item.Properties().rarity(Rarity.EPIC).fireResistant()));

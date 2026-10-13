@@ -24,5 +24,19 @@
   "commands.astralpack.nexus.entered": "Welcome to the Astral Nexus",
   "commands.astralpack.nexus.left": "Back to the Overworld",
   "commands.astralpack.nexus.missing": "The Astral Nexus dimension is not loaded",
-  "message.astralpack.nexus.rescued": "The Nexus brings you back to the central island"
+  "message.astralpack.nexus.rescued": "The Nexus brings you back to the central island",
+  "block.astralpack.astral_ring_block": "Astral Ring Block",
+  "block.astralpack.nexus_console": "Nexus Console",
+  "block.astralpack.nexus_portal": "Nexus Portal",
+  "message.astralpack.nexus.console.wrong_dimension": "The console only works outside the Nexus",
+  "message.astralpack.nexus.console.status_open": "The portal is open",
+  "message.astralpack.nexus.console.status_closed": "The portal is closed: complete the ring",
+  "message.astralpack.nexus.console.needs_scythe": "Plant the Death Scythe here to open the portal",
+  "message.astralpack.nexus.console.no_ring": "No complete, clear ring within 10 blocks",
+  "message.astralpack.nexus.console.opened": "The Death Scythe powers the portal",
+  "message.astralpack.nexus.console.closed": "The portal closes",
+  "commands.astralpack.nexus.scythe.crafted": "The Death Scythe has already been crafted on this server",
+  "commands.astralpack.nexus.scythe.available": "The Death Scythe can still be crafted on this server",
+  "commands.astralpack.nexus.scythe.locked": "Death Scythe crafting is now locked",
+  "commands.astralpack.nexus.scythe.unlocked": "Death Scythe crafting is allowed again"
 }

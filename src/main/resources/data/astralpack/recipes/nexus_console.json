@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "RER",
+    "DND",
+    "DDD"
+  ],
+  "key": {
+    "R": {
+      "item": "astralpack:astral_ring_block"
+    },
+    "E": {
+      "item": "minecraft:ender_eye"
+    },
+    "D": {
+      "item": "minecraft:deepslate_tiles"
+    },
+    "N": {
+      "item": "minecraft:netherite_ingot"
+    }
+  },
+  "result": {
+    "item": "astralpack:nexus_console",
+    "count": 1
+  }
+}
