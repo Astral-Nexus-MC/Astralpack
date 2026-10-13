@@ -159,10 +159,8 @@ def dim_type(effects):
 
 
 write('dimension_type/nexus.json', dim_type('minecraft:overworld'))
-write('dimension_type/nexus_b.json', dim_type('minecraft:the_end'))
-for name in ('nexus', 'nexus_b'):
-    write(f'dimension/{name}.json', {
-        "type": f"astralpack:{name}",
-        "generator": {"type": "minecraft:noise", "settings": "astralpack:nexus", "biome_source": biome_source},
-    })
+write('dimension/nexus.json', {
+    "type": "astralpack:nexus",
+    "generator": {"type": "minecraft:noise", "settings": "astralpack:nexus", "biome_source": biome_source},
+})
 print('ok', SAT_XZ_SCALE, SAT_AMPL, SAT_OFFSET, SAT_TOP, HUB_EROSION)

@@ -29,7 +29,6 @@ public class NexusEvents {
         dispatcher.register(Commands.literal("nexus")
                 .requires(source -> source.hasPermission(2))
                 .executes(context -> enter(context, NexusDimension.NEXUS))
-                .then(Commands.literal("variante_b").executes(context -> enter(context, NexusDimension.NEXUS_B)))
                 .then(Commands.literal("retour").executes(NexusEvents::back)));
     }
 

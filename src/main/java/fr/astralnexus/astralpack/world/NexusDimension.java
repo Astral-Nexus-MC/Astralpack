@@ -16,8 +16,6 @@ import net.minecraft.world.phys.Vec3;
 /** Dimension hub « Nexus Astral » : clés, point d'apparition sûr et téléportation. */
 public final class NexusDimension {
     public static final ResourceKey<Level> NEXUS = key("nexus");
-    /** Variante de comparaison (ciel de l'End), à retirer une fois la lumière choisie. */
-    public static final ResourceKey<Level> NEXUS_B = key("nexus_b");
 
     /** Hauteur de la plateforme de secours si le centre est vide. */
     private static final int PLATFORM_Y = 64;
@@ -30,7 +28,7 @@ public final class NexusDimension {
     }
 
     public static boolean isNexus(Level level) {
-        return level.dimension().equals(NEXUS) || level.dimension().equals(NEXUS_B);
+        return level.dimension().equals(NEXUS);
     }
 
     /** Point d'apparition du hub : au-dessus de l'île centrale, sinon sur une petite plateforme créée à la volée. */

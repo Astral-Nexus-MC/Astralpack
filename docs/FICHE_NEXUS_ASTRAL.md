@@ -1,6 +1,6 @@
 # Fiche — Dimension « Nexus Astral »
 
-Dimension hub du serveur Astral Nexus. Statut : **v1 (0.4.0) développée sur `dev`, non testée en jeu** (2026-10-12) ; terrain vérifié sur un serveur de développement (3 600 chunks, voir « Réalisation »). Recette : [RECETTE_NEXUS_ASTRAL.md](RECETTE_NEXUS_ASTRAL.md). Méthode : même circuit que les mobs et les armes ([FEUILLE_DE_ROUTE_RECETTE.md](FEUILLE_DE_ROUTE_RECETTE.md)) ; une recette dédiée sera créée avec la v1.
+Dimension hub du serveur Astral Nexus. Statut : **v1 (0.4.0) validée en jeu** (2026-10-13), lumière choisie : ciel du monde principal à minuit fixe (variante A) ; terrain vérifié aussi sur un serveur de développement (3 600 chunks, voir « Réalisation »). Recette : [RECETTE_NEXUS_ASTRAL.md](RECETTE_NEXUS_ASTRAL.md). Méthode : même circuit que les mobs et les armes ([FEUILLE_DE_ROUTE_RECETTE.md](FEUILLE_DE_ROUTE_RECETTE.md)) ; une recette dédiée sera créée avec la v1.
 
 ## Intention
 
@@ -28,9 +28,9 @@ Un **lieu de vie** (hub avec des bases) au milieu de l'espace : sombre, mystique
 - Identifiant : `astralpack:nexus`. Fichiers de données : type de dimension, réglages de bruit, biomes.
 - **Terrain** : partir des réglages de bruit de l'End (île centrale + îles autour) avec nos propres biomes et blocs de surface. Blocs vanilla en attendant les blocs du mod (0.5.0).
 - **Biomes** : `nexus_hub` (île centrale, aucun monstre), `astral_isles` (îles satellites, endermen), `crystal_reef` (récif de cristal, endermen plus rares). `void_fringe` (bordure) est reporté : le terrain n'a pas de repère de distance utilisable en données seules.
-- **Lumière** : nuit fixe, lumière ambiante relevée, couleurs de ciel et de brouillard violet nuit, particules ambiantes. **Deux variantes à comparer en jeu** : (A) effets du monde principal + minuit fixe, (B) effets de l'End. On garde celle qui garde le plus de lisibilité.
+- **Lumière** : nuit fixe, lumière ambiante relevée, couleurs de ciel et de brouillard violet nuit, particules ambiantes. **Choix validé en jeu : effets du monde principal + minuit fixe** (la variante à ciel de l'End a été comparée puis retirée).
 - **Vie de hub** : lits fonctionnels (pas d'ancre de réapparition). Chute dans le vide : retour sur l'île centrale sans dégâts (code, v1).
-- **Accès v1** : commandes (niveau opérateur) `/nexus` (arrivée sur l'île centrale), `/nexus retour` (point d'apparition du monde principal) et `/nexus variante_b` (dimension de comparaison à ciel de l'End, à retirer une fois la lumière choisie).
+- **Accès v1** : commandes (niveau opérateur) `/nexus` (arrivée sur l'île centrale), `/nexus retour` (point d'apparition du monde principal). La variante de comparaison à ciel de l'End a été retirée en 0.4.1.
 - Hors v1 : ciel avec galaxie et nébuleuses dessinées (code client), blocs du mod, minerai, équipement, créatures, boss, structures.
 
 ## Ressources exclusives (v2)
@@ -59,8 +59,7 @@ Portes 0 à 3 de la feuille de route, plus :
 
 ## Réalisation (0.4.0)
 
-- Dimension `astralpack:nexus` (et `astralpack:nexus_b` pour la comparaison de lumière) ; types de dimension, réglages de bruit et biomes dans `data/astralpack/` ; code dans `world/NexusDimension.java` et `world/NexusEvents.java`. Les fichiers de données sont générés par `tools/generate_nexus_dimension.py` (réglages : `4.0 2.5 -1.0 70 -0.15`).
+- Dimension `astralpack:nexus` ; types de dimension, réglages de bruit et biomes dans `data/astralpack/` ; code dans `world/NexusDimension.java` et `world/NexusEvents.java`. Les fichiers de données sont générés par `tools/generate_nexus_dimension.py` (réglages : `4.0 2.5 -1.0 70 -0.15`).
 - **Relief** : base de l'End vanilla (île centrale) fusionnée avec des îles satellites faites d'un bruit large, à dessus plat et dessous effilé. Blocs vanilla provisoires : mousse et tuf (hub), calcite et tuf (îles), basalte lisse et ardoise des abysses (récif).
 - **Mesures sur 960 × 960 blocs** (serveur de développement, 3 600 chunks) : île centrale d'environ 220 blocs de large (≈ 37 500 blocs² de surface), sol à y 62–63 (médiane) avec des bosses jusqu'à y 70 ; une centaine d'îles satellites de 20 à 120 blocs de large, 12,5 % de colonnes pleines, dessus à y ≤ 74 ; le biome `nexus_hub` couvre toute l'île centrale. La génération de masse a provoqué un seul retard de 2 s côté serveur.
-- **Non vérifié** : le rendu en jeu (lumière, couleurs, particules), la téléportation, le retour du vide et les lits, qui demandent un joueur.
-- Lumière : deux variantes à comparer en jeu. Intention retenue par le responsable : « une vraie nuit galactique ».
+- **Validé en jeu par le responsable (2026-10-13)** : accès, rendu, île centrale, îles satellites, retour du vide. Intention : « une vraie nuit galactique ».
