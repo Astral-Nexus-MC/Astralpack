@@ -92,7 +92,8 @@ class ResourcesConsistencyTest {
                 "models/block/nexus_console.json", "models/block/nexus_console_planted.json",
                 "models/block/nexus_portal.json", "models/item/astral_ring_block.json",
                 "models/item/nexus_console.json", "textures/block/astral_ring_block.png",
-                "textures/block/nexus_console.png", "textures/block/nexus_portal.png",
+                "textures/block/astral_ring_rune.png", "textures/block/nexus_console_glow.png",
+                "textures/block/nexus_console_scythe.png", "textures/block/nexus_portal.png",
                 "textures/block/nexus_portal.png.mcmeta")) {
             assertTrue(Files.exists(RES.resolve(f)), "ressource manquante : " + f);
         }

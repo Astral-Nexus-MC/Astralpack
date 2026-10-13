@@ -52,7 +52,8 @@ Statut : **développé sur `dev`, non testé en jeu** (2026-10-13). Vérificatio
 ## Porte 1 — En jeu (solo)
 Fabrication
 - [ ] Les recettes du bloc d'anneau (par 4) et du pupitre sont fabricables ; les objets apparaissent dans l'onglet créatif ; les blocs se cassent à la pioche (fer minimum) et rendent leur objet.
-- [ ] Le modèle et la texture du pupitre (vide, puis faux plantée) s'affichent correctement ; le bloc d'anneau a une texture lisible.
+- [ ] Le modèle et les textures (créés dans Blockbench) s'affichent correctement en jeu : bloc d'anneau (plaques de rune sur les quatre côtés), pupitre (vide, puis faux plantée avec sa lame), surface du portail (translucide, animée, sans ligne de raccord entre les blocs). Aucun damier violet et noir (texture manquante), de près comme de loin.
+- [ ] Le bloc d'anneau, le pupitre et leurs objets sont bien proportionnés dans l'inventaire, la main et au sol.
 
 Portail
 - [ ] Un anneau 13 × 13 complet, avec le pupitre à moins de 10 blocs : clic droit avec la faux la plante, le portail s'ouvre (surface translucide animée, particules).

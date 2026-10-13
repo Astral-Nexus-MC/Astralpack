@@ -1,11 +1,13 @@
 {
   "render_type": "minecraft:translucent",
+  "parent": "minecraft:block/block",
   "textures": {
     "0": "astralpack:block/nexus_portal",
     "particle": "astralpack:block/nexus_portal"
   },
   "elements": [
     {
+      "name": "surface",
       "from": [
         0,
         0,
