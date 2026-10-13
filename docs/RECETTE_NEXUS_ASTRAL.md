@@ -53,6 +53,7 @@ Statut : **développé sur `dev`, non testé en jeu** (2026-10-13). Vérificatio
 Fabrication
 - [ ] Les recettes du bloc d'anneau (par 4) et du pupitre sont fabricables ; les objets apparaissent dans l'onglet créatif ; les blocs se cassent à la pioche (fer minimum) et rendent leur objet.
 - [ ] Le modèle et les textures (créés dans Blockbench) s'affichent correctement en jeu : bloc d'anneau (plaques de rune sur les quatre côtés), pupitre (vide, puis faux plantée avec sa lame), surface du portail (translucide, animée, sans ligne de raccord entre les blocs). Aucun damier violet et noir (texture manquante), de près comme de loin.
+- [ ] La faux plantée dans le pupitre est bien la vraie Death Scythe (modèle complet, lueur), droite, au bon endroit dans la collerette, d'environ 2 blocs de haut, dans les quatre orientations du pupitre ; elle reste visible quand on s'éloigne, apparaît pour les autres joueurs et disparaît quand on la reprend.
 - [ ] Le bloc d'anneau, le pupitre et leurs objets sont bien proportionnés dans l'inventaire, la main et au sol.
 
 Portail

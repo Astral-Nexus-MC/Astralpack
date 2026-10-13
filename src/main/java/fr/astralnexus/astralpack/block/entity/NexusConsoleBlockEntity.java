@@ -9,6 +9,9 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.Containers;
@@ -17,6 +20,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 
 import java.util.Optional;
 
@@ -35,6 +39,35 @@ public class NexusConsoleBlockEntity extends BlockEntity {
 
     public NexusConsoleBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.NEXUS_CONSOLE.get(), pos, state);
+    }
+
+    /** La faux plantée, affichée au-dessus du pupitre par le client. */
+    public ItemStack getScythe() {
+        return this.scythe;
+    }
+
+    /** Envoie l'état du pupitre (dont la faux) aux clients qui le voient. */
+    private void sync() {
+        if (this.level != null && !this.level.isClientSide) {
+            BlockState state = this.getBlockState();
+            this.level.sendBlockUpdated(this.worldPosition, state, state, 3);
+        }
+    }
+
+    @Override
+    public CompoundTag getUpdateTag() {
+        return this.saveWithoutMetadata();
+    }
+
+    @Override
+    public Packet<ClientGamePacketListener> getUpdatePacket() {
+        return ClientboundBlockEntityDataPacket.create(this);
+    }
+
+    /** La faux dépasse largement du bloc : sans cela, elle disparaîtrait dès que le pupitre sort du champ. */
+    @Override
+    public AABB getRenderBoundingBox() {
+        return new AABB(this.worldPosition).inflate(2.0D, 0.0D, 2.0D).expandTowards(0.0D, 4.0D, 0.0D);
     }
 
     /** Clic droit : planter la faux, ou la reprendre à main vide. */
@@ -71,6 +104,7 @@ public class NexusConsoleBlockEntity extends BlockEntity {
         held.shrink(1);
         this.openPortal(ring.get());
         this.setPlanted(true);
+        this.sync();
         level.playSound(null, this.worldPosition, SoundEvents.BEACON_ACTIVATE, SoundSource.BLOCKS, 1.0F, 1.0F);
         player.displayClientMessage(Component.translatable("message.astralpack.nexus.console.opened"), true);
         this.setChanged();
@@ -84,6 +118,7 @@ public class NexusConsoleBlockEntity extends BlockEntity {
             player.drop(back, false);
         }
         this.setPlanted(false);
+        this.sync();
         this.level.playSound(null, this.worldPosition, SoundEvents.BEACON_DEACTIVATE, SoundSource.BLOCKS, 1.0F, 1.0F);
         player.displayClientMessage(Component.translatable("message.astralpack.nexus.console.closed"), true);
         this.setChanged();

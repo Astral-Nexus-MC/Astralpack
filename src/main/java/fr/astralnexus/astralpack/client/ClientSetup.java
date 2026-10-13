@@ -3,6 +3,8 @@ package fr.astralnexus.astralpack.client;
 import fr.astralnexus.astralpack.Astralpack;
 import fr.astralnexus.astralpack.client.pose.TwoHandedPose;
 import fr.astralnexus.astralpack.client.renderer.FennecRenderer;
+import fr.astralnexus.astralpack.client.renderer.NexusConsoleRenderer;
+import fr.astralnexus.astralpack.registry.ModBlockEntities;
 import fr.astralnexus.astralpack.registry.ModEntities;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
@@ -20,5 +22,6 @@ public class ClientSetup {
     @SubscribeEvent
     public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
         event.registerEntityRenderer(ModEntities.FENNEC.get(), FennecRenderer::new);
+        event.registerBlockEntityRenderer(ModBlockEntities.NEXUS_CONSOLE.get(), NexusConsoleRenderer::new);
     }
 }
