@@ -13,15 +13,23 @@ Un **lieu de vie** (hub avec des bases) au milieu de l'espace : sombre, mystique
 | Usage | Hub avec bases, ressources exclusives |
 | Ambiance | Espace sombre mais visible : étoiles, nébuleuses lumineuses, violet et bleu nuit |
 | Terrain | Grande île centrale plate et constructible + îles satellites (ressources, dangers) |
-| Accès | Portail en anneau + pupitre de commande où l'on plante la Death Scythe |
+| Accès | Anneau 13 × 13 + pupitre où l'on plante la Death Scythe (gratuit, une seule faux par serveur), retour par portail permanent |
 | Première version | **0.4.0 : dimension seule**, accès par commande |
 
-## Le portail (version 0.5.0, hors v1)
+## Le portail (version 0.5.0)
 
-- **Anneau** : grand cercle vertical en blocs du mod, à construire. Une fois activé, la surface s'ouvre.
-- **Pupitre** : bloc de commande à côté de l'anneau, où l'on **plante la Death Scythe**. La faux fournit l'énergie ; retirée, le portail se referme.
-- À trancher en phase portail : la faux perd-elle de la durabilité à chaque ouverture (proposition : oui, modérée), durée d'ouverture, retour depuis le hub (un anneau côté hub avec son propre pupitre, ou une faux plantée aussi).
-- La recette de la faux reste volontairement difficile : le portail en hérite.
+Décisions du responsable (2026-10-13) :
+
+- **Une seule Death Scythe par serveur.** La faux ne peut être fabriquée qu'une fois : la recette passe par un type de recette qui vérifie, côté serveur, qu'aucune faux n'a encore été fabriquée (donnée enregistrée dans le monde). Conséquence voulue : **un seul portail peut être ouvert à la fois sur tout le serveur.** Commandes d'administration : `/nexus faux` (état), `/nexus faux reset` (autoriser un nouveau craft si la faux est perdue), `/nexus faux bloquer` (marquer la faux comme déjà fabriquée, par exemple après un `/give`).
+- **Coût : gratuit tant que la faux est plantée.** Pas de perte de durabilité. Le portail reste ouvert tant que la faux est dans le pupitre ; la retirer le ferme.
+- **Anneau 13 × 13** (cercle de rayon 6), vertical, fait de **blocs d'anneau astral** à fabriquer. Environ 36 blocs.
+- **Pupitre du Nexus** : bloc posé à moins de 10 blocs du centre de l'anneau. Clic droit avec la Death Scythe : elle est plantée, le portail s'ouvre si l'anneau est complet et dégagé. Clic droit à main vide : elle est reprise et le portail se ferme. Casser le pupitre rend la faux et ferme le portail.
+- **Portail du Nexus** : surface qui remplit l'anneau (non fabricable). Entrer dedans téléporte sur l'île centrale du hub. Le portail se ferme tout seul si l'anneau est cassé.
+- **Retour : portail permanent** au hub, à 14 blocs de l'arrivée, toujours ouvert (anneau de même taille, généré une seule fois). Il ramène le joueur à l'endroit d'où il est parti, côté d'où il est entré. Sans point d'origine connu, il ramène au point d'apparition du monde principal.
+- Le pupitre ne fonctionne pas dans le Nexus.
+- La recette de la faux reste volontairement difficile.
+
+À fixer à l'équilibrage (provisoire en 0.5.0) : recettes des blocs d'anneau et du pupitre.
 
 ## Dimension (v1, 0.4.0)
 
