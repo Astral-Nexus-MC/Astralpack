@@ -4,16 +4,19 @@ import fr.astralnexus.astralpack.block.NexusConsoleBlock;
 import fr.astralnexus.astralpack.item.DeathScytheItem;
 import fr.astralnexus.astralpack.network.Notify;
 import fr.astralnexus.astralpack.registry.ModBlockEntities;
+import fr.astralnexus.astralpack.world.NexusData;
 import fr.astralnexus.astralpack.world.NexusDimension;
 import fr.astralnexus.astralpack.world.NexusRing;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.Containers;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -21,6 +24,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.Optional;
 
@@ -31,11 +35,15 @@ import java.util.Optional;
 public class NexusConsoleBlockEntity extends BlockEntity {
     /** Intervalle, en ticks, entre deux contrôles de l'anneau. */
     private static final int CHECK_INTERVAL = 40;
+    /** Durée, en ticks, de la gerbe d'ouverture du portail. */
+    private static final int KAWOOSH_TICKS = 16;
 
     private ItemStack scythe = ItemStack.EMPTY;
     private boolean open;
     private BlockPos ringCenter = BlockPos.ZERO;
     private Direction.Axis ringAxis = Direction.Axis.X;
+    /** Ticks restants de la gerbe d'ouverture (non enregistré : une réouverture au chargement n'en rejoue pas). */
+    private int openingTicks;
 
     public NexusConsoleBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.NEXUS_CONSOLE.get(), pos, state);
@@ -144,12 +152,46 @@ public class NexusConsoleBlockEntity extends BlockEntity {
         this.ringAxis = ring.axis();
         NexusRing.open(this.level, this.ringCenter, this.ringAxis);
         this.open = true;
+        // Le trajet de retour se fait devant ce pupitre : on retient lequel, et comment il est orienté.
+        NexusData.get(this.level.getServer()).setActivePortal(this.level.dimension().location().toString(),
+                this.worldPosition, this.getBlockState().getValue(NexusConsoleBlock.FACING).get2DDataValue(),
+                this.ringCenter);
+        this.openingTicks = KAWOOSH_TICKS;
+        Vec3 center = Vec3.atCenterOf(this.ringCenter);
+        this.level.playSound(null, center.x, center.y, center.z, SoundEvents.END_PORTAL_SPAWN, SoundSource.BLOCKS,
+                1.2F, 1.5F);
     }
 
     private void closePortal() {
         if (this.open) {
             NexusRing.close(this.level, this.ringCenter, this.ringAxis);
             this.open = false;
+            this.openingTicks = 0;
+            NexusData.get(this.level.getServer()).clearActivePortal();
+        }
+    }
+
+    /**
+     * Ouverture façon Stargate : une gerbe de lumière jaillit de la surface, de chaque côté de l'anneau, gonfle puis
+     * retombe en une seconde environ.
+     */
+    private void kawoosh(ServerLevel server) {
+        int step = KAWOOSH_TICKS - this.openingTicks;
+        double radius = 4.8D * Math.sin(Math.PI * step / (KAWOOSH_TICKS - 1.0D));
+        if (radius < 0.3D) {
+            return;
+        }
+        Vec3 center = Vec3.atCenterOf(this.ringCenter);
+        boolean alongX = this.ringAxis == Direction.Axis.X;
+        double spread = radius * 0.5D;
+        for (int side = -1; side <= 1; side += 2) {
+            double offset = side * radius * 0.9D;
+            double x = center.x + (alongX ? 0.0D : offset);
+            double z = center.z + (alongX ? offset : 0.0D);
+            double dx = alongX ? spread : 0.25D;
+            double dz = alongX ? 0.25D : spread;
+            server.sendParticles(ParticleTypes.END_ROD, x, center.y, z, 14, dx, spread, dz, 0.01D);
+            server.sendParticles(ParticleTypes.REVERSE_PORTAL, x, center.y, z, 8, dx, spread, dz, 0.05D);
         }
     }
 
@@ -161,6 +203,10 @@ public class NexusConsoleBlockEntity extends BlockEntity {
     }
 
     public static void serverTick(Level level, BlockPos pos, BlockState state, NexusConsoleBlockEntity console) {
+        if (console.openingTicks > 0 && level instanceof ServerLevel serverLevel) {
+            console.kawoosh(serverLevel);
+            console.openingTicks--;
+        }
         if (console.scythe.isEmpty() || level.getGameTime() % CHECK_INTERVAL != 0) {
             return;
         }

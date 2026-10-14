@@ -15,6 +15,12 @@ public class NexusData extends SavedData {
     private boolean scytheCrafted;
     private boolean hasReturnGate;
     private long returnGateCenter;
+    /** Le portail actuellement ouvert (une seule faux, donc un seul portail à la fois) : pupitre et anneau. */
+    private boolean portalActive;
+    private String portalDimension = "";
+    private long portalConsole;
+    private int portalConsoleFacing;
+    private long portalCenter;
 
     public static NexusData get(MinecraftServer server) {
         return server.overworld().getDataStorage().computeIfAbsent(NexusData::load, NexusData::new, NAME);
@@ -25,6 +31,11 @@ public class NexusData extends SavedData {
         data.scytheCrafted = tag.getBoolean("ScytheCrafted");
         data.hasReturnGate = tag.getBoolean("HasReturnGate");
         data.returnGateCenter = tag.getLong("ReturnGateCenter");
+        data.portalActive = tag.getBoolean("PortalActive");
+        data.portalDimension = tag.getString("PortalDimension");
+        data.portalConsole = tag.getLong("PortalConsole");
+        data.portalConsoleFacing = tag.getInt("PortalConsoleFacing");
+        data.portalCenter = tag.getLong("PortalCenter");
         return data;
     }
 
@@ -33,6 +44,11 @@ public class NexusData extends SavedData {
         tag.putBoolean("ScytheCrafted", this.scytheCrafted);
         tag.putBoolean("HasReturnGate", this.hasReturnGate);
         tag.putLong("ReturnGateCenter", this.returnGateCenter);
+        tag.putBoolean("PortalActive", this.portalActive);
+        tag.putString("PortalDimension", this.portalDimension);
+        tag.putLong("PortalConsole", this.portalConsole);
+        tag.putInt("PortalConsoleFacing", this.portalConsoleFacing);
+        tag.putLong("PortalCenter", this.portalCenter);
         return tag;
     }
 
@@ -43,6 +59,44 @@ public class NexusData extends SavedData {
     public void setScytheCrafted(boolean crafted) {
         this.scytheCrafted = crafted;
         this.setDirty();
+    }
+
+    /** Mémorise le portail qui vient de s'ouvrir : pupitre (avec son orientation) et centre de l'anneau. */
+    public void setActivePortal(String dimension, BlockPos console, int consoleFacing, BlockPos ringCenter) {
+        this.portalActive = true;
+        this.portalDimension = dimension;
+        this.portalConsole = console.asLong();
+        this.portalConsoleFacing = consoleFacing;
+        this.portalCenter = ringCenter.asLong();
+        this.setDirty();
+    }
+
+    public void clearActivePortal() {
+        if (this.portalActive) {
+            this.portalActive = false;
+            this.setDirty();
+        }
+    }
+
+    public boolean hasActivePortal() {
+        return this.portalActive;
+    }
+
+    public String getPortalDimension() {
+        return this.portalDimension;
+    }
+
+    public BlockPos getPortalConsole() {
+        return BlockPos.of(this.portalConsole);
+    }
+
+    /** Orientation du pupitre : indice de {@code Direction.from2DDataValue}. */
+    public int getPortalConsoleFacing() {
+        return this.portalConsoleFacing;
+    }
+
+    public BlockPos getPortalCenter() {
+        return BlockPos.of(this.portalCenter);
     }
 
     /** Centre du portail de retour du hub, ou {@code null} s'il n'a pas encore été généré. */

@@ -20,6 +20,13 @@ public final class ModNetwork {
 
     public static void register() {
         CHANNEL.registerMessage(0, ToastPacket.class, ToastPacket::encode, ToastPacket::decode, ToastPacket::handle);
+        CHANNEL.registerMessage(1, PortalFxPacket.class, PortalFxPacket::encode, PortalFxPacket::decode,
+                PortalFxPacket::handle);
+    }
+
+    /** Joue l'effet de traversée du portail chez le joueur. */
+    public static void portalFx(ServerPlayer player, int mode, int ticks) {
+        CHANNEL.send(PacketDistributor.PLAYER.with(() -> player), new PortalFxPacket(mode, ticks));
     }
 
     /** Affiche une notification en haut à droite de l'écran du joueur, avec les autres notifications du jeu. */

@@ -89,7 +89,7 @@ public class NexusEvents {
     @SubscribeEvent
     public static void onServerTick(TickEvent.ServerTickEvent event) {
         if (event.phase == TickEvent.Phase.END) {
-            NexusTravel.runPending();
+            NexusTravel.tick();
         }
     }
 

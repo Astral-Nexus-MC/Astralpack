@@ -67,6 +67,10 @@ Portail
 - [ ] Le pupitre ne fonctionne pas dans le Nexus (message).
 
 Retour
+- [ ] Traversée façon Stargate : en entrant dans le portail, on est immobilisé environ 1 seconde, le champ de vision s'élargit, un disque de lumière bleue et blanche grandit depuis le centre de l'écran avec des ondes, tout devient blanc ; à l'arrivée le blanc se dissipe en ondes. Les sons sont audibles et ni trop forts ni gênants ; l'effet n'est pas pénible pour les yeux (sinon, réduire `FOV_KICK` ou la durée).
+- [ ] À l'ouverture du portail, une gerbe de lumière jaillit de chaque côté de l'anneau, avec un son.
+- [ ] On ne peut pas se déplacer ni sauter pendant l'absorption, et on le peut de nouveau juste après l'arrivée (effets retirés).
+- [ ] Le retour dépose devant le pupitre, du côté visible, tourné vers lui, à chaque fois, même en arrivant en courant, dans les deux orientations de l'anneau, et quel que soit l'endroit du pupitre par rapport à l'anneau.
 - [ ] En marchant dans le portail (et non avec `/nexus`), l'arrivée se fait exactement sur l'île centrale, au point d'arrivée du hub, et le retour ramène devant l'anneau de départ : le défaut de la 0.4.2 (coordonnées du monde d'origine appliquées dans la nouvelle dimension) a disparu. Les journaux `[Nexus]` donnent les positions.
 - [ ] L'arrivée par le portail se fait sur l'île centrale (point d'arrivée libre, jamais dans des blocs), y compris pour un anneau posé en hauteur ou sur une pente.
 - [ ] Les notifications (pupitre, chute dans le vide, retour sans origine) s'affichent par Fordix, en Voidframe 2 (verre sombre, en haut à droite, au-dessus de tout), avec le titre « Astral Nexus » et la bonne couleur (vert quand le portail s'ouvre, orange pour un problème). Sans Fordix, elles s'affichent comme les notifications du jeu.
