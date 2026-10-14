@@ -147,6 +147,10 @@ public class NexusConsoleBlockEntity extends BlockEntity {
         }
     }
 
+    public BlockPos getRingCenter() {
+        return this.ringCenter;
+    }
+
     private void openPortal(NexusRing.Found ring) {
         this.ringCenter = ring.center();
         this.ringAxis = ring.axis();

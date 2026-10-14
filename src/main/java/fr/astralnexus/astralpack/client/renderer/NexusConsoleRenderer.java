@@ -58,10 +58,18 @@ public class NexusConsoleRenderer implements BlockEntityRenderer<NexusConsoleBlo
         poseStack.pushPose();
         poseStack.translate(0.5D, 0.0D, 0.5D);
         // Même rotation que le bloc : la lame part du même côté quelle que soit l'orientation du pupitre.
-        poseStack.mulPose(Axis.YP.rotationDegrees(-((facing.toYRot() + 180.0F) % 360.0F)));
+        float yaw = -((facing.toYRot() + 180.0F) % 360.0F);
+        poseStack.mulPose(Axis.YP.rotationDegrees(yaw));
         poseStack.translate(0.0D, TIP_HEIGHT, TIP_FRONT_OFFSET);
-        // Retournée de 180° autour de la verticale de la pointe : la tête de la faux est du côté opposé au manche.
-        poseStack.mulPose(Axis.YP.rotationDegrees(180.0F));
+        // Le manche part du côté opposé à l'anneau : sans retournement il part vers l'axe X local du pupitre, avec il part
+        // de l'autre côté. Si l'anneau est exactement dans l'axe du pupitre, on garde le côté retourné.
+        double radians = Math.toRadians(yaw);
+        double ringX = console.getRingCenter().getX() + 0.5D - (console.getBlockPos().getX() + 0.5D);
+        double ringZ = console.getRingCenter().getZ() + 0.5D - (console.getBlockPos().getZ() + 0.5D);
+        double ringSide = ringX * Math.cos(radians) - ringZ * Math.sin(radians);
+        if (ringSide >= -0.01D) {
+            poseStack.mulPose(Axis.YP.rotationDegrees(180.0F));
+        }
         poseStack.mulPose(Axis.ZP.rotationDegrees(ROLL_DEGREES));
         poseStack.scale(SCALE, SCALE, SCALE);
         poseStack.translate(TIP_MODEL_X / 16.0D, -TIP_MODEL_Y / 16.0D, 0.0D);
