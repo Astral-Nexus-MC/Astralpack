@@ -66,8 +66,6 @@ class ResourcesConsistencyTest {
     void nexusDimensionFilesArePresent() throws IOException {
         Path data = Path.of("src/main/resources/data/astralpack");
         for (String f : List.of("dimension/nexus.json", "dimension_type/nexus.json", "worldgen/noise_settings/nexus.json",
-                // Dimension héritée de la 0.4.0 : ne jamais la supprimer (elle est enregistrée dans les mondes).
-                "dimension/nexus_b.json", "dimension_type/nexus_b.json",
                 "worldgen/biome/nexus_hub.json", "worldgen/biome/astral_isles.json",
                 "worldgen/biome/crystal_reef.json")) {
             assertTrue(Files.exists(data.resolve(f)), "fichier manquant : " + f);

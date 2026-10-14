@@ -87,6 +87,6 @@ Une seule faux
 
 ## Porte 3 — Serveur dédié (mêmes mods)
 - [ ] Le serveur démarre sans erreur ni avertissement `astralpack` avec les mods du serveur.
-- [ ] **Un monde déjà utilisé en 0.4.0 charge sans erreur** (dimension `astralpack:nexus_b` conservée).
+- [ ] **Un monde déjà utilisé en 0.4.0 ou 0.4.1 charge sans erreur après `tools/retirer_nexus_b.py`** (serveur arrêté, sauvegarde faite) ; sans l'outil, il refuse de démarrer : c'est attendu.
 - [ ] Un client connecté voit le portail, les blocs et leurs textures, sans erreur de modèle dans les logs.
 - [ ] Plusieurs joueurs : un seul portail ouvrable (une seule faux) ; passages simultanés sans conflit.

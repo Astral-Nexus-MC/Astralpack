@@ -164,12 +164,5 @@ write('dimension/nexus.json', {
     "generator": {"type": "minecraft:noise", "settings": "astralpack:nexus", "biome_source": biome_source},
 })
 
-# Dimension héritée de la 0.4.0 (variante de lumière comparée puis abandonnée). Elle n'a plus de commande ni de code,
-# mais ne doit JAMAIS être supprimée : un monde enregistre ses dimensions, et une dimension qui disparaît d'une version
-# à l'autre empêche le serveur de charger le monde.
-write('dimension_type/nexus_b.json', dim_type('minecraft:the_end'))
-write('dimension/nexus_b.json', {
-    "type": "astralpack:nexus_b",
-    "generator": {"type": "minecraft:noise", "settings": "astralpack:nexus", "biome_source": biome_source},
-})
+# Attention : ne jamais supprimer une dimension déjà publiée sans avoir nettoyé les mondes (voir tools/retirer_nexus_b.py).
 print('ok', SAT_XZ_SCALE, SAT_AMPL, SAT_OFFSET, SAT_TOP, HUB_EROSION)
