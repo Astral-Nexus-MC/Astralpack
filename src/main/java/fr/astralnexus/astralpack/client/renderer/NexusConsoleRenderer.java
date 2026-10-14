@@ -17,21 +17,27 @@ import net.minecraft.world.item.ItemStack;
  * Dessine, plantée dans le pupitre, la vraie faux astrale avec son modèle GeckoLib complet. Un modèle de bloc plafonne à
  * environ un bloc de haut : seul le rendu de l'objet lui-même permet de montrer la faux entière, avec sa lueur.
  *
- * <p>La faux est retournée : c'est sa tête, avec la lame, qui est enfoncée dans le socle, et le manche qui en sort vers le
- * haut, à travers l'ouverture sombre du plateau, en penchant légèrement.
+ * <p>Elle est plantée par la pointe de sa lame : on la fait pivoter autour de cette pointe jusqu'à ce qu'elle soit le point
+ * le plus bas de la faux (à environ 120°, vérifié sur la géométrie), la pointe entre dans l'ouverture sombre du plateau, et
+ * le manche part en diagonale vers le haut, comme une lame plantée en terre.
  */
 public class NexusConsoleRenderer implements BlockEntityRenderer<NexusConsoleBlockEntity> {
-    /** Échelle de la faux : elle mesure environ 5 blocs à l'échelle 1, soit 2,7 blocs une fois plantée. */
-    private static final float SCALE = 0.5F;
+    /** Échelle de la faux : elle mesure environ 5 blocs à l'échelle 1. */
+    private static final float SCALE = 0.6F;
+    /** Hauteur, dans le bloc, de la pointe : l'ouverture est vers 0,9, la pointe y est enfoncée d'un quart de bloc. */
+    private static final float TIP_HEIGHT = 0.65F;
     /**
-     * Hauteur, dans le bloc, du bout du manche côté lame (là où la lame s'attache). Elle est sous la collerette, qui
-     * s'arrête vers 0,9 : la lame est donc enfoncée dans la colonne, et seul le bout de son arc en dépasse sur le côté.
+     * Position de la pointe de la lame dans le fichier du modèle de la faux (x, y), en seizièmes de bloc. GeckoLib inverse
+     * l'axe horizontal du modèle à l'affichage : dans le jeu, la pointe est à x = -TIP_MODEL_X.
      */
-    private static final float HEAD_HEIGHT = 0.5F;
-    /** Hauteur, dans le modèle de la faux, du bout du manche côté lame, en seizièmes de bloc. */
-    private static final float HEAD_MODEL_Y = 46.0F;
-    /** Inclinaison, en degrés, du manche : une lame plantée ne tient jamais parfaitement droite. */
-    private static final float LEAN_DEGREES = 10.0F;
+    private static final float TIP_MODEL_X = 34.6F;
+    private static final float TIP_MODEL_Y = 31.77F;
+    /**
+     * Rotation de la faux autour de sa pointe : 120° vue de face dans le sens horaire (le modèle étant inversé, le sens
+     * antihoraire de l'espace de rendu). Entre 65° et 125° la pointe est le point le plus bas ; à 120° le manche monte en
+     * diagonale, à environ 30° de la verticale, et l'arc de la lame ressort au-dessus du pupitre.
+     */
+    private static final float ROLL_DEGREES = 120.0F;
 
     public NexusConsoleRenderer(BlockEntityRendererProvider.Context context) {
     }
@@ -48,12 +54,10 @@ public class NexusConsoleRenderer implements BlockEntityRenderer<NexusConsoleBlo
         poseStack.translate(0.5D, 0.0D, 0.5D);
         // Même rotation que le bloc : la lame part du même côté quelle que soit l'orientation du pupitre.
         poseStack.mulPose(Axis.YP.rotationDegrees(-((facing.toYRot() + 180.0F) % 360.0F)));
-        poseStack.translate(0.0D, HEAD_HEIGHT, 0.0D);
-        // Le manche penche à l'opposé de la lame ; la faux est retournée (tête en bas) autour de ce point.
-        poseStack.mulPose(Axis.ZP.rotationDegrees(-LEAN_DEGREES));
-        poseStack.mulPose(Axis.ZP.rotationDegrees(180.0F));
+        poseStack.translate(0.0D, TIP_HEIGHT, 0.0D);
+        poseStack.mulPose(Axis.ZP.rotationDegrees(ROLL_DEGREES));
         poseStack.scale(SCALE, SCALE, SCALE);
-        poseStack.translate(0.0D, -HEAD_MODEL_Y / 16.0D, 0.0D);
+        poseStack.translate(TIP_MODEL_X / 16.0D, -TIP_MODEL_Y / 16.0D, 0.0D);
         Minecraft.getInstance().getItemRenderer().renderStatic(scythe, ItemDisplayContext.NONE, packedLight,
                 OverlayTexture.NO_OVERLAY, poseStack, buffer, console.getLevel(),
                 (int) console.getBlockPos().asLong());
