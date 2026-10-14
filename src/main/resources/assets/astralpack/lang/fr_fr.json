@@ -38,5 +38,7 @@
   "commands.astralpack.nexus.scythe.crafted": "La Death Scythe a déjà été fabriquée sur ce serveur",
   "commands.astralpack.nexus.scythe.available": "La Death Scythe peut encore être fabriquée sur ce serveur",
   "commands.astralpack.nexus.scythe.locked": "La fabrication de la Death Scythe est maintenant verrouillée",
-  "commands.astralpack.nexus.scythe.unlocked": "La fabrication de la Death Scythe est de nouveau autorisée"
+  "commands.astralpack.nexus.scythe.unlocked": "La fabrication de la Death Scythe est de nouveau autorisée",
+  "toast.astralpack.title": "Nexus Astral",
+  "message.astralpack.nexus.no_origin": "Aucun point de départ connu : retour au point d'apparition"
 }

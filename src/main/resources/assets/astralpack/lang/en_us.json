@@ -38,5 +38,7 @@
   "commands.astralpack.nexus.scythe.crafted": "The Death Scythe has already been crafted on this server",
   "commands.astralpack.nexus.scythe.available": "The Death Scythe can still be crafted on this server",
   "commands.astralpack.nexus.scythe.locked": "Death Scythe crafting is now locked",
-  "commands.astralpack.nexus.scythe.unlocked": "Death Scythe crafting is allowed again"
+  "commands.astralpack.nexus.scythe.unlocked": "Death Scythe crafting is allowed again",
+  "toast.astralpack.title": "Astral Nexus",
+  "message.astralpack.nexus.no_origin": "No known starting point: back to the world spawn"
 }

@@ -4,6 +4,7 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import fr.astralnexus.astralpack.Astralpack;
+import fr.astralnexus.astralpack.network.Notify;
 import fr.astralnexus.astralpack.registry.ModItems;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -92,6 +93,6 @@ public class NexusEvents {
             return;
         }
         NexusDimension.teleportToHub(player, (ServerLevel) player.level());
-        player.displayClientMessage(Component.translatable("message.astralpack.nexus.rescued"), true);
+        Notify.send(player, "message.astralpack.nexus.rescued");
     }
 }

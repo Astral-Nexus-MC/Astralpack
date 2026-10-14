@@ -67,6 +67,9 @@ Portail
 - [ ] Le pupitre ne fonctionne pas dans le Nexus (message).
 
 Retour
+- [ ] L'arrivée par le portail se fait sur l'île centrale (point d'arrivée libre, jamais dans des blocs), y compris pour un anneau posé en hauteur ou sur une pente.
+- [ ] Les notifications (pupitre, chute dans le vide, retour sans origine) s'affichent en haut à droite comme les autres notifications du jeu, au-dessus de l'interface, en français et en anglais.
+- [ ] Le retour ramène devant l'anneau de départ, sur un sol libre, même si l'anneau est contre une pente ou un mur.
 - [ ] Le portail de retour existe au hub (14 blocs au sud de l'arrivée), toujours ouvert, bien posé sur le sol.
 - [ ] Le prendre ramène à l'endroit d'où on est parti, du côté d'où on est entré, sans retraverser le portail en boucle.
 - [ ] Sans origine connue (arrivé par `/nexus`), il ramène au point d'apparition du monde principal.

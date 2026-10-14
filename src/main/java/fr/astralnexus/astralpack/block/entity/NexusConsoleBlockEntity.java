@@ -2,13 +2,13 @@ package fr.astralnexus.astralpack.block.entity;
 
 import fr.astralnexus.astralpack.block.NexusConsoleBlock;
 import fr.astralnexus.astralpack.item.DeathScytheItem;
+import fr.astralnexus.astralpack.network.Notify;
 import fr.astralnexus.astralpack.registry.ModBlockEntities;
 import fr.astralnexus.astralpack.world.NexusDimension;
 import fr.astralnexus.astralpack.world.NexusRing;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
@@ -77,7 +77,7 @@ public class NexusConsoleBlockEntity extends BlockEntity {
             return;
         }
         if (NexusDimension.isNexus(level)) {
-            player.displayClientMessage(Component.translatable("message.astralpack.nexus.console.wrong_dimension"), true);
+            Notify.send(player, "message.astralpack.nexus.console.wrong_dimension");
             return;
         }
         ItemStack held = player.getMainHandItem();
@@ -85,19 +85,19 @@ public class NexusConsoleBlockEntity extends BlockEntity {
             if (held.isEmpty()) {
                 this.take(player);
             } else {
-                player.displayClientMessage(Component.translatable(this.open
+                Notify.send(player, this.open
                         ? "message.astralpack.nexus.console.status_open"
-                        : "message.astralpack.nexus.console.status_closed"), true);
+                        : "message.astralpack.nexus.console.status_closed");
             }
             return;
         }
         if (!(held.getItem() instanceof DeathScytheItem)) {
-            player.displayClientMessage(Component.translatable("message.astralpack.nexus.console.needs_scythe"), true);
+            Notify.send(player, "message.astralpack.nexus.console.needs_scythe");
             return;
         }
         Optional<NexusRing.Found> ring = NexusRing.find(level, this.worldPosition);
         if (ring.isEmpty()) {
-            player.displayClientMessage(Component.translatable("message.astralpack.nexus.console.no_ring"), true);
+            Notify.send(player, "message.astralpack.nexus.console.no_ring");
             return;
         }
         this.scythe = held.copy();
@@ -106,7 +106,7 @@ public class NexusConsoleBlockEntity extends BlockEntity {
         this.setPlanted(true);
         this.sync();
         level.playSound(null, this.worldPosition, SoundEvents.BEACON_ACTIVATE, SoundSource.BLOCKS, 1.0F, 1.0F);
-        player.displayClientMessage(Component.translatable("message.astralpack.nexus.console.opened"), true);
+        Notify.send(player, "message.astralpack.nexus.console.opened");
         this.setChanged();
     }
 
@@ -120,7 +120,7 @@ public class NexusConsoleBlockEntity extends BlockEntity {
         this.setPlanted(false);
         this.sync();
         this.level.playSound(null, this.worldPosition, SoundEvents.BEACON_DEACTIVATE, SoundSource.BLOCKS, 1.0F, 1.0F);
-        player.displayClientMessage(Component.translatable("message.astralpack.nexus.console.closed"), true);
+        Notify.send(player, "message.astralpack.nexus.console.closed");
         this.setChanged();
     }
 

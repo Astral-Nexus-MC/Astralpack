@@ -45,7 +45,8 @@ public final class NexusDimension {
             y = PLATFORM_Y;
         }
         ensureReturnGate(level);
-        return new Vec3(0.5, y, 0.5);
+        // Même après tout cela, on s'assure que le point est bien libre : sol plein dessous, deux blocs libres.
+        return SafeSpot.find(level, 0.5D, y, 0.5D);
     }
 
     public static void teleportToHub(ServerPlayer player, ServerLevel level) {
