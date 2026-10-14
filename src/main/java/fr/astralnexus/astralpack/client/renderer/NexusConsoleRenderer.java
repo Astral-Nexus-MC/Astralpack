@@ -63,13 +63,19 @@ public class NexusConsoleRenderer implements BlockEntityRenderer<NexusConsoleBlo
         poseStack.translate(0.0D, TIP_HEIGHT, TIP_FRONT_OFFSET);
         // Le manche part du côté opposé à l'anneau : sans retournement il part vers l'axe X local du pupitre, avec il part
         // de l'autre côté. Si l'anneau est exactement dans l'axe du pupitre, on garde le côté retourné.
-        double radians = Math.toRadians(yaw);
-        double ringX = console.getRingCenter().getX() + 0.5D - (console.getBlockPos().getX() + 0.5D);
-        double ringZ = console.getRingCenter().getZ() + 0.5D - (console.getBlockPos().getZ() + 0.5D);
-        double ringSide = ringX * Math.cos(radians) - ringZ * Math.sin(radians);
-        if (ringSide >= -0.01D) {
-            poseStack.mulPose(Axis.YP.rotationDegrees(180.0F));
+        // L'anneau est un plan vertical : le manche part perpendiculairement à ce plan, du côté du pupitre, donc à l'opposé
+        // de l'anneau (et non le long de l'anneau).
+        double awayX = console.getBlockPos().getX() - console.getRingCenter().getX();
+        double awayZ = console.getBlockPos().getZ() - console.getRingCenter().getZ();
+        if (Math.abs(awayX) >= Math.abs(awayZ)) {
+            awayZ = 0.0D;
+            awayX = Math.signum(awayX);
+        } else {
+            awayX = 0.0D;
+            awayZ = Math.signum(awayZ);
         }
+        float shaftYaw = (float) Math.toDegrees(Math.atan2(-awayZ, awayX));
+        poseStack.mulPose(Axis.YP.rotationDegrees(shaftYaw - yaw));
         poseStack.mulPose(Axis.ZP.rotationDegrees(ROLL_DEGREES));
         poseStack.scale(SCALE, SCALE, SCALE);
         poseStack.translate(TIP_MODEL_X / 16.0D, -TIP_MODEL_Y / 16.0D, 0.0D);
