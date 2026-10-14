@@ -29,3 +29,11 @@ mandatory=true
 versionRange="[4.8,)"
 ordering="AFTER"
 side="BOTH"
+
+# Fordix (interface Voidframe 2 du serveur) : facultatif. S'il est installé, les notifications du mod passent par lui.
+[[dependencies.${mod_id}]]
+modId="fordix"
+mandatory=false
+versionRange="[0.1,)"
+ordering="AFTER"
+side="BOTH"

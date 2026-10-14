@@ -132,7 +132,7 @@ public final class NexusTravel {
         Vec3 spot = SafeSpot.find(overworld, spawn.getX() + 0.5D, spawn.getY(), spawn.getZ() + 0.5D);
         player.teleportTo(overworld, spot.x, spot.y, spot.z, player.getYRot(), 0.0F);
         player.fallDistance = 0.0F;
-        Notify.send(player, "message.astralpack.nexus.no_origin");
+        Notify.send(player, "message.astralpack.nexus.no_origin", Notify.Kind.WARNING);
     }
 
     /**

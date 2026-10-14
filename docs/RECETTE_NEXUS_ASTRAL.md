@@ -53,7 +53,7 @@ Statut : **développé sur `dev`, non testé en jeu** (2026-10-13). Vérificatio
 Fabrication
 - [ ] Les recettes du bloc d'anneau (par 4) et du pupitre sont fabricables ; les objets apparaissent dans l'onglet créatif ; les blocs se cassent à la pioche (fer minimum) et rendent leur objet.
 - [ ] Le modèle et les textures (créés dans Blockbench) s'affichent correctement en jeu : bloc d'anneau (plaques de rune sur les quatre côtés), pupitre (vide, puis faux plantée avec sa lame), surface du portail (translucide, animée, sans ligne de raccord entre les blocs). Aucun damier violet et noir (texture manquante), de près comme de loin.
-- [ ] La faux plantée dans le pupitre est bien la vraie Death Scythe (modèle complet, lueur), droite, au bon endroit dans la collerette, d'environ 2 blocs de haut, dans les quatre orientations du pupitre ; elle reste visible quand on s'éloigne, apparaît pour les autres joueurs et disparaît quand on la reprend.
+- [ ] La faux paraît plantée et non posée : son manche entre dans l'ouverture sombre de la collerette (aucun jour visible dessous), elle penche légèrement, des fissures lumineuses rayonnent sur le plateau et des étincelles montent. C'est bien la vraie Death Scythe (modèle complet, lueur), d'environ 2,7 blocs de haut, dans les quatre orientations du pupitre ; elle reste visible quand on s'éloigne, apparaît pour les autres joueurs et disparaît quand on la reprend.
 - [ ] Le bloc d'anneau, le pupitre et leurs objets sont bien proportionnés dans l'inventaire, la main et au sol.
 
 Portail
@@ -69,7 +69,7 @@ Portail
 Retour
 - [ ] En marchant dans le portail (et non avec `/nexus`), l'arrivée se fait exactement sur l'île centrale, au point d'arrivée du hub, et le retour ramène devant l'anneau de départ : le défaut de la 0.4.2 (coordonnées du monde d'origine appliquées dans la nouvelle dimension) a disparu. Les journaux `[Nexus]` donnent les positions.
 - [ ] L'arrivée par le portail se fait sur l'île centrale (point d'arrivée libre, jamais dans des blocs), y compris pour un anneau posé en hauteur ou sur une pente.
-- [ ] Les notifications (pupitre, chute dans le vide, retour sans origine) s'affichent en haut à droite comme les autres notifications du jeu, au-dessus de l'interface, en français et en anglais.
+- [ ] Les notifications (pupitre, chute dans le vide, retour sans origine) s'affichent par Fordix, en Voidframe 2 (verre sombre, en haut à droite, au-dessus de tout), avec le titre « Nexus Astral » et la bonne couleur (vert quand le portail s'ouvre, orange pour un problème). Sans Fordix, elles s'affichent comme les notifications du jeu.
 - [ ] Le retour ramène devant l'anneau de départ, sur un sol libre, même si l'anneau est contre une pente ou un mur.
 - [ ] Le portail de retour existe au hub (14 blocs au sud de l'arrivée), toujours ouvert, bien posé sur le sol.
 - [ ] Le prendre ramène à l'endroit d'où on est parti, du côté d'où on est entré, sans retraverser le portail en boucle.

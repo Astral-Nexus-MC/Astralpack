@@ -4,6 +4,8 @@ import fr.astralnexus.astralpack.block.entity.NexusConsoleBlockEntity;
 import fr.astralnexus.astralpack.registry.ModBlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -74,6 +76,17 @@ public class NexusConsoleBlock extends HorizontalDirectionalBlock implements Ent
             console.interact(player);
         }
         return InteractionResult.CONSUME;
+    }
+
+    /** Faux plantée : de petites étincelles montent de l'ouverture du plateau. */
+    @Override
+    public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
+        if (state.getValue(PLANTED) && random.nextInt(3) == 0) {
+            double x = pos.getX() + 0.5D + (random.nextDouble() - 0.5D) * 0.4D;
+            double z = pos.getZ() + 0.5D + (random.nextDouble() - 0.5D) * 0.4D;
+            level.addParticle(random.nextInt(4) == 0 ? ParticleTypes.REVERSE_PORTAL : ParticleTypes.END_ROD,
+                    x, pos.getY() + 0.95D, z, 0.0D, 0.02D + random.nextDouble() * 0.03D, 0.0D);
+        }
     }
 
     @Override

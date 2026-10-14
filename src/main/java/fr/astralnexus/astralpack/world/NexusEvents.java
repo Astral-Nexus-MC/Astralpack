@@ -101,6 +101,6 @@ public class NexusEvents {
             return;
         }
         NexusDimension.teleportToHub(player, (ServerLevel) player.level());
-        Notify.send(player, "message.astralpack.nexus.rescued");
+        Notify.send(player, "message.astralpack.nexus.rescued", Notify.Kind.INFO);
     }
 }

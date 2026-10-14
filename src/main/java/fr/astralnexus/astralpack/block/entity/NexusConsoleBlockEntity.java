@@ -77,7 +77,7 @@ public class NexusConsoleBlockEntity extends BlockEntity {
             return;
         }
         if (NexusDimension.isNexus(level)) {
-            Notify.send(player, "message.astralpack.nexus.console.wrong_dimension");
+            Notify.send(player, "message.astralpack.nexus.console.wrong_dimension", Notify.Kind.WARNING);
             return;
         }
         ItemStack held = player.getMainHandItem();
@@ -85,19 +85,21 @@ public class NexusConsoleBlockEntity extends BlockEntity {
             if (held.isEmpty()) {
                 this.take(player);
             } else {
-                Notify.send(player, this.open
-                        ? "message.astralpack.nexus.console.status_open"
-                        : "message.astralpack.nexus.console.status_closed");
+                if (this.open) {
+                Notify.send(player, "message.astralpack.nexus.console.status_open", Notify.Kind.INFO);
+            } else {
+                Notify.send(player, "message.astralpack.nexus.console.status_closed", Notify.Kind.WARNING);
+            }
             }
             return;
         }
         if (!(held.getItem() instanceof DeathScytheItem)) {
-            Notify.send(player, "message.astralpack.nexus.console.needs_scythe");
+            Notify.send(player, "message.astralpack.nexus.console.needs_scythe", Notify.Kind.INFO);
             return;
         }
         Optional<NexusRing.Found> ring = NexusRing.find(level, this.worldPosition);
         if (ring.isEmpty()) {
-            Notify.send(player, "message.astralpack.nexus.console.no_ring");
+            Notify.send(player, "message.astralpack.nexus.console.no_ring", Notify.Kind.WARNING);
             return;
         }
         this.scythe = held.copy();
@@ -106,7 +108,7 @@ public class NexusConsoleBlockEntity extends BlockEntity {
         this.setPlanted(true);
         this.sync();
         level.playSound(null, this.worldPosition, SoundEvents.BEACON_ACTIVATE, SoundSource.BLOCKS, 1.0F, 1.0F);
-        Notify.send(player, "message.astralpack.nexus.console.opened");
+        Notify.send(player, "message.astralpack.nexus.console.opened", Notify.Kind.SUCCESS);
         this.setChanged();
     }
 
@@ -120,7 +122,7 @@ public class NexusConsoleBlockEntity extends BlockEntity {
         this.setPlanted(false);
         this.sync();
         this.level.playSound(null, this.worldPosition, SoundEvents.BEACON_DEACTIVATE, SoundSource.BLOCKS, 1.0F, 1.0F);
-        Notify.send(player, "message.astralpack.nexus.console.closed");
+        Notify.send(player, "message.astralpack.nexus.console.closed", Notify.Kind.INFO);
         this.setChanged();
     }
 
