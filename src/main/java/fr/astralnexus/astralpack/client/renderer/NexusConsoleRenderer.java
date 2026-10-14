@@ -27,10 +27,11 @@ public class NexusConsoleRenderer implements BlockEntityRenderer<NexusConsoleBlo
     /**
      * Position de l'encoche du plateau, dans le bloc, mesurée sur le modèle (Blockbench) : le plateau est incliné de
      * 22,5°, donc l'encoche est à 0,89 de haut et décalée de 0,06 bloc vers l'avant du pupitre. La pointe de la lame y est
-     * plantée, enfoncée de huit centièmes de bloc (l'encoche affleure à 0,9).
+     * plantée, enfoncée de huit centièmes de bloc (l'encoche affleure à 0,9). Le décalage vers l'avant a été recalé en jeu
+     * (0,06 mesuré + 0,32 constaté de profil, la profondeur n'étant pas visible de face).
      */
     private static final float TIP_HEIGHT = 0.82F;
-    private static final float TIP_FRONT_OFFSET = -0.06F;
+    private static final float TIP_FRONT_OFFSET = -0.38F;
     /**
      * Position de la pointe de la lame dans le fichier du modèle de la faux (x, y), en seizièmes de bloc. GeckoLib inverse
      * l'axe horizontal du modèle à l'affichage : dans le jeu, la pointe est à x = -TIP_MODEL_X.
