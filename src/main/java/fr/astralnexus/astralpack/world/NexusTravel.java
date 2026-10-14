@@ -39,11 +39,11 @@ public final class NexusTravel {
     private static final Logger LOGGER = LogUtils.getLogger();
     private static final String ORIGIN = "astralpack_nexus_origin";
     /** Délai, en ticks, avant qu'un joueur puisse reprendre un portail (évite les allers-retours en boucle). */
-    private static final int COOLDOWN = 160;
+    private static final int COOLDOWN = 240;
     /** Durée, en ticks, pendant laquelle le joueur est happé par le portail avant d'être téléporté. */
-    private static final int ABSORB_TICKS = 24;
+    private static final int ABSORB_TICKS = 50;
     /** Durée, en ticks, du fondu à l'arrivée. */
-    private static final int ARRIVAL_TICKS = 30;
+    private static final int ARRIVAL_TICKS = 60;
     /** Distances, en blocs, devant le plan du portail pour l'ancien calcul du point de retour (secours). */
     private static final double[] EXIT_DISTANCES = {3.0D, 2.0D, 4.0D};
 

@@ -1,5 +1,7 @@
 # Fiche de conception — Death Scythe
 
+> **Nom en jeu depuis la 0.4.5 : « Faux astral » (français) et « Astral Scythe » (anglais).** L'identifiant reste `astralpack:death_scythe` et ce document garde le nom d'origine, « Death Scythe », pour ne pas casser les références.
+
 Arme de référence du mod. Méthode générale (armes et outils) : [CAHIER_DES_CHARGES_ARME_OUTIL.md](CAHIER_DES_CHARGES_ARME_OUTIL.md) · Recette : [RECETTE_DEATH_SCYTHE.md](RECETTE_DEATH_SCYTHE.md). Statut : **validée définitivement en jeu avec la version 0.2.7, publiée en 0.3.0** (2026-10-08), recette et tenue à deux mains (3ᵉ et 1ʳᵉ personne) comprises.
 
 ## Identité
