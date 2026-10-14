@@ -60,6 +60,8 @@ public class NexusConsoleRenderer implements BlockEntityRenderer<NexusConsoleBlo
         // Même rotation que le bloc : la lame part du même côté quelle que soit l'orientation du pupitre.
         poseStack.mulPose(Axis.YP.rotationDegrees(-((facing.toYRot() + 180.0F) % 360.0F)));
         poseStack.translate(0.0D, TIP_HEIGHT, TIP_FRONT_OFFSET);
+        // Retournée de 180° autour de la verticale de la pointe : la tête de la faux est du côté opposé au manche.
+        poseStack.mulPose(Axis.YP.rotationDegrees(180.0F));
         poseStack.mulPose(Axis.ZP.rotationDegrees(ROLL_DEGREES));
         poseStack.scale(SCALE, SCALE, SCALE);
         poseStack.translate(TIP_MODEL_X / 16.0D, -TIP_MODEL_Y / 16.0D, 0.0D);
