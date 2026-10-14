@@ -16,7 +16,9 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import org.slf4j.Logger;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -30,6 +32,8 @@ public final class NexusTravel {
     private static final double[] EXIT_DISTANCES = {3.0D, 2.0D, 4.0D};
 
     private static final Map<UUID, Long> COOLDOWNS = new HashMap<>();
+    /** Trajets en attente : exécutés à la fin du tick, une fois tous les paquets du joueur traités. */
+    private static final List<Runnable> PENDING = new ArrayList<>();
 
     private NexusTravel() {
     }
@@ -41,11 +45,36 @@ public final class NexusTravel {
             return;
         }
         COOLDOWNS.put(player.getUUID(), now + COOLDOWN);
-        MinecraftServer server = player.server;
-        if (NexusDimension.isNexus(player.level())) {
-            back(player, server);
-        } else {
-            toNexus(player, portalPos, axis, server);
+        // Ne jamais téléporter ici : cette méthode est appelée pendant le traitement du paquet de déplacement du joueur
+        // (Entity.move -> checkInsideBlocks). Le jeu, en finissant ce traitement, remettrait le joueur aux coordonnées
+        // envoyées par son client, mais dans la nouvelle dimension : arrivée dans le vide ou dans des blocs, et retour
+        // loin du portail. Le trajet part à la fin du tick.
+        PENDING.add(() -> {
+            if (player.isRemoved() || player.hasDisconnected()) {
+                return;
+            }
+            MinecraftServer server = player.server;
+            if (NexusDimension.isNexus(player.level())) {
+                back(player, server);
+            } else {
+                toNexus(player, portalPos, axis, server);
+            }
+        });
+    }
+
+    /** Exécute les trajets demandés pendant ce tick. À appeler à la fin de chaque tick du serveur. */
+    public static void runPending() {
+        if (PENDING.isEmpty()) {
+            return;
+        }
+        List<Runnable> batch = new ArrayList<>(PENDING);
+        PENDING.clear();
+        for (Runnable travel : batch) {
+            try {
+                travel.run();
+            } catch (RuntimeException e) {
+                LOGGER.error("[Nexus] trajet en erreur", e);
+            }
         }
     }
 

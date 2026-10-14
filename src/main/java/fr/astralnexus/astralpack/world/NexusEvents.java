@@ -85,6 +85,14 @@ public class NexusEvents {
         }
     }
 
+    /** Les trajets par le portail partent à la fin du tick, après le traitement des paquets des joueurs. */
+    @SubscribeEvent
+    public static void onServerTick(TickEvent.ServerTickEvent event) {
+        if (event.phase == TickEvent.Phase.END) {
+            NexusTravel.runPending();
+        }
+    }
+
     @SubscribeEvent
     public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
         if (event.phase != TickEvent.Phase.END || event.player.level().isClientSide

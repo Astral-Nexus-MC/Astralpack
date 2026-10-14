@@ -67,6 +67,7 @@ Portail
 - [ ] Le pupitre ne fonctionne pas dans le Nexus (message).
 
 Retour
+- [ ] En marchant dans le portail (et non avec `/nexus`), l'arrivée se fait exactement sur l'île centrale, au point d'arrivée du hub, et le retour ramène devant l'anneau de départ : le défaut de la 0.4.2 (coordonnées du monde d'origine appliquées dans la nouvelle dimension) a disparu. Les journaux `[Nexus]` donnent les positions.
 - [ ] L'arrivée par le portail se fait sur l'île centrale (point d'arrivée libre, jamais dans des blocs), y compris pour un anneau posé en hauteur ou sur une pente.
 - [ ] Les notifications (pupitre, chute dans le vide, retour sans origine) s'affichent en haut à droite comme les autres notifications du jeu, au-dessus de l'interface, en français et en anglais.
 - [ ] Le retour ramène devant l'anneau de départ, sur un sol libre, même si l'anneau est contre une pente ou un mur.
