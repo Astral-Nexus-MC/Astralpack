@@ -8,7 +8,10 @@ import fr.astralnexus.astralpack.registry.ModEntities;
 import fr.astralnexus.astralpack.registry.ModItems;
 import fr.astralnexus.astralpack.registry.ModRecipeSerializers;
 import fr.astralnexus.astralpack.registry.ModSounds;
+import fr.astralnexus.astralpack.world.LegacyWorldMigration;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
@@ -19,6 +22,10 @@ public class Astralpack {
 
     public Astralpack() {
         IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
+
+        if (FMLEnvironment.dist == Dist.DEDICATED_SERVER) {
+            LegacyWorldMigration.run();
+        }
 
         modBus.addListener((FMLCommonSetupEvent event) -> event.enqueueWork(ModNetwork::register));
 

@@ -76,14 +76,11 @@ Portes 0 à 3 de la feuille de route, plus :
 
 **Une dimension déjà publiée ne se supprime pas à la légère.** Un monde enregistre ses dimensions dans `level.dat` ; si l'une d'elles disparaît du mod, le serveur refuse de charger le monde (erreur « Failed to get element … dimension_type »). C'est ce qui est arrivé avec `astralpack:nexus_b`, la variante de lumière de la 0.4.0 abandonnée : reproduit sur un serveur de développement, puis corrigé.
 
-**Retrait de `astralpack:nexus_b` (0.4.2)** : la dimension n'existe plus dans le mod. Avant de mettre le jar sur un monde utilisé en 0.4.0 ou 0.4.1, **arrêter le serveur** et lancer sur son monde :
+**Retrait de `astralpack:nexus_b` (0.4.2)** : la dimension n'existe plus dans le mod. Le déploiement étant automatique (le VPS installe la dernière release tout seul), le mod **nettoie lui-même le monde au démarrage d'un serveur dédié** (`world/LegacyWorldMigration`, appelé depuis le constructeur du mod, avant que le jeu ne lise le monde) : il lit `level-name` dans `server.properties`, et si `level.dat` enregistre `astralpack:nexus_b`, il en fait une copie (`level.dat.avant-retrait-nexus_b`) puis retire cette seule entrée. Aucune manipulation n'est nécessaire. Vérifié sur un serveur de développement avec un monde de 0.4.0 : le serveur démarre, la migration est journalisée (`[Astralpack] Dimension astralpack:nexus_b retirée…`), `nexus_b` est inconnue, `nexus` intacte, et sans la migration le serveur ne démarrait pas.
 
-```
-pip install nbtlib
-python tools/retirer_nexus_b.py /chemin/du/serveur/world
-```
+Limites : seul un serveur dédié est migré ; un monde solo créé avec 0.4.0 ou 0.4.1 doit être nettoyé à la main. Les chunks de nexus_b restent sur le disque (inoffensifs ; `--supprimer-donnees` de l'outil les efface). Les joueurs déconnectés dans nexus_b réapparaissent dans le monde principal.
 
-L'outil sauvegarde `level.dat` (`level.dat.avant-retrait-nexus_b`), retire la seule entrée `astralpack:nexus_b`, ne touche à rien d'autre, et ne fait rien s'il est relancé. L'option `--supprimer-donnees` efface aussi les chunks de nexus_b. Les joueurs déconnectés dans nexus_b réapparaissent dans le monde principal. Vérifié sur un monde de développement : sans l'outil le serveur ne démarre pas ; avec, il démarre, `nexus_b` est inconnue et `nexus` est intacte.
+**Outil de secours** : `tools/retirer_nexus_b.py` fait la même chose à la main (serveur arrêté ; `pip install nbtlib` puis `python tools/retirer_nexus_b.py /chemin/du/serveur/world`), si la migration automatique échoue (message d'erreur dans les journaux).
 
 Règle pour la suite : même procédure pour tout type de dimension, biome ou réglage de bruit déjà publié que l'on voudrait retirer. `astralpack:nexus` ne se retire pas.
 
