@@ -20,7 +20,7 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-/** Accès au Nexus Astral par commande (v1) et retour sur l'île centrale en cas de chute dans le vide. */
+/** Accès à l'Astral Nexus par commande (v1) et retour sur l'île centrale en cas de chute dans le vide. */
 @Mod.EventBusSubscriber(modid = Astralpack.MOD_ID)
 public class NexusEvents {
     /** En dessous de cette hauteur, le joueur est ramené au hub (le bas du monde est à 0). */

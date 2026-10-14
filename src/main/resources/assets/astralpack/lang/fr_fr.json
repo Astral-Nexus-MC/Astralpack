@@ -21,9 +21,9 @@
   "item.astralpack.death_scythe": "Faux de la Mort",
   "item.astralpack.death_scythe.two_handed": "Deux mains : main secondaire vide",
   "item.astralpack.death_scythe.wither": "Flétrit sa cible pendant 3 secondes",
-  "commands.astralpack.nexus.entered": "Bienvenue dans le Nexus Astral",
+  "commands.astralpack.nexus.entered": "Bienvenue dans l'Astral Nexus",
   "commands.astralpack.nexus.left": "Retour dans le monde principal",
-  "commands.astralpack.nexus.missing": "La dimension du Nexus Astral n'est pas chargée",
+  "commands.astralpack.nexus.missing": "La dimension de l'Astral Nexus n'est pas chargée",
   "message.astralpack.nexus.rescued": "Le Nexus vous ramène sur l'île centrale",
   "block.astralpack.astral_ring_block": "Bloc d'anneau astral",
   "block.astralpack.nexus_console": "Pupitre du Nexus",
@@ -39,6 +39,6 @@
   "commands.astralpack.nexus.scythe.available": "La Death Scythe peut encore être fabriquée sur ce serveur",
   "commands.astralpack.nexus.scythe.locked": "La fabrication de la Death Scythe est maintenant verrouillée",
   "commands.astralpack.nexus.scythe.unlocked": "La fabrication de la Death Scythe est de nouveau autorisée",
-  "toast.astralpack.title": "Nexus Astral",
+  "toast.astralpack.title": "Astral Nexus",
   "message.astralpack.nexus.no_origin": "Aucun point de départ connu : retour au point d'apparition"
 }

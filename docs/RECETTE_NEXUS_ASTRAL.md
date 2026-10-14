@@ -1,4 +1,4 @@
-# Recette — Dimension « Nexus Astral » (v1, 0.4.0)
+# Recette — Dimension « Astral Nexus » (v1, 0.4.0)
 
 Suivi du plan de recette, déroulé selon la [feuille de route](FEUILLE_DE_ROUTE_RECETTE.md). Fiche : [FICHE_NEXUS_ASTRAL.md](FICHE_NEXUS_ASTRAL.md). Statut : **validée en jeu par le responsable avec la 0.4.0** (2026-10-13) ; toutes les cases sont cochées sur sa confirmation (« tout fonctionne »).
 
@@ -69,7 +69,7 @@ Portail
 Retour
 - [ ] En marchant dans le portail (et non avec `/nexus`), l'arrivée se fait exactement sur l'île centrale, au point d'arrivée du hub, et le retour ramène devant l'anneau de départ : le défaut de la 0.4.2 (coordonnées du monde d'origine appliquées dans la nouvelle dimension) a disparu. Les journaux `[Nexus]` donnent les positions.
 - [ ] L'arrivée par le portail se fait sur l'île centrale (point d'arrivée libre, jamais dans des blocs), y compris pour un anneau posé en hauteur ou sur une pente.
-- [ ] Les notifications (pupitre, chute dans le vide, retour sans origine) s'affichent par Fordix, en Voidframe 2 (verre sombre, en haut à droite, au-dessus de tout), avec le titre « Nexus Astral » et la bonne couleur (vert quand le portail s'ouvre, orange pour un problème). Sans Fordix, elles s'affichent comme les notifications du jeu.
+- [ ] Les notifications (pupitre, chute dans le vide, retour sans origine) s'affichent par Fordix, en Voidframe 2 (verre sombre, en haut à droite, au-dessus de tout), avec le titre « Astral Nexus » et la bonne couleur (vert quand le portail s'ouvre, orange pour un problème). Sans Fordix, elles s'affichent comme les notifications du jeu.
 - [ ] Le retour ramène devant l'anneau de départ, sur un sol libre, même si l'anneau est contre une pente ou un mur.
 - [ ] Le portail de retour existe au hub (14 blocs au sud de l'arrivée), toujours ouvert, bien posé sur le sol.
 - [ ] Le prendre ramène à l'endroit d'où on est parti, du côté d'où on est entré, sans retraverser le portail en boucle.

@@ -1,4 +1,4 @@
-"""Génère les fichiers de données de la dimension Nexus Astral (relief, biomes, types de dimension).
+"""Génère les fichiers de données de la dimension Astral Nexus (relief, biomes, types de dimension).
 
 Usage : python tools/generate_nexus_dimension.py [xz_scale ampl offset haut_iles erosion_hub]
 Valeurs retenues en 0.4.0 : 4.0 2.5 -1.0 70 -0.15. Nécessite le jar client-extra de Minecraft 1.20.1 (cache Gradle).

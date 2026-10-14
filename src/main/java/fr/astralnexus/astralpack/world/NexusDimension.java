@@ -16,7 +16,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.phys.Vec3;
 
-/** Dimension hub « Nexus Astral » : clé, point d'apparition sûr, portail de retour et téléportation. */
+/** Dimension hub « Astral Nexus » : clé, point d'apparition sûr, portail de retour et téléportation. */
 public final class NexusDimension {
     public static final ResourceKey<Level> NEXUS =
             ResourceKey.create(Registries.DIMENSION, new ResourceLocation(Astralpack.MOD_ID, "nexus"));
