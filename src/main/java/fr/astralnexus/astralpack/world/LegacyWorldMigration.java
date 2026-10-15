@@ -28,6 +28,57 @@ public final class LegacyWorldMigration {
 
     /** À appeler au démarrage d'un serveur dédié, depuis le dossier du serveur. Ne lève jamais d'exception. */
     public static void run() {
+        removeOldDimension();
+        regenerateNexusIfOutdated();
+    }
+
+    /**
+     * Génération du terrain du Nexus. À augmenter chaque fois que les blocs ou le relief changent au point de vouloir
+     * régénérer le Nexus : au prochain démarrage du serveur, ses chunks sont mis de côté (jamais supprimés) et le jeu
+     * les régénère au prochain trajet. 1 = blocs vanilla (0.4.x) ; 2 = blocs du mod (ressources du Nexus).
+     */
+    private static final int NEXUS_GENERATION = 2;
+    private static final String GENERATION_FILE = "astralpack_nexus_generation.txt";
+
+    /**
+     * Le fichier de génération, à la racine du monde, dit avec quelle version du terrain les chunks du Nexus ont été
+     * créés. Absent ou plus ancien : le dossier du Nexus est déplacé en {@code nexus.avant-regeneration-<date>}. Dans
+     * tous les cas le fichier est ensuite mis à jour, donc cela ne se produit qu'une fois par génération.
+     */
+    private static void regenerateNexusIfOutdated() {
+        try {
+            Path world = Path.of(levelName());
+            if (!Files.isDirectory(world)) {
+                return;
+            }
+            Path marker = world.resolve(GENERATION_FILE);
+            int current = 0;
+            if (Files.isRegularFile(marker)) {
+                try {
+                    current = Integer.parseInt(Files.readString(marker).trim());
+                } catch (NumberFormatException e) {
+                    current = 0;
+                }
+            }
+            if (current >= NEXUS_GENERATION) {
+                return;
+            }
+            Path nexus = world.resolve("dimensions").resolve("astralpack").resolve("nexus");
+            if (Files.isDirectory(nexus)) {
+                String stamp = java.time.LocalDateTime.now()
+                        .format(java.time.format.DateTimeFormatter.ofPattern("yyyyMMdd-HHmmss"));
+                Path backup = nexus.resolveSibling("nexus.avant-regeneration-" + stamp);
+                Files.move(nexus, backup);
+                LOGGER.info("[Astralpack] Nexus régénéré (génération {} -> {}) : anciens chunks mis de côté dans {}.",
+                        current, NEXUS_GENERATION, backup);
+            }
+            Files.writeString(marker, Integer.toString(NEXUS_GENERATION));
+        } catch (IOException | RuntimeException e) {
+            LOGGER.error("[Astralpack] Régénération du Nexus impossible ; utiliser tools/regenerer_nexus.py", e);
+        }
+    }
+
+    private static void removeOldDimension() {
         try {
             Path levelDat = Path.of(levelName()).resolve("level.dat");
             if (!Files.isRegularFile(levelDat)) {
