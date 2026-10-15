@@ -48,5 +48,7 @@
   "block.astralpack.nebula_ore": "Minerai de nébuleuse",
   "block.astralpack.astralite_block": "Bloc d'astralite",
   "item.astralpack.astralite": "Astralite",
-  "item.astralpack.nebula_shard": "Éclat de nébuleuse"
+  "item.astralpack.nebula_shard": "Éclat de nébuleuse",
+  "block.astralpack.abyssal_stone": "Pierre abyssale",
+  "block.astralpack.lumen_moss": "Mousse lumineuse"
 }

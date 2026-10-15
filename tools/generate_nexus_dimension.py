@@ -71,10 +71,18 @@ def floor_rule(top, below):
     ]}
 
 
-def biome_rule(biome, top, below):
+def biome_rule(biome, top, below, patch=None):
+    run = floor_rule(top, below)
+    if patch:
+        run = {"type": "minecraft:sequence", "sequence": [
+            {"type": "minecraft:condition",
+             "if_true": {"type": "minecraft:noise_threshold", "noise": "minecraft:surface",
+                         "min_threshold": patch[1], "max_threshold": 10.0},
+             "then_run": floor_rule(patch[0], below)},
+            run]}
     return {"type": "minecraft:condition",
             "if_true": {"type": "minecraft:biome", "biome_is": [biome]},
-            "then_run": floor_rule(top, below)}
+            "then_run": run}
 
 
 noise_settings = {
@@ -83,15 +91,15 @@ noise_settings = {
     "aquifers_enabled": False,
     "ore_veins_enabled": False,
     "legacy_random_source": True,
-    "default_block": {"Name": "minecraft:deepslate", "Properties": {"axis": "y"}},
+    "default_block": {"Name": "astralpack:abyssal_stone"},
     "default_fluid": {"Name": "minecraft:air"},
     "noise": {"min_y": 0, "height": 128, "size_horizontal": 2, "size_vertical": 1},
     "noise_router": router,
     "spawn_target": [],
     "surface_rule": {"type": "minecraft:sequence", "sequence": [
-        biome_rule("astralpack:nexus_hub", "astralpack:astral_regolith", "astralpack:stellar_stone"),
-        biome_rule("astralpack:astral_isles", "astralpack:astral_regolith", "astralpack:stellar_stone"),
-        biome_rule("astralpack:crystal_reef", "astralpack:reef_crystal", "minecraft:deepslate"),
+        biome_rule("astralpack:nexus_hub", "astralpack:astral_regolith", "astralpack:stellar_stone", ("astralpack:lumen_moss", 0.3)),
+        biome_rule("astralpack:astral_isles", "astralpack:astral_regolith", "astralpack:stellar_stone", ("astralpack:lumen_moss", 0.45)),
+        biome_rule("astralpack:crystal_reef", "astralpack:reef_crystal", "astralpack:abyssal_stone"),
     ]},
 }
 write('worldgen/noise_settings/nexus.json', noise_settings)

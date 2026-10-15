@@ -48,5 +48,7 @@
   "block.astralpack.nebula_ore": "Nebula ore",
   "block.astralpack.astralite_block": "Block of astralite",
   "item.astralpack.astralite": "Astralite",
-  "item.astralpack.nebula_shard": "Nebula shard"
+  "item.astralpack.nebula_shard": "Nebula shard",
+  "block.astralpack.abyssal_stone": "Abyssal stone",
+  "block.astralpack.lumen_moss": "Lumen moss"
 }

@@ -102,4 +102,20 @@ public class ModBlocks {
                     .requiresCorrectToolForDrops()
                     .lightLevel(state -> 8)
                     .sound(SoundType.AMETHYST)));
+
+    /** Roche profonde du Nexus : remplace l'ardoise des abysses sous la surface. */
+    public static final RegistryObject<Block> ABYSSAL_STONE = BLOCKS.register("abyssal_stone",
+            () -> new Block(BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.COLOR_BLACK)
+                    .strength(3.0F, 9.0F)
+                    .requiresCorrectToolForDrops()
+                    .sound(SoundType.DEEPSLATE)));
+
+    /** Mousse qui tache le sol du hub et des îles, éclaire légèrement. */
+    public static final RegistryObject<Block> LUMEN_MOSS = BLOCKS.register("lumen_moss",
+            () -> new Block(BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.COLOR_GREEN)
+                    .strength(0.1F)
+                    .lightLevel(state -> 6)
+                    .sound(SoundType.MOSS)));
 }

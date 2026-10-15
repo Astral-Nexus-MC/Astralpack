@@ -5,6 +5,8 @@ Les textures (PNG) ne sont PAS générées ici : elles sont faites dans Blockben
 """
 import json, os
 
+ASTRALITE_COUNT = 1
+NEBULA_COUNT = 4
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 RES = os.path.join(REPO, 'src', 'main', 'resources')
 ASSETS = os.path.join(RES, 'assets', 'astralpack')
@@ -27,6 +29,8 @@ BLOCKS = {
     'astralite_ore': ("Minerai d'astralite", 'Astralite ore', 'pickaxe', True),
     'nebula_ore': ('Minerai de nébuleuse', 'Nebula ore', 'pickaxe', True),
     'astralite_block': ("Bloc d'astralite", 'Block of astralite', 'pickaxe', True),
+    'abyssal_stone': ('Pierre abyssale', 'Abyssal stone', 'pickaxe', False),
+    'lumen_moss': ('Mousse lumineuse', 'Lumen moss', 'hoe', False),
 }
 ITEMS = {
     'astralite': ('Astralite', 'Astralite'),
@@ -87,6 +91,8 @@ def tag(path, new_values):
 
 tag(os.path.join(MC, 'tags', 'blocks', 'mineable', 'pickaxe.json'),
     ['astralpack:' + n for n, b in BLOCKS.items() if b[2] == 'pickaxe'])
+tag(os.path.join(MC, 'tags', 'blocks', 'mineable', 'hoe.json'),
+    ['astralpack:' + n for n, b in BLOCKS.items() if b[2] == 'hoe'])
 tag(os.path.join(MC, 'tags', 'blocks', 'mineable', 'shovel.json'),
     ['astralpack:' + n for n, b in BLOCKS.items() if b[2] == 'shovel'])
 tag(os.path.join(MC, 'tags', 'blocks', 'needs_iron_tool.json'),
@@ -125,21 +131,22 @@ lang('en_us', 1)
 TARGETS = [{"target": {"predicate_type": "minecraft:tag_match", "tag": "minecraft:deepslate_ore_replaceables"}}]
 
 
-def ore_feature(name, block, size, count, top):
+def ore_feature(name, block, size, count, discard):
+    targets = [{"target": {"predicate_type": "minecraft:block_match", "block": "astralpack:" + rock},
+                "state": {"Name": "astralpack:" + block}} for rock in ('abyssal_stone', 'stellar_stone')]
     write(os.path.join(DATA, 'worldgen', 'configured_feature', name + '.json'), {
         "type": "minecraft:ore",
-        "config": {"discard_chance_on_air_exposure": 0.0, "size": size, "targets": [
-            {"target": {"predicate_type": "minecraft:tag_match", "tag": "minecraft:deepslate_ore_replaceables"},
-             "state": {"Name": "astralpack:" + block}}]}})
+        "config": {"discard_chance_on_air_exposure": discard, "size": size, "targets": targets}})
     write(os.path.join(DATA, 'worldgen', 'placed_feature', name + '.json'), {
         "feature": "astralpack:" + name,
         "placement": [
             {"type": "minecraft:count", "count": count},
             {"type": "minecraft:in_square"},
             {"type": "minecraft:height_range", "height": {
-                "type": "minecraft:uniform", "min_inclusive": {"absolute": 0}, "max_inclusive": {"absolute": top}}},
+                "type": "minecraft:uniform", "min_inclusive": {"absolute": 0}, "max_inclusive": {"absolute": 100}}},
             {"type": "minecraft:biome"}]})
 
 
-ore_feature('astralite_ore', 'astralite_ore', 7, 14, 90)
-ore_feature('nebula_ore', 'nebula_ore', 9, 30, 90)
+# Rareté visée : astralite comme le diamant, nébuleuse comme la redstone (réglée sur la roche réellement générée).
+ore_feature('astralite_ore', 'astralite_ore', 6, ASTRALITE_COUNT, 0.5)
+ore_feature('nebula_ore', 'nebula_ore', 8, NEBULA_COUNT, 0.0)

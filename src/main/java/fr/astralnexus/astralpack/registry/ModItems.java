@@ -52,6 +52,12 @@ public class ModItems {
 
     public static final RegistryObject<Item> NEBULA_SHARD = ITEMS.register("nebula_shard", () -> new Item(new Item.Properties()));
 
+    public static final RegistryObject<Item> ABYSSAL_STONE = ITEMS.register("abyssal_stone",
+            () -> new BlockItem(ModBlocks.ABYSSAL_STONE.get(), new Item.Properties()));
+
+    public static final RegistryObject<Item> LUMEN_MOSS = ITEMS.register("lumen_moss",
+            () -> new BlockItem(ModBlocks.LUMEN_MOSS.get(), new Item.Properties()));
+
     public static final RegistryObject<Item> DEATH_SCYTHE =
             ITEMS.register("death_scythe",
                     () -> new DeathScytheItem(new Item.Properties().rarity(Rarity.EPIC).fireResistant()));
