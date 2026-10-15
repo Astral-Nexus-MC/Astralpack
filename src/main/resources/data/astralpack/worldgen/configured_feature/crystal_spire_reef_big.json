@@ -1,0 +1,7 @@
+{
+  "type": "astralpack:crystal_spire",
+  "config": {
+    "size": 2,
+    "min_distance": 0
+  }
+}

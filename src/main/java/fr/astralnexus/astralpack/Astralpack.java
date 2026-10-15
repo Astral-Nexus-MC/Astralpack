@@ -5,6 +5,7 @@ import fr.astralnexus.astralpack.registry.ModBlockEntities;
 import fr.astralnexus.astralpack.registry.ModBlocks;
 import fr.astralnexus.astralpack.registry.ModCreativeTabs;
 import fr.astralnexus.astralpack.registry.ModEntities;
+import fr.astralnexus.astralpack.registry.ModFeatures;
 import fr.astralnexus.astralpack.registry.ModItems;
 import fr.astralnexus.astralpack.registry.ModRecipeSerializers;
 import fr.astralnexus.astralpack.registry.ModSounds;
@@ -35,6 +36,7 @@ public class Astralpack {
         ModItems.ITEMS.register(modBus);
         ModEntities.ENTITY_TYPES.register(modBus);
         ModSounds.SOUNDS.register(modBus);
+        ModFeatures.FEATURES.register(modBus);
         ModCreativeTabs.TABS.register(modBus);
     }
 }

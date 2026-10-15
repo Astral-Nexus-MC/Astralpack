@@ -123,3 +123,17 @@ Textures faites dans Blockbench (`blockbench/block/nexus_ressources.bbmodel`) ; 
 **Rareté** (mesurée sur un Nexus neuf, serveur de développement, part de minerai dans la roche des biomes concernés) : astralite 0,013 à 0,020 % (veines de 6, 1 par chunk, moitié écartée à l'air libre) ; nébuleuse 0,035 à 0,17 % (veines de 8, 4 par chunk) ; référence : le diamant vanilla vaut environ 0,02 % de la roche, la redstone environ cinq fois plus. Réglages : `ASTRALITE_COUNT` et `NEBULA_COUNT` dans le script. Astralite : satellites et récif ; nébuleuse : satellites.
 
 **Régénérer le Nexus** : automatique, puisque le serveur est sur un VPS qui installe tout seul la dernière version. `world/LegacyWorldMigration` compare un fichier `astralpack_nexus_generation.txt` (racine du monde) à la constante `NEXUS_GENERATION` (2 depuis les blocs du mod). Absent ou plus ancien : au démarrage du serveur, avant le chargement du monde, `dimensions/astralpack/nexus` est déplacé en `nexus.avant-regeneration-AAAAMMJJ-HHMMSS` (jamais supprimé) puis le fichier est mis à jour ; le jeu regénère le relief au prochain trajet avec les blocs actuels, et le portail de retour est reconstruit au même endroit. Une seule fois par génération ; pour une régénération future, augmenter la constante. Constructions, lits et coffres du Nexus sont perdus (récupérables dans le dossier mis de côté). Secours manuel : `tools/regenerer_nexus.py` (serveur arrêté, `--oui`).
+
+## Décor du Nexus (0.5.1)
+
+Éléments de génération en Java (`world/feature`, enregistrés dans `registry/ModFeatures`, réglés par `NexusFeatureConfig` : taille et distance minimale au centre du monde) ; données générées par `tools/generate_nexus_ressources.py` (éléments) et `tools/generate_nexus_dimension.py` (listes par biome).
+
+| Élément | Où | Détail |
+|---|---|---|
+| Aiguilles de cristal (`crystal_spire`) | hub (bords seulement, à plus de 60 blocs du centre), îles, récif (nombreuses, certaines grandes) | cristal de récif, pointe en bloc d'astralite (lumineuse) |
+| Stalactites (`stalactite`) | sous toutes les îles | roche stellaire ou abyssale, parfois pointe de cristal |
+| Cratères (`crater`) | îles et récif | cuvette, mousse, minerai visible au fond (nébuleuse aux îles, astralite au récif) ; jamais sur le hub |
+| Ruines (`ruin`) | hub (bords), îles, récif | arche (parfois effondrée, clef de voûte en bloc d'anneau) ou petite salle aux murs éboulés, coins coiffés de blocs d'anneau |
+| Débris flottants (`floating_debris`) | autour des îles, à plus de 90 blocs du centre du hub | petits blocs de roche suspendus, dessus en régolithe/mousse, cristal et pointes |
+
+Le milieu du hub reste libre et constructible. Taches de mousse lumineuse resserrées. Vérifié par un rendu des chunks générés (vue du dessus et coupes) : cratères, aiguilles, stalactites, débris et ruines présents. `NEXUS_GENERATION` passe à 3 : le Nexus est régénéré une fois de plus au premier démarrage (les constructions faites dans le Nexus depuis la 0.5.0 sont mises de côté, pas supprimées).

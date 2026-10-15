@@ -24,7 +24,9 @@
   "features": [
     [],
     [],
-    [],
+    [
+      "astralpack:crater_isles"
+    ],
     [],
     [],
     [],
@@ -32,9 +34,15 @@
       "astralpack:nebula_ore",
       "astralpack:astralite_ore"
     ],
+    [
+      "astralpack:stalactite"
+    ],
     [],
-    [],
-    [],
+    [
+      "astralpack:crystal_spire_isles",
+      "astralpack:ruin_isles",
+      "astralpack:debris"
+    ],
     []
   ],
   "spawn_costs": {},

@@ -97,8 +97,8 @@ noise_settings = {
     "noise_router": router,
     "spawn_target": [],
     "surface_rule": {"type": "minecraft:sequence", "sequence": [
-        biome_rule("astralpack:nexus_hub", "astralpack:astral_regolith", "astralpack:stellar_stone", ("astralpack:lumen_moss", 0.3)),
-        biome_rule("astralpack:astral_isles", "astralpack:astral_regolith", "astralpack:stellar_stone", ("astralpack:lumen_moss", 0.45)),
+        biome_rule("astralpack:nexus_hub", "astralpack:astral_regolith", "astralpack:stellar_stone", ("astralpack:lumen_moss", 0.62)),
+        biome_rule("astralpack:astral_isles", "astralpack:astral_regolith", "astralpack:stellar_stone", ("astralpack:lumen_moss", 0.7)),
         biome_rule("astralpack:crystal_reef", "astralpack:reef_crystal", "astralpack:abyssal_stone"),
     ]},
 }
@@ -109,7 +109,7 @@ def rgb(h):
     return int(h, 16)
 
 
-def biome(sky, fog, water, water_fog, particle, particle_p, spawners=None, temperature=0.5, ores=()):
+def biome(sky, fog, water, water_fog, particle, particle_p, spawners=None, temperature=0.5, steps=None):
     effects = {
         "sky_color": rgb(sky), "fog_color": rgb(fog),
         "water_color": rgb(water), "water_fog_color": rgb(water_fog),
@@ -120,7 +120,7 @@ def biome(sky, fog, water, water_fog, particle, particle_p, spawners=None, tempe
         effects["particle"] = {"probability": particle_p, "options": {"type": particle}}
     return {
         "carvers": {}, "downfall": 0.0, "has_precipitation": False, "temperature": temperature,
-        "effects": effects, "features": [[]] * 6 + [list(ores)] + [[]] * 4, "spawn_costs": {},
+        "effects": effects, "features": [list((steps or {}).get(i, [])) for i in range(11)], "spawn_costs": {},
         "spawners": spawners or {"monster": [], "creature": [], "ambient": [], "axolotls": [], "misc": [],
                                   "underground_water_creature": [], "water_ambient": [], "water_creature": []},
     }
@@ -132,13 +132,19 @@ def with_monsters(mobs):
     return s
 
 
-write('worldgen/biome/nexus_hub.json', biome('1a1448', '2a1c68', '5b3fd6', '1a1448', 'minecraft:end_rod', 0.004))
+write('worldgen/biome/nexus_hub.json', biome('1a1448', '2a1c68', '5b3fd6', '1a1448', 'minecraft:end_rod', 0.004,
+      steps={7: ["astralpack:stalactite"],
+             9: ["astralpack:crystal_spire_hub", "astralpack:ruin_hub", "astralpack:debris_hub"]}))
 write('worldgen/biome/astral_isles.json', biome('160f3a', '241a5c', '3f5fd6', '140f3a', 'minecraft:end_rod', 0.003,
       with_monsters([{"type": "minecraft:enderman", "weight": 10, "minCount": 1, "maxCount": 2}]),
-      ores=("astralpack:nebula_ore", "astralpack:astralite_ore")))
+      steps={2: ["astralpack:crater_isles"], 6: ["astralpack:nebula_ore", "astralpack:astralite_ore"],
+             7: ["astralpack:stalactite"],
+             9: ["astralpack:crystal_spire_isles", "astralpack:ruin_isles", "astralpack:debris"]}))
 write('worldgen/biome/crystal_reef.json', biome('1c1050', '33206e', '7a4be0', '1c1050', 'minecraft:reverse_portal', 0.006,
       with_monsters([{"type": "minecraft:enderman", "weight": 6, "minCount": 1, "maxCount": 1}]),
-      ores=("astralpack:astralite_ore",)))
+      steps={2: ["astralpack:crater_reef"], 6: ["astralpack:astralite_ore"], 7: ["astralpack:stalactite"],
+             9: ["astralpack:crystal_spire_reef", "astralpack:crystal_spire_reef_big", "astralpack:ruin_reef",
+                 "astralpack:debris"]}))
 
 FULL = [-2.0, 2.0]
 

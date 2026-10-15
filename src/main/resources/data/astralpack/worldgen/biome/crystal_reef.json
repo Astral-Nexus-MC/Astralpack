@@ -24,16 +24,25 @@
   "features": [
     [],
     [],
-    [],
+    [
+      "astralpack:crater_reef"
+    ],
     [],
     [],
     [],
     [
       "astralpack:astralite_ore"
     ],
+    [
+      "astralpack:stalactite"
+    ],
     [],
-    [],
-    [],
+    [
+      "astralpack:crystal_spire_reef",
+      "astralpack:crystal_spire_reef_big",
+      "astralpack:ruin_reef",
+      "astralpack:debris"
+    ],
     []
   ],
   "spawn_costs": {},

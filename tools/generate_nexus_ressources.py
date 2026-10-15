@@ -150,3 +150,50 @@ def ore_feature(name, block, size, count, discard):
 # Rareté visée : astralite comme le diamant, nébuleuse comme la redstone (réglée sur la roche réellement générée).
 ore_feature('astralite_ore', 'astralite_ore', 6, ASTRALITE_COUNT, 0.5)
 ore_feature('nebula_ore', 'nebula_ore', 8, NEBULA_COUNT, 0.0)
+
+
+# ---- Décor : aiguilles de cristal, stalactites, cratères, ruines, débris flottants (éléments en Java, world/feature) ----
+SURFACE = [{"type": "minecraft:in_square"}, {"type": "minecraft:heightmap", "heightmap": "WORLD_SURFACE_WG"},
+           {"type": "minecraft:biome"}]
+
+
+def decor(name, kind, placement, size=1, min_distance=0):
+    write(os.path.join(DATA, 'worldgen', 'configured_feature', name + '.json'), {
+        "type": "astralpack:" + kind, "config": {"size": size, "min_distance": min_distance}})
+    write(os.path.join(DATA, 'worldgen', 'placed_feature', name + '.json'),
+          {"feature": "astralpack:" + name, "placement": placement})
+
+
+def rarity(n):
+    return [{"type": "minecraft:rarity_filter", "chance": n}]
+
+
+def count(n):
+    return [{"type": "minecraft:count", "count": n}]
+
+
+# Le milieu du hub reste libre : les éléments du hub restent à plus de 60 blocs du centre du monde.
+decor('crystal_spire_hub', 'crystal_spire', rarity(5) + SURFACE, 1, 60)
+decor('crystal_spire_isles', 'crystal_spire', rarity(2) + SURFACE)
+decor('crystal_spire_reef', 'crystal_spire', count(3) + SURFACE)
+decor('crystal_spire_reef_big', 'crystal_spire', rarity(4) + SURFACE, 2)
+decor('stalactite', 'stalactite', count(36) + [
+    {"type": "minecraft:in_square"},
+    {"type": "minecraft:height_range", "height": {"type": "minecraft:uniform", "min_inclusive": {"absolute": 5},
+                                                  "max_inclusive": {"absolute": 100}}},
+    {"type": "minecraft:environment_scan", "direction_of_search": "up", "max_steps": 16,
+     "target_condition": {"type": "minecraft:solid"},
+     "allowed_search_condition": {"type": "minecraft:matching_blocks", "blocks": "minecraft:air"}},
+    {"type": "minecraft:random_offset", "xz_spread": 0, "y_spread": -1},
+    {"type": "minecraft:biome"}])
+decor('crater_isles', 'crater', rarity(3) + SURFACE)
+decor('crater_reef', 'crater', rarity(4) + SURFACE)
+decor('ruin_hub', 'ruin', rarity(8) + SURFACE, 1, 65)
+decor('ruin_isles', 'ruin', rarity(5) + SURFACE)
+decor('ruin_reef', 'ruin', rarity(6) + SURFACE)
+VOID = [{"type": "minecraft:in_square"},
+        {"type": "minecraft:height_range", "height": {"type": "minecraft:uniform", "min_inclusive": {"absolute": 25},
+                                                      "max_inclusive": {"absolute": 105}}},
+        {"type": "minecraft:biome"}]
+decor('debris_hub', 'floating_debris', count(1) + VOID, 1, 90)
+decor('debris', 'floating_debris', count(1) + VOID)

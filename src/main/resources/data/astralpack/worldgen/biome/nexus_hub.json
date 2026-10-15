@@ -29,9 +29,15 @@
     [],
     [],
     [],
+    [
+      "astralpack:stalactite"
+    ],
     [],
-    [],
-    [],
+    [
+      "astralpack:crystal_spire_hub",
+      "astralpack:ruin_hub",
+      "astralpack:debris_hub"
+    ],
     []
   ],
   "spawn_costs": {},
