@@ -18,7 +18,7 @@ import net.minecraft.world.item.ItemStack;
  * environ un bloc de haut : seul le rendu de l'objet lui-même permet de montrer la faux entière, avec sa lueur.
  *
  * <p>Elle est plantée par la pointe de sa lame : on la fait pivoter autour de cette pointe jusqu'à ce qu'elle soit le point
- * le plus bas de la faux (à environ 105°, vérifié sur la géométrie), la pointe est plantée dans l'encoche sombre du plateau, et
+ * le plus bas de la faux (entre 65° et 125°, vérifié sur la géométrie), la pointe est plantée dans l'encoche sombre du plateau, et
  * le manche part en diagonale vers le haut, comme une lame plantée en terre.
  */
 public class NexusConsoleRenderer implements BlockEntityRenderer<NexusConsoleBlockEntity> {
@@ -39,11 +39,11 @@ public class NexusConsoleRenderer implements BlockEntityRenderer<NexusConsoleBlo
     private static final float TIP_MODEL_X = 34.6F;
     private static final float TIP_MODEL_Y = 31.77F;
     /**
-     * Rotation de la faux autour de sa pointe : 105° vue de face dans le sens horaire (le modèle étant inversé, le sens
-     * antihoraire de l'espace de rendu). Entre 65° et 125° la pointe est le point le plus bas ; à 105° la lame monte de l'encoche
+     * Rotation de la faux autour de sa pointe : 75° vue de face dans le sens horaire (le modèle étant inversé, le sens
+     * antihoraire de l'espace de rendu). Entre 65° et 125° la pointe est le point le plus bas  ; à 75° la faux est très inclinée vers le joueur, la lame monte de l'encoche
      * en s'incurvant et le manche part en diagonale vers le haut.
      */
-    private static final float ROLL_DEGREES = 105.0F;
+    private static final float ROLL_DEGREES = 75.0F;
 
     public NexusConsoleRenderer(BlockEntityRendererProvider.Context context) {
     }
