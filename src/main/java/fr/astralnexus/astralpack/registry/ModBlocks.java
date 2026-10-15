@@ -52,4 +52,54 @@ public class ModBlocks {
                     .lightLevel(state -> 11)
                     .noOcclusion()
                     .sound(SoundType.GLASS)));
+
+    /** Sol de l'île centrale et des satellites : régolithe violet nuit. */
+    public static final RegistryObject<Block> ASTRAL_REGOLITH = BLOCKS.register("astral_regolith",
+            () -> new Block(BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.COLOR_PURPLE)
+                    .strength(0.7F)
+                    .sound(SoundType.SAND)));
+
+    /** Roche sous la surface du Nexus. */
+    public static final RegistryObject<Block> STELLAR_STONE = BLOCKS.register("stellar_stone",
+            () -> new Block(BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.COLOR_BLUE)
+                    .strength(2.0F, 6.0F)
+                    .requiresCorrectToolForDrops()
+                    .sound(SoundType.DEEPSLATE)));
+
+    /** Surface du récif de cristal : cristal teal lumineux. */
+    public static final RegistryObject<Block> REEF_CRYSTAL = BLOCKS.register("reef_crystal",
+            () -> new Block(BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.COLOR_CYAN)
+                    .strength(1.5F, 6.0F)
+                    .requiresCorrectToolForDrops()
+                    .lightLevel(state -> 5)
+                    .sound(SoundType.AMETHYST)));
+
+    /** Minerai d'astralite : îles satellites et récif seulement. */
+    public static final RegistryObject<Block> ASTRALITE_ORE = BLOCKS.register("astralite_ore",
+            () -> new Block(BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.COLOR_CYAN)
+                    .strength(4.0F, 6.0F)
+                    .requiresCorrectToolForDrops()
+                    .lightLevel(state -> 4)
+                    .sound(SoundType.DEEPSLATE)));
+
+    /** Minerai de nébuleuse : îles satellites seulement. */
+    public static final RegistryObject<Block> NEBULA_ORE = BLOCKS.register("nebula_ore",
+            () -> new Block(BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.COLOR_PINK)
+                    .strength(3.5F, 6.0F)
+                    .requiresCorrectToolForDrops()
+                    .lightLevel(state -> 4)
+                    .sound(SoundType.DEEPSLATE)));
+
+    public static final RegistryObject<Block> ASTRALITE_BLOCK = BLOCKS.register("astralite_block",
+            () -> new Block(BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.COLOR_CYAN)
+                    .strength(5.0F, 6.0F)
+                    .requiresCorrectToolForDrops()
+                    .lightLevel(state -> 8)
+                    .sound(SoundType.AMETHYST)));
 }

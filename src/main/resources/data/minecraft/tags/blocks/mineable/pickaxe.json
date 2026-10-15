@@ -2,6 +2,11 @@
   "replace": false,
   "values": [
     "astralpack:astral_ring_block",
-    "astralpack:nexus_console"
+    "astralpack:nexus_console",
+    "astralpack:stellar_stone",
+    "astralpack:reef_crystal",
+    "astralpack:astralite_ore",
+    "astralpack:nebula_ore",
+    "astralpack:astralite_block"
   ]
 }

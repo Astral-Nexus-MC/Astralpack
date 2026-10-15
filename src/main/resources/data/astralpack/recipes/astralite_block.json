@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "AAA",
+    "AAA",
+    "AAA"
+  ],
+  "key": {
+    "A": {
+      "item": "astralpack:astralite"
+    }
+  },
+  "result": {
+    "item": "astralpack:astralite_block",
+    "count": 1
+  }
+}

@@ -21,7 +21,21 @@
       }
     }
   },
-  "features": [],
+  "features": [
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [
+      "astralpack:astralite_ore"
+    ],
+    [],
+    [],
+    [],
+    []
+  ],
   "spawn_costs": {},
   "spawners": {
     "monster": [

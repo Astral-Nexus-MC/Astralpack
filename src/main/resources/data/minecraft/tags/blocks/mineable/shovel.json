@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "astralpack:fennec_burrow"
+    "astralpack:fennec_burrow",
+    "astralpack:astral_regolith"
   ]
 }

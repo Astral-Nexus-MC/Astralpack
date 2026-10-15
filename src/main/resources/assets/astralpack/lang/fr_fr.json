@@ -40,5 +40,13 @@
   "commands.astralpack.nexus.scythe.locked": "La fabrication de la Faux astral est maintenant verrouillée",
   "commands.astralpack.nexus.scythe.unlocked": "La fabrication de la Faux astral est de nouveau autorisée",
   "toast.astralpack.title": "Astral Nexus",
-  "message.astralpack.nexus.no_origin": "Aucun point de départ connu : retour au point d'apparition"
+  "message.astralpack.nexus.no_origin": "Aucun point de départ connu : retour au point d'apparition",
+  "block.astralpack.astral_regolith": "Régolithe astral",
+  "block.astralpack.stellar_stone": "Pierre stellaire",
+  "block.astralpack.reef_crystal": "Cristal de récif",
+  "block.astralpack.astralite_ore": "Minerai d'astralite",
+  "block.astralpack.nebula_ore": "Minerai de nébuleuse",
+  "block.astralpack.astralite_block": "Bloc d'astralite",
+  "item.astralpack.astralite": "Astralite",
+  "item.astralpack.nebula_shard": "Éclat de nébuleuse"
 }

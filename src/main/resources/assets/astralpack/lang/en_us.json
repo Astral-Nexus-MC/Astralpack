@@ -40,5 +40,13 @@
   "commands.astralpack.nexus.scythe.locked": "Astral Scythe crafting is now locked",
   "commands.astralpack.nexus.scythe.unlocked": "Astral Scythe crafting is allowed again",
   "toast.astralpack.title": "Astral Nexus",
-  "message.astralpack.nexus.no_origin": "No known starting point: back to the world spawn"
+  "message.astralpack.nexus.no_origin": "No known starting point: back to the world spawn",
+  "block.astralpack.astral_regolith": "Astral regolith",
+  "block.astralpack.stellar_stone": "Stellar stone",
+  "block.astralpack.reef_crystal": "Reef crystal",
+  "block.astralpack.astralite_ore": "Astralite ore",
+  "block.astralpack.nebula_ore": "Nebula ore",
+  "block.astralpack.astralite_block": "Block of astralite",
+  "item.astralpack.astralite": "Astralite",
+  "item.astralpack.nebula_shard": "Nebula shard"
 }

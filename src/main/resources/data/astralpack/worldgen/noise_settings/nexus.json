@@ -224,7 +224,7 @@
               "then_run": {
                 "type": "minecraft:block",
                 "result_state": {
-                  "Name": "minecraft:moss_block"
+                  "Name": "astralpack:astral_regolith"
                 }
               }
             },
@@ -240,7 +240,7 @@
               "then_run": {
                 "type": "minecraft:block",
                 "result_state": {
-                  "Name": "minecraft:tuff"
+                  "Name": "astralpack:stellar_stone"
                 }
               }
             }
@@ -270,7 +270,7 @@
               "then_run": {
                 "type": "minecraft:block",
                 "result_state": {
-                  "Name": "minecraft:calcite"
+                  "Name": "astralpack:astral_regolith"
                 }
               }
             },
@@ -286,7 +286,7 @@
               "then_run": {
                 "type": "minecraft:block",
                 "result_state": {
-                  "Name": "minecraft:tuff"
+                  "Name": "astralpack:stellar_stone"
                 }
               }
             }
@@ -316,7 +316,7 @@
               "then_run": {
                 "type": "minecraft:block",
                 "result_state": {
-                  "Name": "minecraft:smooth_basalt"
+                  "Name": "astralpack:reef_crystal"
                 }
               }
             },

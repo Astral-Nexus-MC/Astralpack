@@ -21,7 +21,19 @@
       }
     }
   },
-  "features": [],
+  "features": [
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    []
+  ],
   "spawn_costs": {},
   "spawners": {
     "monster": [],
