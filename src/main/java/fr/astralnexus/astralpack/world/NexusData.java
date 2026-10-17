@@ -20,6 +20,10 @@ public class NexusData extends SavedData {
     private String portalDimension = "";
     private long portalConsole;
     private int portalConsoleFacing;
+    /** Construction du hub : version du plan, étape atteinte, hauteur de la place. */
+    private int hubKey;
+    private int hubStage;
+    private int hubY;
     private long portalCenter;
 
     public static NexusData get(MinecraftServer server) {
@@ -36,6 +40,9 @@ public class NexusData extends SavedData {
         data.portalConsole = tag.getLong("PortalConsole");
         data.portalConsoleFacing = tag.getInt("PortalConsoleFacing");
         data.portalCenter = tag.getLong("PortalCenter");
+        data.hubKey = tag.getInt("HubKey");
+        data.hubStage = tag.getInt("HubStage");
+        data.hubY = tag.getInt("HubY");
         return data;
     }
 
@@ -49,6 +56,9 @@ public class NexusData extends SavedData {
         tag.putLong("PortalConsole", this.portalConsole);
         tag.putInt("PortalConsoleFacing", this.portalConsoleFacing);
         tag.putLong("PortalCenter", this.portalCenter);
+        tag.putInt("HubKey", this.hubKey);
+        tag.putInt("HubStage", this.hubStage);
+        tag.putInt("HubY", this.hubY);
         return tag;
     }
 
@@ -107,6 +117,29 @@ public class NexusData extends SavedData {
     public void setReturnGate(BlockPos center) {
         this.hasReturnGate = true;
         this.returnGateCenter = center.asLong();
+        this.setDirty();
+    }
+
+    /** Un plan ou un terrain différent de celui déjà construit : la construction du hub repart de zéro. */
+    public void syncHubKey(int key) {
+        if (this.hubKey != key) {
+            this.hubKey = key;
+            this.hubStage = 0;
+            this.setDirty();
+        }
+    }
+
+    public int getHubStage() {
+        return this.hubStage;
+    }
+
+    public void setHubStage(int stage) {
+        this.hubStage = stage;
+        this.setDirty();
+    }
+
+    public void setHubY(int y) {
+        this.hubY = y;
         this.setDirty();
     }
 }

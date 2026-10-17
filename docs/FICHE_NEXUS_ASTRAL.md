@@ -137,3 +137,16 @@ Textures faites dans Blockbench (`blockbench/block/nexus_ressources.bbmodel`) ; 
 | Débris flottants (`floating_debris`) | autour des îles, à plus de 90 blocs du centre du hub | petits blocs de roche suspendus, dessus en régolithe/mousse, cristal et pointes |
 
 Le milieu du hub reste libre et constructible. Taches de mousse lumineuse resserrées. Vérifié par un rendu des chunks générés (vue du dessus et coupes) : cratères, aiguilles, stalactites, débris et ruines présents. `NEXUS_GENERATION` passe à 3 : le Nexus est régénéré une fois de plus au premier démarrage (les constructions faites dans le Nexus depuis la 0.5.0 sont mises de côté, pas supprimées).
+
+## Construction du hub (0.5.2)
+
+Plan validé par le responsable (2026-10-17), construit par `world/NexusHubBuilder` sur le terrain déjà généré, sans régénération. 25 étapes, une par seconde tant qu'un joueur est dans le Nexus ; la place du centre est faite tout de suite à la première arrivée. La progression (`HubKey`, `HubStage`, `HubY`) est dans `NexusData` ; `HUB_KEY` = génération du terrain x 100 + version du plan : un changement de l'un ou de l'autre refait la construction. Seuls les blocs naturels et de décor du Nexus sont remplacés : rien de ce que les joueurs construisent n'est touché.
+
+- **Place du Nexus** : disque de 20 blocs de rayon aplani à la hauteur du centre, anneaux de pierre abyssale, huit rayons de cristal, disque central en bloc d'astralite, huit balises en blocs d'astralite, quatre paires de grandes balises à l'entrée des avenues. Elle ne touche pas au portail de retour (14 blocs au sud de l'arrivée).
+- **Quatre avenues** (est, ouest, nord, sud) de 5 blocs de large jusqu'au bord de l'île, lampadaires de cristal tous les 12 blocs.
+- **Route circulaire** de 3 blocs de large à 64 blocs du centre.
+- **Parcelles de base** libres de 22 x 22 blocs, aplanies, bordées de pierre abyssale, avec quatre bornes de cristal et un bloc d'anneau à l'entrée : huit sur un anneau intérieur (46 blocs), seize sur l'anneau extérieur (84 blocs) ; une parcelle dont le sol couvre moins de 85 % de l'emprise, ou dont le relief varie de plus de 10 blocs, est ignorée (15 construites avec le terrain actuel).
+- **Marché** au nord : six étals (comptoir, poteaux, toit, lanterne de cristal) sur une dalle de 34 x 16.
+- **Deux embarcadères** à l'est et à l'ouest : plateforme et passerelle de 14 blocs avec balise au bout.
+
+Commandes d'administration : `/nexus hub` (termine toutes les étapes restantes tout de suite), `/nexus hub reconstruire` (repart de la première étape). Vérifié par un rendu des chunks après `/nexus hub` sur un Nexus neuf (une dizaine de secondes pour les 25 étapes).

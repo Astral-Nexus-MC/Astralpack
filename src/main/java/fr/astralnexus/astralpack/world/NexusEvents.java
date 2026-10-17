@@ -33,6 +33,9 @@ public class NexusEvents {
                 .requires(source -> source.hasPermission(2))
                 .executes(context -> enter(context, NexusDimension.NEXUS))
                 .then(Commands.literal("retour").executes(NexusEvents::back))
+                .then(Commands.literal("hub")
+                        .executes(context -> buildHub(context, false))
+                        .then(Commands.literal("reconstruire").executes(context -> buildHub(context, true))))
                 .then(Commands.literal("faux")
                         .executes(NexusEvents::scytheStatus)
                         .then(Commands.literal("reset").executes(context -> setScytheCrafted(context, false)))
@@ -49,6 +52,17 @@ public class NexusEvents {
         }
         NexusDimension.teleportToHub(player, level);
         context.getSource().sendSuccess(() -> Component.translatable("commands.astralpack.nexus.entered"), true);
+        return 1;
+    }
+
+    private static int buildHub(CommandContext<CommandSourceStack> context, boolean restart) {
+        ServerLevel level = context.getSource().getServer().getLevel(NexusDimension.NEXUS);
+        if (level == null) {
+            context.getSource().sendFailure(Component.translatable("commands.astralpack.nexus.missing"));
+            return 0;
+        }
+        int steps = NexusHubBuilder.runAll(level, restart);
+        context.getSource().sendSuccess(() -> Component.translatable("commands.astralpack.nexus.hub.built", steps), true);
         return 1;
     }
 
@@ -90,6 +104,10 @@ public class NexusEvents {
     public static void onServerTick(TickEvent.ServerTickEvent event) {
         if (event.phase == TickEvent.Phase.END) {
             NexusTravel.tick();
+            ServerLevel nexus = event.getServer().getLevel(NexusDimension.NEXUS);
+            if (nexus != null) {
+                NexusHubBuilder.tick(nexus);
+            }
         }
     }
 

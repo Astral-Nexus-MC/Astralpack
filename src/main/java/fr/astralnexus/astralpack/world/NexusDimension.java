@@ -36,6 +36,7 @@ public final class NexusDimension {
     /** Point d'apparition du hub : au-dessus de l'île centrale, sinon sur une petite plateforme créée à la volée. */
     public static Vec3 hubSpawn(ServerLevel level) {
         level.getChunk(0, 0);
+        NexusHubBuilder.ensurePlaza(level);
         int y = level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, 0, 0);
         if (y <= level.getMinBuildHeight() + 1) {
             BlockPos center = new BlockPos(0, PLATFORM_Y - 1, 0);

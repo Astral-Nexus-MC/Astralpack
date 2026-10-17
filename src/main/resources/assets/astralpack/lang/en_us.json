@@ -50,5 +50,6 @@
   "item.astralpack.astralite": "Astralite",
   "item.astralpack.nebula_shard": "Nebula shard",
   "block.astralpack.abyssal_stone": "Abyssal stone",
-  "block.astralpack.lumen_moss": "Lumen moss"
+  "block.astralpack.lumen_moss": "Lumen moss",
+  "commands.astralpack.nexus.hub.built": "Hub construction: %s step(s) done"
 }
