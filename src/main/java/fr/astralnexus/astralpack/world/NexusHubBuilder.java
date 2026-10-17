@@ -144,8 +144,7 @@ public final class NexusHubBuilder {
     private static boolean replaceable(BlockState state) {
         return state.isAir() || state.is(ModBlocks.ASTRAL_REGOLITH.get()) || state.is(ModBlocks.STELLAR_STONE.get())
                 || state.is(ModBlocks.ABYSSAL_STONE.get()) || state.is(ModBlocks.LUMEN_MOSS.get())
-                || state.is(ModBlocks.REEF_CRYSTAL.get()) || state.is(ModBlocks.ASTRALITE_BLOCK.get())
-                || state.is(ModBlocks.ASTRAL_RING_BLOCK.get());
+                || state.is(ModBlocks.REEF_CRYSTAL.get());
     }
 
     private static boolean natural(BlockState state) {
@@ -261,7 +260,7 @@ public final class NexusHubBuilder {
             int x = (int) Math.round(16.5D * Math.cos(angle));
             int z = (int) Math.round(16.5D * Math.sin(angle));
             if (!insideReturnGate(x, z)) {
-                pillar(level, x, z, target, 4, beacon());
+                pillar(level, x, z, target, 5, beacon());
             }
         }
         for (int[] d : AVENUES) {
@@ -284,7 +283,10 @@ public final class NexusHubBuilder {
         if (r < 2.5D) {
             return beacon();
         }
-        if ((r >= 8.0D && r < 9.2D) || (r >= 13.0D && r < 14.2D) || r >= 18.8D) {
+        if ((r >= 8.0D && r < 9.2D) || r >= 18.8D) {
+            return crystal();
+        }
+        if (r >= 13.0D && r < 14.2D) {
             return abyssal();
         }
         double angle = Math.toDegrees(Math.atan2(z, x));
@@ -301,14 +303,14 @@ public final class NexusHubBuilder {
             for (int w = -2; w <= 2; w++) {
                 int x = d[0] != 0 ? d[0] * t : w;
                 int z = d[1] != 0 ? d[1] * t : w;
-                pave(level, x, z, Math.abs(w) <= 1 ? stellar() : abyssal());
+                pave(level, x, z, Math.abs(w) <= 1 ? stellar() : crystal());
             }
             if (t % 12 == 0) {
                 for (int side = -1; side <= 1; side += 2) {
                     int x = d[0] != 0 ? d[0] * t : side * 3;
                     int z = d[1] != 0 ? d[1] * t : side * 3;
                     if (hasTerrain(level, x, z)) {
-                        pillar(level, x, z, groundAt(level, x, z), 3, crystal());
+                        pillar(level, x, z, groundAt(level, x, z), 4, beacon());
                     }
                 }
             }
@@ -321,7 +323,7 @@ public final class NexusHubBuilder {
             for (int z = -bound; z <= bound; z++) {
                 double off = Math.abs(Math.sqrt(x * x + z * z) - RING_ROAD_RADIUS);
                 if (off <= 1.5D) {
-                    pave(level, x, z, off <= 0.6D ? stellar() : abyssal());
+                    pave(level, x, z, off <= 0.6D ? stellar() : crystal());
                 }
             }
         }
@@ -354,13 +356,13 @@ public final class NexusHubBuilder {
         for (int x = cx - half; x < cx + half; x++) {
             for (int z = cz - half; z < cz + half; z++) {
                 boolean border = x == cx - half || x == cx + half - 1 || z == cz - half || z == cz + half - 1;
-                flatten(level, x, z, target, border ? abyssal() : regolith());
+                flatten(level, x, z, target, border ? crystal() : regolith());
             }
         }
         int[][] corners = {{cx - half, cz - half}, {cx + half - 1, cz - half}, {cx - half, cz + half - 1},
                 {cx + half - 1, cz + half - 1}};
         for (int[] c : corners) {
-            pillar(level, c[0], c[1], target, 3, crystal());
+            pillar(level, c[0], c[1], target, 5, beacon());
         }
         int markX = cx;
         int markZ = cz;
@@ -395,7 +397,7 @@ public final class NexusHubBuilder {
         for (int x = -17; x <= 16; x++) {
             for (int z = cz - 8; z <= cz + 7; z++) {
                 boolean border = x == -17 || x == 16 || z == cz - 8 || z == cz + 7;
-                flatten(level, x, z, target, border ? abyssal() : stellar());
+                flatten(level, x, z, target, border ? crystal() : stellar());
             }
         }
         for (int row = 0; row < 2; row++) {
@@ -434,23 +436,23 @@ public final class NexusHubBuilder {
         for (int dx = -4; dx <= 4; dx++) {
             for (int dz = -4; dz <= 4; dz++) {
                 boolean border = Math.abs(dx) == 4 || Math.abs(dz) == 4;
-                flatten(level, cx + dx, dz, y, border ? abyssal() : stellar());
+                flatten(level, cx + dx, dz, y, border ? crystal() : stellar());
             }
         }
         for (int t = 1; t <= 14; t++) {
             int x = side * (end + t);
             for (int w = -1; w <= 1; w++) {
-                set(level, x, y, w, Math.abs(w) == 1 ? abyssal() : stellar());
+                set(level, x, y, w, Math.abs(w) == 1 ? crystal() : stellar());
             }
             if (t % 4 == 0) {
-                pillar(level, x, -2, y, 2, crystal());
-                pillar(level, x, 2, y, 2, crystal());
+                pillar(level, x, -2, y, 3, beacon());
+                pillar(level, x, 2, y, 3, beacon());
             }
         }
         int tip = side * (end + 15);
         for (int w = -1; w <= 1; w++) {
             set(level, tip, y, w, abyssal());
         }
-        pillar(level, tip, 0, y, 4, beacon());
+        pillar(level, tip, 0, y, 6, beacon());
     }
 }
