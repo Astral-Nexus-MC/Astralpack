@@ -114,6 +114,12 @@ public class NexusData extends SavedData {
         return this.hasReturnGate ? BlockPos.of(this.returnGateCenter) : null;
     }
 
+    /** Oublie la position du portail de retour : il sera reconstruit à la prochaine arrivée, à la hauteur du sol. */
+    public void clearReturnGate() {
+        this.hasReturnGate = false;
+        this.setDirty();
+    }
+
     public void setReturnGate(BlockPos center) {
         this.hasReturnGate = true;
         this.returnGateCenter = center.asLong();

@@ -150,3 +150,5 @@ Plan validé par le responsable (2026-10-17), construit par `world/NexusHubBuild
 - **Deux embarcadères** à l'est et à l'ouest : plateforme et passerelle de 14 blocs avec balise au bout.
 
 Commandes d'administration : `/nexus hub` (termine toutes les étapes restantes tout de suite), `/nexus hub reconstruire` (repart de la première étape). Vérifié par un rendu des chunks après `/nexus hub` sur un Nexus neuf (une dizaine de secondes pour les 25 étapes).
+
+**Portail de retour à niveau (0.5.4)** : retour du responsable, « le portail n'est pas à niveau » : généré à la première arrivée, il reposait sur le point le plus haut de sa rangée et se retrouvait sur un monticule au bord de la place. La première étape (place) démonte maintenant l'ancien portail (anneau, surface et dalle de base, rien d'autre), aplanit toute la place y compris son emplacement, puis le reconstruit à la hauteur de la place (`NexusDimension.ensureReturnGate`). `HUB_KEY` passe à 303.

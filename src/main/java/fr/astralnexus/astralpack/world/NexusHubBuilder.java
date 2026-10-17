@@ -23,7 +23,7 @@ public final class NexusHubBuilder {
     private static final Logger LOGGER = LogUtils.getLogger();
 
     /** Génération du terrain (celle de {@code LegacyWorldMigration}) et version du plan : un changement refait la construction. */
-    public static final int HUB_KEY = 3 * 100 + 2;
+    public static final int HUB_KEY = 3 * 100 + 3;
 
     private static final int PLAZA_RADIUS = 20;
     private static final int AVENUE_START = 21;
@@ -253,15 +253,17 @@ public final class NexusHubBuilder {
         }
         data.setHubY(center);
         int target = center;
+        dismantleReturnGate(level, data);
         for (int x = -PLAZA_RADIUS; x <= PLAZA_RADIUS; x++) {
             for (int z = -PLAZA_RADIUS; z <= PLAZA_RADIUS; z++) {
                 double r = Math.sqrt(x * x + z * z);
-                if (r > PLAZA_RADIUS || insideReturnGate(x, z)) {
+                if (r > PLAZA_RADIUS) {
                     continue;
                 }
                 flatten(level, x, z, target, plazaBlock(x, z, r));
             }
         }
+        NexusDimension.ensureReturnGate(level);
         for (int k = 0; k < 8; k++) {
             double angle = Math.toRadians(22.5D + 45.0D * k);
             int x = (int) Math.round(16.5D * Math.cos(angle));
@@ -279,6 +281,40 @@ public final class NexusHubBuilder {
                 }
             }
         }
+    }
+
+    /**
+     * Le portail de retour, généré à la première arrivée, peut se trouver sur un monticule : on le démonte (anneau,
+     * surface et dalle de base, rien d'autre) pour le reconstruire à la hauteur de la place, une fois celle-ci aplanie.
+     */
+    private static void dismantleReturnGate(ServerLevel level, NexusData data) {
+        BlockPos center = data.getReturnGate();
+        if (center == null) {
+            return;
+        }
+        BlockState air = Blocks.AIR.defaultBlockState();
+        int r = RingGeometry.RADIUS;
+        for (int[] c : RingGeometry.ring()) {
+            BlockPos pos = NexusRing.cell(center, net.minecraft.core.Direction.Axis.X, c[0], c[1]);
+            if (level.getBlockState(pos).is(ModBlocks.ASTRAL_RING_BLOCK.get())) {
+                level.setBlock(pos, air, 2);
+            }
+        }
+        for (int[] c : RingGeometry.interior()) {
+            BlockPos pos = NexusRing.cell(center, net.minecraft.core.Direction.Axis.X, c[0], c[1]);
+            if (level.getBlockState(pos).is(ModBlocks.NEXUS_PORTAL.get())) {
+                level.setBlock(pos, air, 2);
+            }
+        }
+        for (int x = -r + 2; x <= r - 2; x++) {
+            for (int dz = -1; dz <= 1; dz++) {
+                BlockPos pos = center.offset(x, -r - 1, dz);
+                if (level.getBlockState(pos).is(Blocks.DEEPSLATE_TILES)) {
+                    level.setBlock(pos, air, 2);
+                }
+            }
+        }
+        data.clearReturnGate();
     }
 
     /** Le portail de retour est à 14 blocs au sud de l'arrivée : la place ne le touche pas. */
