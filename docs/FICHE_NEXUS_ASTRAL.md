@@ -146,7 +146,7 @@ Plan validé par le responsable (2026-10-17), construit par `world/NexusHubBuild
 - **Quatre avenues** (est, ouest, nord, sud) de 5 blocs de large jusqu'au bord de l'île, lampadaires de cristal tous les 12 blocs.
 - **Route circulaire** de 3 blocs de large à 64 blocs du centre.
 - **Parcelles de base** libres de 22 x 22 blocs, aplanies, bordées de pierre abyssale, avec quatre bornes de cristal et un bloc d'anneau à l'entrée : huit sur un anneau intérieur (46 blocs), seize sur l'anneau extérieur (84 blocs) ; une parcelle dont le sol couvre moins de 85 % de l'emprise, ou dont le relief varie de plus de 10 blocs, est ignorée (15 construites avec le terrain actuel).
-- **Marché** au nord : six étals (comptoir, poteaux, toit, lanterne de cristal) sur une dalle de 34 x 16.
+- **Place du marché** au nord, à l'extrémité de l'avenue (jusqu'à 84 blocs du centre, plus près si l'île est plus courte) : carré de 36 x 36 blocs aplani, bordure de cristal, fontaine d'astralite au centre (anneau de cristal, socle, colonne de 9 blocs et balise), huit étals (quatre au nord, quatre au sud avec un passage pour l'avenue), balises aux quatre coins. Les deux parcelles extérieures du nord sont supprimées pour lui laisser la place. `HUB_KEY` passe à 302 : les mondes déjà construits en 301 sont reconstruits au prochain `/nexus hub reconstruire` ou au premier passage.
 - **Deux embarcadères** à l'est et à l'ouest : plateforme et passerelle de 14 blocs avec balise au bout.
 
 Commandes d'administration : `/nexus hub` (termine toutes les étapes restantes tout de suite), `/nexus hub reconstruire` (repart de la première étape). Vérifié par un rendu des chunks après `/nexus hub` sur un Nexus neuf (une dizaine de secondes pour les 25 étapes).

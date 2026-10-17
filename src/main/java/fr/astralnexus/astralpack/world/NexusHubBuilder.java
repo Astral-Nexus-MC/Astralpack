@@ -15,7 +15,7 @@ import java.util.List;
 
 /**
  * Construction du hub (plan validé par le responsable) : place du Nexus au centre, quatre avenues, route circulaire,
- * jusqu'à vingt-quatre parcelles de base libres (huit sur un anneau intérieur, seize sur l'extérieur, celles dont le sol est trop incomplet sont ignorées), marché au nord et deux embarcadères. Elle se fait en étapes (une par tick, tant qu'un
+ * jusqu'à vingt-quatre parcelles de base libres (huit sur un anneau intérieur, seize sur l'extérieur, celles dont le sol est trop incomplet sont ignorées), place du marché au nord et deux embarcadères. Elle se fait en étapes (une par tick, tant qu'un
  * joueur est dans le Nexus) sur le terrain déjà généré, et ne touche qu'aux blocs naturels du Nexus : rien de ce que
  * les joueurs ont construit n'est remplacé. La progression est enregistrée dans {@link NexusData}.
  */
@@ -23,7 +23,7 @@ public final class NexusHubBuilder {
     private static final Logger LOGGER = LogUtils.getLogger();
 
     /** Génération du terrain (celle de {@code LegacyWorldMigration}) et version du plan : un changement refait la construction. */
-    public static final int HUB_KEY = 3 * 100 + 1;
+    public static final int HUB_KEY = 3 * 100 + 2;
 
     private static final int PLAZA_RADIUS = 20;
     private static final int AVENUE_START = 21;
@@ -163,6 +163,13 @@ public final class NexusHubBuilder {
 
     private static void set(ServerLevel level, int x, int y, int z, BlockState state) {
         level.setBlock(new BlockPos(x, y, z), state, 2);
+    }
+
+    /** Pose un bloc seulement là où il n'y a rien ou du terrain naturel : jamais sur la construction d'un joueur. */
+    private static void putSafe(ServerLevel level, int x, int y, int z, BlockState state) {
+        if (replaceable(level.getBlockState(new BlockPos(x, y, z)))) {
+            set(level, x, y, z, state);
+        }
     }
 
     /** Enlève le décor naturel au-dessus d'un point, sans toucher à autre chose. */
@@ -330,6 +337,9 @@ public final class NexusHubBuilder {
     }
 
     private static void parcel(ServerLevel level, int index) {
+        if (index == 11 || index == 12) {
+            return;
+        }
         boolean inner = index >= OUTER_PARCELS;
         double angle = inner ? Math.toRadians(22.5D + 45.0D * (index - OUTER_PARCELS))
                 : Math.toRadians(11.25D + 22.5D * index);
@@ -374,52 +384,93 @@ public final class NexusHubBuilder {
         set(level, markX, target, markZ, ModBlocks.ASTRAL_RING_BLOCK.get().defaultBlockState());
     }
 
+    /** Demi-côté de la place du marché : un carré de 36 x 36 blocs sur l'avenue du nord. */
+    private static final int MARKET_HALF = 18;
+
     private static void market(ServerLevel level) {
         int north = edge(level, 0, -1);
-        if (north < 40) {
+        if (north < 50) {
             return;
         }
-        int distance = Math.min(86, north - 14);
-        int cz = -distance;
+        int cz = -Math.min(84, north - MARKET_HALF - 2);
         List<Integer> heights = new ArrayList<>();
-        for (int x = -17; x <= 16; x++) {
-            for (int z = cz - 8; z <= cz + 7; z++) {
+        for (int x = -MARKET_HALF; x < MARKET_HALF; x++) {
+            for (int z = cz - MARKET_HALF; z < cz + MARKET_HALF; z++) {
                 if (hasTerrain(level, x, z)) {
                     heights.add(terrainTop(level, x, z));
                 }
             }
         }
-        if (heights.size() < 34 * 16 * 80 / 100) {
+        if (heights.size() < 4 * MARKET_HALF * MARKET_HALF * 75 / 100) {
             return;
         }
         Collections.sort(heights);
         int target = heights.get(heights.size() / 2);
-        for (int x = -17; x <= 16; x++) {
-            for (int z = cz - 8; z <= cz + 7; z++) {
-                boolean border = x == -17 || x == 16 || z == cz - 8 || z == cz + 7;
-                flatten(level, x, z, target, border ? crystal() : stellar());
+        for (int x = -MARKET_HALF; x < MARKET_HALF; x++) {
+            for (int z = cz - MARKET_HALF; z < cz + MARKET_HALF; z++) {
+                boolean border = x == -MARKET_HALF || x == MARKET_HALF - 1 || z == cz - MARKET_HALF
+                        || z == cz + MARKET_HALF - 1;
+                double r = Math.sqrt(x * x + (z - cz) * (z - cz));
+                boolean fountainRing = r >= 5.5D && r < 6.7D;
+                flatten(level, x, z, target, border || fountainRing ? crystal() : stellar());
             }
         }
-        for (int row = 0; row < 2; row++) {
-            int rowZ = row == 0 ? cz - 5 : cz + 4;
-            for (int s = -1; s <= 1; s++) {
-                int sx = s * 9 - 1;
-                for (int dx = 0; dx < 3; dx++) {
-                    set(level, sx + dx, target + 1, rowZ, stellar());
-                }
-                for (int[] post : new int[][]{{sx - 1, rowZ - 1}, {sx + 3, rowZ - 1}, {sx - 1, rowZ + 1}, {sx + 3, rowZ + 1}}) {
-                    for (int h = 1; h <= 3; h++) {
-                        set(level, post[0], target + h, post[1], abyssal());
-                    }
-                }
-                for (int dx = -1; dx <= 3; dx++) {
-                    for (int dz = -1; dz <= 1; dz++) {
-                        set(level, sx + dx, target + 4, rowZ + dz, abyssal());
-                    }
-                }
-                set(level, sx + 1, target + 5, rowZ, crystal());
+        int[] corner = {-MARKET_HALF, MARKET_HALF - 1};
+        for (int cx : corner) {
+            for (int zz : new int[]{cz - MARKET_HALF, cz + MARKET_HALF - 1}) {
+                pillar(level, cx, zz, target, 6, beacon());
             }
         }
+        monument(level, cz, target);
+        int[] northRow = {-12, -4, 4, 12};
+        int[] southRow = {-12, -6, 6, 12};
+        for (int sx : northRow) {
+            stall(level, sx, cz - 13, target);
+        }
+        for (int sx : southRow) {
+            stall(level, sx, cz + 13, target);
+        }
+    }
+
+    /** Fontaine d'astralite au centre de la place : socle, colonne et balise, entourés de quatre cristaux. */
+    private static void monument(ServerLevel level, int cz, int target) {
+        for (int dx = -2; dx <= 2; dx++) {
+            for (int dz = -2; dz <= 2; dz++) {
+                boolean edge = Math.abs(dx) == 2 || Math.abs(dz) == 2;
+                putSafe(level, dx, target + 1, cz + dz, edge ? abyssal() : stellar());
+            }
+        }
+        for (int dx = -1; dx <= 1; dx++) {
+            for (int dz = -1; dz <= 1; dz++) {
+                putSafe(level, dx, target + 2, cz + dz, stellar());
+            }
+        }
+        for (int h = 3; h <= 8; h++) {
+            putSafe(level, 0, target + h, cz, abyssal());
+        }
+        putSafe(level, 0, target + 9, cz, beacon());
+        for (int[] c : new int[][]{{-2, -2}, {2, -2}, {-2, 2}, {2, 2}}) {
+            putSafe(level, c[0], target + 2, cz + c[1], crystal());
+            putSafe(level, c[0], target + 3, cz + c[1], crystal());
+        }
+    }
+
+    /** Étal : comptoir de trois blocs, quatre poteaux, toit et lanterne de cristal. */
+    private static void stall(ServerLevel level, int sx, int sz, int target) {
+        for (int dx = -1; dx <= 1; dx++) {
+            putSafe(level, sx + dx, target + 1, sz, stellar());
+        }
+        for (int[] post : new int[][]{{sx - 2, sz - 1}, {sx + 2, sz - 1}, {sx - 2, sz + 1}, {sx + 2, sz + 1}}) {
+            for (int h = 1; h <= 3; h++) {
+                putSafe(level, post[0], target + h, post[1], abyssal());
+            }
+        }
+        for (int dx = -2; dx <= 2; dx++) {
+            for (int dz = -1; dz <= 1; dz++) {
+                putSafe(level, sx + dx, target + 4, sz + dz, abyssal());
+            }
+        }
+        putSafe(level, sx, target + 5, sz, crystal());
     }
 
     private static void jetty(ServerLevel level, int side) {
