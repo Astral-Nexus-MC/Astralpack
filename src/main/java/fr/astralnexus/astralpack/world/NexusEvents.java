@@ -61,8 +61,9 @@ public class NexusEvents {
             context.getSource().sendFailure(Component.translatable("commands.astralpack.nexus.missing"));
             return 0;
         }
-        int steps = NexusHubBuilder.runAll(level, restart);
-        context.getSource().sendSuccess(() -> Component.translatable("commands.astralpack.nexus.hub.built", steps), true);
+        int[] result = NexusHubBuilder.runAll(level, restart);
+        context.getSource().sendSuccess(() -> Component.translatable("commands.astralpack.nexus.hub.built",
+                result[0], result[1]), true);
         return 1;
     }
 

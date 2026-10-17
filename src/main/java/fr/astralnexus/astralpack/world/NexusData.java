@@ -24,6 +24,8 @@ public class NexusData extends SavedData {
     private int hubKey;
     private int hubStage;
     private int hubY;
+    private int hubHomes;
+    private int hubRole;
     private long portalCenter;
 
     public static NexusData get(MinecraftServer server) {
@@ -43,6 +45,8 @@ public class NexusData extends SavedData {
         data.hubKey = tag.getInt("HubKey");
         data.hubStage = tag.getInt("HubStage");
         data.hubY = tag.getInt("HubY");
+        data.hubHomes = tag.getInt("HubHomes");
+        data.hubRole = tag.getInt("HubRole");
         return data;
     }
 
@@ -59,6 +63,8 @@ public class NexusData extends SavedData {
         tag.putInt("HubKey", this.hubKey);
         tag.putInt("HubStage", this.hubStage);
         tag.putInt("HubY", this.hubY);
+        tag.putInt("HubHomes", this.hubHomes);
+        tag.putInt("HubRole", this.hubRole);
         return tag;
     }
 
@@ -131,6 +137,8 @@ public class NexusData extends SavedData {
         if (this.hubKey != key) {
             this.hubKey = key;
             this.hubStage = 0;
+            this.hubHomes = 0;
+            this.hubRole = 0;
             this.setDirty();
         }
     }
@@ -140,6 +148,10 @@ public class NexusData extends SavedData {
     }
 
     public void setHubStage(int stage) {
+        if (stage == 0) {
+            this.hubHomes = 0;
+            this.hubRole = 0;
+        }
         this.hubStage = stage;
         this.setDirty();
     }
@@ -147,5 +159,22 @@ public class NexusData extends SavedData {
     public void setHubY(int y) {
         this.hubY = y;
         this.setDirty();
+    }
+
+    /** Nombre de maisons de joueurs construites pendant la construction du hub en cours. */
+    public int getHomes() {
+        return this.hubHomes;
+    }
+
+    public void addHome() {
+        this.hubHomes++;
+        this.setDirty();
+    }
+
+    /** Numéro du prochain bâtiment du village à construire. */
+    public int nextRole() {
+        int role = this.hubRole++;
+        this.setDirty();
+        return role;
     }
 }

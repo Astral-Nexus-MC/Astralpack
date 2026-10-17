@@ -152,3 +152,19 @@ Plan validé par le responsable (2026-10-17), construit par `world/NexusHubBuild
 Commandes d'administration : `/nexus hub` (termine toutes les étapes restantes tout de suite), `/nexus hub reconstruire` (repart de la première étape). Vérifié par un rendu des chunks après `/nexus hub` sur un Nexus neuf (une dizaine de secondes pour les 25 étapes).
 
 **Portail de retour à niveau (0.5.4)** : retour du responsable, « le portail n'est pas à niveau » : généré à la première arrivée, il reposait sur le point le plus haut de sa rangée et se retrouvait sur un monticule au bord de la place. La première étape (place) démonte maintenant l'ancien portail (anneau, surface et dalle de base, rien d'autre), aplanit toute la place y compris son emplacement, puis le reconstruit à la hauteur de la place (`NexusDimension.ensureReturnGate`). `HUB_KEY` passe à 303.
+
+## Village du hub (0.6.0)
+
+Demande du responsable (2026-10-17) : générer un village complet sur les parcelles, générer la place du marché et les embarcadères (que son monde ne montrait pas), et créer **10 maisons utilisables par les joueurs**. Réalisé par `world/NexusVillage` (bâtiments, repère local u/v/y) et `world/NexusHubBuilder` (emplacements, rôles, marché, embarcadères). `NEXUS_GENERATION` passe à 4 : le Nexus est régénéré une dernière fois pour repartir d'un terrain vierge (la construction 0.5.x du hub ne se démonte pas proprement) ; `HUB_KEY` = 401.
+
+**Parcelles** (18 x 18, bordure de cristal, porte du côté de la place) : trois anneaux, 8 intérieurs (rayon 38), 12 au milieu (56) et 16 extérieurs (92) ; la route circulaire passe à 72 blocs. Une parcelle dont le sol couvre moins de 80 % de l'emprise ou dont le relief varie de plus de 10 blocs est ignorée, ainsi que celles qui chevauchent la place du marché.
+
+**Attribution** : l'anneau intérieur reçoit les bâtiments du village dans l'ordre (auberge, forge, bibliothèque, entrepôt, chapelle, atelier d'alchimie, tour de guet, puits) ; les anneaux milieu et extérieur reçoivent les **maisons des joueurs jusqu'à 10**, puis le reste du village (serre, ferme, jardin, répétés). Les parcelles ignorées ne consomment ni maison ni bâtiment : il y a toujours 10 maisons tant que le terrain le permet (le journal l'indique à la fin : « N maison(s) pour les joueurs »).
+
+**Maison de joueur** (9 x 9, toit en bâtière en tuiles d'ardoise des abysses, coins de cristal) : porte (bois biscornu), fenêtres en verre violet, lit violet, coffre, établi, four, tapis, bibliothèque, lumière au plafond (lanterne des mers), jardinet de mousse lumineuse et lampadaires à l'entrée. Le lit fonctionne (les lits sont actifs dans le Nexus). Aucune protection : les joueurs peuvent la transformer.
+
+**Village** : auberge (comptoir, tonneaux, tables, deux lits), forge (hauts fourneaux, enclume, meule, table de forge, chaudron, cheminée), bibliothèque (étagères, table d'enchantement entourée d'étagères, lutrin), entrepôt (coffres et tonneaux), chapelle (nef, autel d'astralite, bancs, vitraux), atelier d'alchimie (alambics, chaudrons), tour de guet (13 blocs, échelle, plateforme à balise), puits, serre (cultures sous verre, eau, lumière), ferme (champs irrigués) et jardin lumineux (bassin, cristaux).
+
+**Place du marché et embarcadères, rendus robustes** : la place du marché cherche un emplacement convenable (vers le nord de préférence, sinon le sud, l'est ou l'ouest, de 84 à 44 blocs du centre) et s'oriente en conséquence ; les deux embarcadères se placent sur les deux axes (hors celui du marché) où l'île s'étend le plus loin (30 blocs au moins). `/nexus hub` indique le nombre d'étapes ignorées ; le journal du serveur dit lesquelles (« Étape N du hub ignorée »).
+
+Vérifié sur un Nexus neuf du serveur de développement (rendu des chunks, vue du dessus et vues en perspective) : 10 maisons, village complet, place du marché et deux embarcadères présents.

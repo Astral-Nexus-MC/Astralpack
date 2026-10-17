@@ -3,6 +3,7 @@ package fr.astralnexus.astralpack.world;
 import com.mojang.logging.LogUtils;
 import fr.astralnexus.astralpack.registry.ModBlocks;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
@@ -23,28 +24,48 @@ public final class NexusHubBuilder {
     private static final Logger LOGGER = LogUtils.getLogger();
 
     /** Génération du terrain (celle de {@code LegacyWorldMigration}) et version du plan : un changement refait la construction. */
-    public static final int HUB_KEY = 3 * 100 + 3;
+    public static final int HUB_KEY = 4 * 100 + 1;
 
     private static final int PLAZA_RADIUS = 20;
     private static final int AVENUE_START = 21;
-    private static final int RING_ROAD_RADIUS = 64;
-    private static final int PARCEL_RING = 84;
-    private static final int PARCEL_INNER_RING = 46;
-    private static final int OUTER_PARCELS = 16;
-    private static final int INNER_PARCELS = 8;
-    private static final int PARCEL_SIZE = 22;
-    private static final int PARCELS = OUTER_PARCELS + INNER_PARCELS;
+    private static final int RING_ROAD_RADIUS = 72;
+    private static final int PARCEL_SIZE = 18;
+    /** Nombre de maisons utilisables réservées aux joueurs. */
+    private static final int HOMES = 10;
     private static final int STAGE_PLAZA = 0;
     private static final int STAGE_AVENUE_FIRST = 1;
     private static final int STAGE_RING_ROAD = 5;
-    private static final int STAGE_PARCEL_FIRST = 6;
-    private static final int STAGE_MARKET = STAGE_PARCEL_FIRST + PARCELS;
-    private static final int STAGE_JETTY_EAST = STAGE_MARKET + 1;
-    private static final int STAGE_JETTY_WEST = STAGE_MARKET + 2;
-    private static final int STAGES = STAGE_MARKET + 3;
+    private static final int STAGE_MARKET = 6;
+    private static final int STAGE_JETTY_FIRST = 7;
+    private static final int JETTIES = 2;
+    private static final int STAGE_PARCEL_FIRST = STAGE_JETTY_FIRST + JETTIES;
+
+    /** Emplacements de parcelles : centre et anneau (0 intérieur, 1 milieu, 2 extérieur). */
+    private static final List<int[]> PARCEL_SLOTS = parcelSlots();
+    private static final int STAGES = STAGE_PARCEL_FIRST + PARCEL_SLOTS.size();
 
     /** Directions des avenues : est, ouest, nord, sud (le nord est vers les z négatifs). */
     private static final int[][] AVENUES = {{1, 0}, {-1, 0}, {0, -1}, {0, 1}};
+
+    /** Bâtiments du village, dans l'ordre où on les attribue aux parcelles ; la fin du tableau se répète. */
+    private static final NexusVillage.Kind[] VILLAGE = {
+            NexusVillage.Kind.INN, NexusVillage.Kind.FORGE, NexusVillage.Kind.LIBRARY, NexusVillage.Kind.WAREHOUSE,
+            NexusVillage.Kind.CHAPEL, NexusVillage.Kind.ALCHEMIST, NexusVillage.Kind.TOWER, NexusVillage.Kind.WELL,
+            NexusVillage.Kind.GREENHOUSE, NexusVillage.Kind.FARM, NexusVillage.Kind.GARDEN, NexusVillage.Kind.FARM};
+    private static final int VILLAGE_REPEAT_FROM = 8;
+
+    private static List<int[]> parcelSlots() {
+        List<int[]> slots = new ArrayList<>();
+        double[][] rings = {{38, 8, 22.5D, 45.0D}, {56, 12, 15.0D, 30.0D}, {92, 16, 11.25D, 22.5D}};
+        for (int ring = 0; ring < rings.length; ring++) {
+            for (int k = 0; k < (int) rings[ring][1]; k++) {
+                double angle = Math.toRadians(rings[ring][2] + rings[ring][3] * k);
+                slots.add(new int[]{(int) Math.round(rings[ring][0] * Math.cos(angle)),
+                        (int) Math.round(rings[ring][0] * Math.sin(angle)), ring});
+            }
+        }
+        return slots;
+    }
 
     /** Une étape toutes les 20 ticks (une seconde) : chaque étape peut générer des chunks, on évite les à-coups. */
     private static final int STAGE_INTERVAL = 20;
@@ -67,19 +88,22 @@ public final class NexusHubBuilder {
         runStage(level, data);
     }
 
-    /** Commande d'administration : termine toutes les étapes restantes tout de suite. Renvoie le nombre d'étapes faites. */
-    public static int runAll(ServerLevel level, boolean restart) {
+    /** Commande d'administration : termine toutes les étapes restantes tout de suite. Renvoie {étapes faites, étapes ignorées}. */
+    public static int[] runAll(ServerLevel level, boolean restart) {
         NexusData data = NexusData.get(level.getServer());
         data.syncHubKey(HUB_KEY);
         if (restart) {
             data.setHubStage(0);
         }
         int done = 0;
+        int skipped = 0;
         while (data.getHubStage() < STAGES) {
-            runStage(level, data);
+            if (!runStage(level, data)) {
+                skipped++;
+            }
             done++;
         }
-        return done;
+        return new int[]{done, skipped};
     }
 
     /** La place du centre doit exister avant d'y faire arriver un joueur. */
@@ -91,31 +115,37 @@ public final class NexusHubBuilder {
         }
     }
 
-    private static void runStage(ServerLevel level, NexusData data) {
+    /** Fait l'étape en cours ; renvoie faux si elle a été ignorée (terrain inadapté ou erreur). */
+    private static boolean runStage(ServerLevel level, NexusData data) {
         int stage = data.getHubStage();
+        boolean built = false;
         try {
             if (stage == STAGE_PLAZA) {
-                plaza(level, data);
+                marketCache = null;
+                jettyCache = null;
+                built = plaza(level, data);
             } else if (stage < STAGE_RING_ROAD) {
-                avenue(level, AVENUES[stage - STAGE_AVENUE_FIRST]);
+                built = avenue(level, AVENUES[stage - STAGE_AVENUE_FIRST]);
             } else if (stage == STAGE_RING_ROAD) {
-                ringRoad(level);
-            } else if (stage < STAGE_MARKET) {
-                parcel(level, stage - STAGE_PARCEL_FIRST);
+                built = ringRoad(level);
             } else if (stage == STAGE_MARKET) {
-                market(level);
-            } else if (stage == STAGE_JETTY_EAST) {
-                jetty(level, 1);
+                built = market(level);
+            } else if (stage < STAGE_PARCEL_FIRST) {
+                built = jetty(level, stage - STAGE_JETTY_FIRST);
             } else {
-                jetty(level, -1);
+                built = parcel(level, data, stage - STAGE_PARCEL_FIRST);
             }
         } catch (RuntimeException e) {
             LOGGER.error("[Nexus] Étape {} de la construction du hub impossible, on passe à la suivante", stage, e);
         }
+        if (!built) {
+            LOGGER.warn("[Nexus] Étape {} du hub ignorée (terrain inadapté ou erreur).", stage);
+        }
         data.setHubStage(stage + 1);
         if (stage + 1 >= STAGES) {
-            LOGGER.info("[Nexus] Construction du hub terminée.");
+            LOGGER.info("[Nexus] Construction du hub terminée : {} maison(s) pour les joueurs.", data.getHomes());
         }
+        return built;
     }
 
     // ---- Outils ----
@@ -141,7 +171,7 @@ public final class NexusHubBuilder {
     }
 
     /** Blocs naturels ou de décor du Nexus : les seuls que la construction a le droit de remplacer. */
-    private static boolean replaceable(BlockState state) {
+    static boolean replaceable(BlockState state) {
         return state.isAir() || state.is(ModBlocks.ASTRAL_REGOLITH.get()) || state.is(ModBlocks.STELLAR_STONE.get())
                 || state.is(ModBlocks.ABYSSAL_STONE.get()) || state.is(ModBlocks.LUMEN_MOSS.get())
                 || state.is(ModBlocks.REEF_CRYSTAL.get());
@@ -166,7 +196,7 @@ public final class NexusHubBuilder {
     }
 
     /** Pose un bloc seulement là où il n'y a rien ou du terrain naturel : jamais sur la construction d'un joueur. */
-    private static void putSafe(ServerLevel level, int x, int y, int z, BlockState state) {
+    static void putSafe(ServerLevel level, int x, int y, int z, BlockState state) {
         if (replaceable(level.getBlockState(new BlockPos(x, y, z)))) {
             set(level, x, y, z, state);
         }
@@ -215,7 +245,7 @@ public final class NexusHubBuilder {
         return true;
     }
 
-    private static void pillar(ServerLevel level, int x, int z, int groundY, int height, BlockState cap) {
+    static void pillar(ServerLevel level, int x, int z, int groundY, int height, BlockState cap) {
         for (int i = 1; i <= height; i++) {
             BlockPos pos = new BlockPos(x, groundY + i, z);
             if (!replaceable(level.getBlockState(pos))) {
@@ -246,10 +276,10 @@ public final class NexusHubBuilder {
 
     // ---- Étapes ----
 
-    private static void plaza(ServerLevel level, NexusData data) {
+    private static boolean plaza(ServerLevel level, NexusData data) {
         int center = terrainTop(level, 0, 0);
         if (center <= level.getMinBuildHeight() + 2) {
-            return;
+            return false;
         }
         data.setHubY(center);
         int target = center;
@@ -281,6 +311,7 @@ public final class NexusHubBuilder {
                 }
             }
         }
+        return true;
     }
 
     /**
@@ -340,7 +371,7 @@ public final class NexusHubBuilder {
         return stellar();
     }
 
-    private static void avenue(ServerLevel level, int[] d) {
+    private static boolean avenue(ServerLevel level, int[] d) {
         int end = edge(level, d[0], d[1]);
         for (int t = AVENUE_START; t <= end; t++) {
             for (int w = -2; w <= 2; w++) {
@@ -358,9 +389,10 @@ public final class NexusHubBuilder {
                 }
             }
         }
+        return true;
     }
 
-    private static void ringRoad(ServerLevel level) {
+    private static boolean ringRoad(ServerLevel level) {
         int bound = RING_ROAD_RADIUS + 3;
         for (int x = -bound; x <= bound; x++) {
             for (int z = -bound; z <= bound; z++) {
@@ -370,18 +402,39 @@ public final class NexusHubBuilder {
                 }
             }
         }
+        return true;
     }
 
-    private static void parcel(ServerLevel level, int index) {
-        if (index == 11 || index == 12) {
-            return;
+    // ---- Parcelles : maisons des joueurs et village ----
+
+    /** Direction de la porte : du côté de la place du Nexus. */
+    private static Direction towardsPlaza(int cx, int cz) {
+        if (Math.abs(cx) >= Math.abs(cz)) {
+            return cx > 0 ? Direction.WEST : Direction.EAST;
         }
-        boolean inner = index >= OUTER_PARCELS;
-        double angle = inner ? Math.toRadians(22.5D + 45.0D * (index - OUTER_PARCELS))
-                : Math.toRadians(11.25D + 22.5D * index);
-        int ring = inner ? PARCEL_INNER_RING : PARCEL_RING;
-        int cx = (int) Math.round(ring * Math.cos(angle));
-        int cz = (int) Math.round(ring * Math.sin(angle));
+        return cz > 0 ? Direction.NORTH : Direction.SOUTH;
+    }
+
+    private static NexusVillage.Kind chooseKind(NexusData data, int ring) {
+        if (ring > 0 && data.getHomes() < HOMES) {
+            data.addHome();
+            return NexusVillage.Kind.HOME;
+        }
+        int i = data.nextRole();
+        if (i >= VILLAGE.length) {
+            i = VILLAGE_REPEAT_FROM + (i - VILLAGE_REPEAT_FROM) % (VILLAGE.length - VILLAGE_REPEAT_FROM);
+        }
+        return VILLAGE[i];
+    }
+
+    private static boolean parcel(ServerLevel level, NexusData data, int index) {
+        int[] slot = PARCEL_SLOTS.get(index);
+        int cx = slot[0];
+        int cz = slot[1];
+        MarketPlan plan = marketPlan(level);
+        if (plan != null && Math.abs(cx - plan.x()) < 30 && Math.abs(cz - plan.z()) < 30) {
+            return false;
+        }
         int half = PARCEL_SIZE / 2;
         List<Integer> heights = new ArrayList<>();
         for (int x = cx - half; x < cx + half; x++) {
@@ -391,155 +444,204 @@ public final class NexusHubBuilder {
                 }
             }
         }
-        if (heights.size() < PARCEL_SIZE * PARCEL_SIZE * 85 / 100) {
-            return;
+        if (heights.size() < PARCEL_SIZE * PARCEL_SIZE * 80 / 100) {
+            return false;
         }
         Collections.sort(heights);
         int target = heights.get(heights.size() / 2);
         if (heights.get(heights.size() - 1) - heights.get(0) > 10) {
-            return;
+            return false;
         }
+        NexusVillage.Kind kind = chooseKind(data, slot[2]);
         for (int x = cx - half; x < cx + half; x++) {
             for (int z = cz - half; z < cz + half; z++) {
                 boolean border = x == cx - half || x == cx + half - 1 || z == cz - half || z == cz + half - 1;
                 flatten(level, x, z, target, border ? crystal() : regolith());
             }
         }
-        int[][] corners = {{cx - half, cz - half}, {cx + half - 1, cz - half}, {cx - half, cz + half - 1},
-                {cx + half - 1, cz + half - 1}};
-        for (int[] c : corners) {
-            pillar(level, c[0], c[1], target, 5, beacon());
-        }
-        int markX = cx;
-        int markZ = cz;
-        if (Math.abs(cx) >= Math.abs(cz)) {
-            markX = cx + (cx > 0 ? -half : half - 1);
-        } else {
-            markZ = cz + (cz > 0 ? -half : half - 1);
-        }
-        set(level, markX, target, markZ, ModBlocks.ASTRAL_RING_BLOCK.get().defaultBlockState());
+        NexusVillage.build(new NexusVillage.Ctx(level, cx, cz, target, towardsPlaza(cx, cz)), kind);
+        return true;
     }
 
-    /** Demi-côté de la place du marché : un carré de 36 x 36 blocs sur l'avenue du nord. */
+    // ---- Place du marché ----
+
+    /** Demi-côté de la place du marché : un carré de 36 x 36 blocs. */
     private static final int MARKET_HALF = 18;
 
-    private static void market(ServerLevel level) {
-        int north = edge(level, 0, -1);
-        if (north < 50) {
-            return;
+    /** Où se trouve la place du marché : centre (à la distance donnée du centre du hub, sur un axe). */
+    private record MarketPlan(Direction outward, int distance) {
+        int x() {
+            return this.outward.getStepX() * this.distance;
         }
-        int cz = -Math.min(84, north - MARKET_HALF - 2);
+
+        int z() {
+            return this.outward.getStepZ() * this.distance;
+        }
+    }
+
+    private static MarketPlan marketCache;
+    private static List<int[]> jettyCache;
+
+    /** Cherche la place du marché : vers le nord de préférence, sinon le sud, l'est ou l'ouest ; la plus loin possible. */
+    private static MarketPlan marketPlan(ServerLevel level) {
+        if (marketCache != null) {
+            return marketCache;
+        }
+        for (Direction outward : new Direction[]{Direction.NORTH, Direction.SOUTH, Direction.EAST, Direction.WEST}) {
+            for (int distance = 84; distance >= 44; distance -= 4) {
+                int mx = outward.getStepX() * distance;
+                int mz = outward.getStepZ() * distance;
+                int valid = 0;
+                int total = 0;
+                int low = Integer.MAX_VALUE;
+                int high = Integer.MIN_VALUE;
+                for (int x = mx - MARKET_HALF; x < mx + MARKET_HALF; x += 3) {
+                    for (int z = mz - MARKET_HALF; z < mz + MARKET_HALF; z += 3) {
+                        total++;
+                        if (hasTerrain(level, x, z)) {
+                            valid++;
+                            int y = terrainTop(level, x, z);
+                            low = Math.min(low, y);
+                            high = Math.max(high, y);
+                        }
+                    }
+                }
+                if (valid * 100 >= total * 70 && high - low <= 12) {
+                    marketCache = new MarketPlan(outward, distance);
+                    return marketCache;
+                }
+            }
+        }
+        return null;
+    }
+
+    private static boolean market(ServerLevel level) {
+        MarketPlan plan = marketPlan(level);
+        if (plan == null) {
+            return false;
+        }
+        int mx = plan.x();
+        int mz = plan.z();
         List<Integer> heights = new ArrayList<>();
-        for (int x = -MARKET_HALF; x < MARKET_HALF; x++) {
-            for (int z = cz - MARKET_HALF; z < cz + MARKET_HALF; z++) {
+        for (int x = mx - MARKET_HALF; x < mx + MARKET_HALF; x++) {
+            for (int z = mz - MARKET_HALF; z < mz + MARKET_HALF; z++) {
                 if (hasTerrain(level, x, z)) {
                     heights.add(terrainTop(level, x, z));
                 }
             }
         }
-        if (heights.size() < 4 * MARKET_HALF * MARKET_HALF * 75 / 100) {
-            return;
-        }
         Collections.sort(heights);
         int target = heights.get(heights.size() / 2);
-        for (int x = -MARKET_HALF; x < MARKET_HALF; x++) {
-            for (int z = cz - MARKET_HALF; z < cz + MARKET_HALF; z++) {
-                boolean border = x == -MARKET_HALF || x == MARKET_HALF - 1 || z == cz - MARKET_HALF
-                        || z == cz + MARKET_HALF - 1;
-                double r = Math.sqrt(x * x + (z - cz) * (z - cz));
-                boolean fountainRing = r >= 5.5D && r < 6.7D;
-                flatten(level, x, z, target, border || fountainRing ? crystal() : stellar());
+        for (int x = mx - MARKET_HALF; x < mx + MARKET_HALF; x++) {
+            for (int z = mz - MARKET_HALF; z < mz + MARKET_HALF; z++) {
+                boolean border = x == mx - MARKET_HALF || x == mx + MARKET_HALF - 1 || z == mz - MARKET_HALF
+                        || z == mz + MARKET_HALF - 1;
+                double r = Math.sqrt((x - mx) * (x - mx) + (z - mz) * (z - mz));
+                flatten(level, x, z, target, border || (r >= 5.5D && r < 6.7D) ? crystal() : stellar());
             }
         }
-        int[] corner = {-MARKET_HALF, MARKET_HALF - 1};
-        for (int cx : corner) {
-            for (int zz : new int[]{cz - MARKET_HALF, cz + MARKET_HALF - 1}) {
-                pillar(level, cx, zz, target, 6, beacon());
+        NexusVillage.Ctx c = new NexusVillage.Ctx(level, mx, mz, target, plan.outward().getOpposite());
+        for (int u : new int[]{-MARKET_HALF, MARKET_HALF - 1}) {
+            for (int v : new int[]{-MARKET_HALF, MARKET_HALF - 1}) {
+                c.post(u, v, 6, beacon());
             }
         }
-        monument(level, cz, target);
-        int[] northRow = {-12, -4, 4, 12};
-        int[] southRow = {-12, -6, 6, 12};
-        for (int sx : northRow) {
-            stall(level, sx, cz - 13, target);
+        monument(c);
+        for (int u : new int[]{-12, -4, 4, 12}) {
+            stall(c, u, -13);
         }
-        for (int sx : southRow) {
-            stall(level, sx, cz + 13, target);
+        for (int u : new int[]{-12, -6, 6, 12}) {
+            stall(c, u, 13);
         }
+        return true;
     }
 
     /** Fontaine d'astralite au centre de la place : socle, colonne et balise, entourés de quatre cristaux. */
-    private static void monument(ServerLevel level, int cz, int target) {
-        for (int dx = -2; dx <= 2; dx++) {
-            for (int dz = -2; dz <= 2; dz++) {
-                boolean edge = Math.abs(dx) == 2 || Math.abs(dz) == 2;
-                putSafe(level, dx, target + 1, cz + dz, edge ? abyssal() : stellar());
+    private static void monument(NexusVillage.Ctx c) {
+        for (int u = -2; u <= 2; u++) {
+            for (int v = -2; v <= 2; v++) {
+                c.put(u, v, 1, Math.abs(u) == 2 || Math.abs(v) == 2 ? abyssal() : stellar());
             }
         }
-        for (int dx = -1; dx <= 1; dx++) {
-            for (int dz = -1; dz <= 1; dz++) {
-                putSafe(level, dx, target + 2, cz + dz, stellar());
-            }
-        }
-        for (int h = 3; h <= 8; h++) {
-            putSafe(level, 0, target + h, cz, abyssal());
-        }
-        putSafe(level, 0, target + 9, cz, beacon());
-        for (int[] c : new int[][]{{-2, -2}, {2, -2}, {-2, 2}, {2, 2}}) {
-            putSafe(level, c[0], target + 2, cz + c[1], crystal());
-            putSafe(level, c[0], target + 3, cz + c[1], crystal());
+        c.fill(-1, 1, -1, 1, 2, 2, stellar());
+        c.fill(0, 0, 0, 0, 3, 8, abyssal());
+        c.put(0, 0, 9, beacon());
+        for (int[] p : new int[][]{{-2, -2}, {2, -2}, {-2, 2}, {2, 2}}) {
+            c.put(p[0], p[1], 2, crystal());
+            c.put(p[0], p[1], 3, crystal());
         }
     }
 
     /** Étal : comptoir de trois blocs, quatre poteaux, toit et lanterne de cristal. */
-    private static void stall(ServerLevel level, int sx, int sz, int target) {
-        for (int dx = -1; dx <= 1; dx++) {
-            putSafe(level, sx + dx, target + 1, sz, stellar());
+    private static void stall(NexusVillage.Ctx c, int u, int v) {
+        c.fill(u - 1, u + 1, v, v, 1, 1, stellar());
+        for (int[] post : new int[][]{{u - 2, v - 1}, {u + 2, v - 1}, {u - 2, v + 1}, {u + 2, v + 1}}) {
+            c.fill(post[0], post[0], post[1], post[1], 1, 3, abyssal());
         }
-        for (int[] post : new int[][]{{sx - 2, sz - 1}, {sx + 2, sz - 1}, {sx - 2, sz + 1}, {sx + 2, sz + 1}}) {
-            for (int h = 1; h <= 3; h++) {
-                putSafe(level, post[0], target + h, post[1], abyssal());
-            }
-        }
-        for (int dx = -2; dx <= 2; dx++) {
-            for (int dz = -1; dz <= 1; dz++) {
-                putSafe(level, sx + dx, target + 4, sz + dz, abyssal());
-            }
-        }
-        putSafe(level, sx, target + 5, sz, crystal());
+        c.fill(u - 2, u + 2, v - 1, v + 1, 4, 4, abyssal());
+        c.put(u, v, 5, crystal());
     }
 
-    private static void jetty(ServerLevel level, int side) {
-        int edge = edge(level, side, 0);
-        if (edge < 40) {
-            return;
+    // ---- Embarcadères ----
+
+    /** Les deux embarcadères : les deux axes (hors celui du marché) où l'île s'étend le plus loin, à 30 blocs au moins. */
+    private static List<int[]> jettyPlan(ServerLevel level) {
+        if (jettyCache != null) {
+            return jettyCache;
         }
-        int end = edge - 1;
-        int cx = side * (end - 4);
-        int y = terrainTop(level, cx, 0);
+        MarketPlan market = marketPlan(level);
+        List<int[]> candidates = new ArrayList<>();
+        for (int[] d : new int[][]{{1, 0}, {-1, 0}, {0, 1}, {0, -1}}) {
+            if (market != null && market.outward().getStepX() == d[0] && market.outward().getStepZ() == d[1]) {
+                continue;
+            }
+            int e = edge(level, d[0], d[1]);
+            if (e >= 30) {
+                candidates.add(new int[]{d[0], d[1], e});
+            }
+        }
+        candidates.sort((p, q) -> Integer.compare(q[2], p[2]));
+        jettyCache = new ArrayList<>(candidates.subList(0, Math.min(JETTIES, candidates.size())));
+        return jettyCache;
+    }
+
+    private static boolean jetty(ServerLevel level, int index) {
+        List<int[]> plan = jettyPlan(level);
+        if (index >= plan.size()) {
+            return false;
+        }
+        int[] d = plan.get(index);
+        Direction outward = Direction.EAST;
+        for (Direction candidate : Direction.Plane.HORIZONTAL) {
+            if (candidate.getStepX() == d[0] && candidate.getStepZ() == d[1]) {
+                outward = candidate;
+            }
+        }
+        int platform = d[2] - 5;
+        int px = d[0] * platform;
+        int pz = d[1] * platform;
+        int y = terrainTop(level, px, pz);
         if (y <= level.getMinBuildHeight() + 2) {
-            return;
+            return false;
         }
-        for (int dx = -4; dx <= 4; dx++) {
-            for (int dz = -4; dz <= 4; dz++) {
-                boolean border = Math.abs(dx) == 4 || Math.abs(dz) == 4;
-                flatten(level, cx + dx, dz, y, border ? crystal() : stellar());
+        NexusVillage.Ctx c = new NexusVillage.Ctx(level, px, pz, y, outward);
+        for (int u = -4; u <= 4; u++) {
+            for (int v = -4; v <= 4; v++) {
+                BlockPos p = c.pos(u, v, 0);
+                boolean border = Math.abs(u) == 4 || Math.abs(v) == 4;
+                flatten(level, p.getX(), p.getZ(), y, border ? crystal() : stellar());
             }
         }
-        for (int t = 1; t <= 14; t++) {
-            int x = side * (end + t);
-            for (int w = -1; w <= 1; w++) {
-                set(level, x, y, w, Math.abs(w) == 1 ? crystal() : stellar());
+        for (int v = 5; v <= 18; v++) {
+            for (int u = -1; u <= 1; u++) {
+                c.put(u, v, 0, Math.abs(u) == 1 ? crystal() : stellar());
             }
-            if (t % 4 == 0) {
-                pillar(level, x, -2, y, 3, beacon());
-                pillar(level, x, 2, y, 3, beacon());
+            if (v % 4 == 1) {
+                c.post(-2, v, 3, beacon());
+                c.post(2, v, 3, beacon());
             }
         }
-        int tip = side * (end + 15);
-        for (int w = -1; w <= 1; w++) {
-            set(level, tip, y, w, abyssal());
-        }
-        pillar(level, tip, 0, y, 6, beacon());
+        c.post(0, 19, 6, beacon());
+        return true;
     }
 }

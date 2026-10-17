@@ -35,9 +35,9 @@ public final class LegacyWorldMigration {
     /**
      * Génération du terrain du Nexus. À augmenter chaque fois que les blocs ou le relief changent au point de vouloir
      * régénérer le Nexus : au prochain démarrage du serveur, ses chunks sont mis de côté (jamais supprimés) et le jeu
-     * les régénère au prochain trajet. 1 = blocs vanilla (0.4.x) ; 2 = blocs du mod (ressources du Nexus) ; 3 = décor (aiguilles, stalactites, cratères, ruines, débris).
+     * les régénère au prochain trajet. 1 = blocs vanilla (0.4.x) ; 2 = blocs du mod (ressources du Nexus) ; 3 = décor (aiguilles, stalactites, cratères, ruines, débris) ; 4 = village du hub (repart d'un terrain vierge : la construction précédente du hub n'est pas démontable).
      */
-    private static final int NEXUS_GENERATION = 3;
+    private static final int NEXUS_GENERATION = 4;
     private static final String GENERATION_FILE = "astralpack_nexus_generation.txt";
 
     /**

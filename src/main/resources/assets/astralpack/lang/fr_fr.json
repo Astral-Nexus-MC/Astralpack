@@ -51,5 +51,5 @@
   "item.astralpack.nebula_shard": "Éclat de nébuleuse",
   "block.astralpack.abyssal_stone": "Pierre abyssale",
   "block.astralpack.lumen_moss": "Mousse lumineuse",
-  "commands.astralpack.nexus.hub.built": "Construction du hub : %s étape(s) effectuée(s)"
+  "commands.astralpack.nexus.hub.built": "Construction du hub : %s étape(s) effectuée(s), %s ignorée(s) (terrain inadapté)"
 }
