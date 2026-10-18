@@ -195,6 +195,12 @@ public final class SpawnerEvents {
                 mob.discard();
             }
         }
+        // Un groupe est un simple « plot » à tuer : sans IA, il ne coûte presque rien au serveur.
+        for (Mob group : groups.values()) {
+            if (!group.isNoAi()) {
+                group.setNoAi(true);
+            }
+        }
         if (!fresh.isEmpty()) {
             Mob kept = groups.get(fresh.get(0).getType());
             if (kept != null) {
