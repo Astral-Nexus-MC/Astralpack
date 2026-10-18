@@ -8,7 +8,7 @@ Statut : sur `dev`, non publiée (2026-10-18). Testée sur serveur de développe
 |---|---|---|---|---|
 | Cadence | délai x 0,75 (bonus) ou x 1,33 (malus) | délai >= 10 ticks | quartz du Nether | toile d'araignée |
 | Quantité | +1 monstre par apparition | 1 à 12 | paratonnerre | barreaux de fer |
-| Population max | x 4 par cran de bonus (x 0,5 par cran de malus) | 1 à 32 000 | bloc d'os | laisse |
+| Population max | x 4 au premier cran de bonus puis x 2 à chaque cran (6 : 24, 48, 96, 192, 384) ; x 0,5 par cran de malus | 1 à 32 000 | bloc d'os | laisse |
 | Portée d'activation | +8 blocs | 4 à 64 | œil de l'Ender | boule de slime |
 | Rayon d'apparition | +2 blocs | 1 à 16 | boussole | ficelle |
 | Vie des monstres | bonus : +50 % de vie par cran (jusqu'à x 3,5) ; malus : -20 % par cran, et au niveau -5 0,5 point de vie (un quart de cœur : l'attribut de vie maximale ne descend pas sous 1, le monstre a 1 de vie max et 0,5 de vie actuelle) | min. 0,5 point | nourriture crue (étiquette `astralpack:raw_food` : bœuf, porc, poulet, mouton, lapin, morue, saumon, poisson tropical, pomme de terre) | spéléothème (stalactite de dripstone) |

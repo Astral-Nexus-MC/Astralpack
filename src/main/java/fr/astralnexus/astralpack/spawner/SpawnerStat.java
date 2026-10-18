@@ -19,7 +19,7 @@ public enum SpawnerStat {
     /** Nombre de monstres par apparition : +1 par cran (de 1 à 12). */
     COUNT("count", "SpawnCount", null, "minecraft:lightning_rod", "minecraft:iron_bars"),
     /**
-     * Monstres autour du spawner avant qu'il s'arrête : x 4 par cran de bonus (jusqu'à 32 000), x 0,5 par cran de
+     * Monstres autour du spawner avant qu'il s'arrête : x 4 au premier cran de bonus puis il double à chaque cran (6 devient 24, 48, 96, 192, 384 ; jusqu'à 32 000), x 0,5 par cran de
      * malus. Sur un spawner posé avec la clé à molette, les monstres fusionnent (voir {@link SpawnerEvents}).
      */
     POPULATION("population", "MaxNearbyEntities", null, "minecraft:bone_block", "minecraft:lead"),
@@ -129,7 +129,7 @@ public enum SpawnerStat {
         return switch (this) {
             case CADENCE -> (int) Math.max(10, Math.round(base * Math.pow(0.75D, level)));
             case COUNT -> Math.max(1, Math.min(12, base + level));
-            case POPULATION -> level >= 0 ? (int) Math.min(32000L, Math.round(base * Math.pow(4.0D, level)))
+            case POPULATION -> level >= 0 ? (int) Math.min(32000L, Math.round(base * Math.pow(2.0D, level + 1)))
                     : Math.max(1, (int) Math.round(base * Math.pow(0.5D, -level)));
             case RANGE -> Math.max(4, Math.min(64, base + 8 * level));
             case RADIUS -> Math.max(1, Math.min(16, base + 2 * level));
