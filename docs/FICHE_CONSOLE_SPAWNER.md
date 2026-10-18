@@ -7,13 +7,13 @@ Statut : sur `dev`, non publiée (2026-10-18). Testée sur serveur de développe
 | Réglage | Effet par cran | Limites | Objet de bonus | Objet de malus |
 |---|---|---|---|---|
 | Cadence | délai x 0,75 (bonus) ou x 1,33 (malus) | délai >= 10 ticks | quartz du Nether | toile d'araignée |
-| Quantité | +1 monstre par apparition | 1 à 12 | éclat de nébuleuse | barreaux de fer |
+| Quantité | +1 monstre par apparition | 1 à 12 | paratonnerre | barreaux de fer |
 | Population max | +4 monstres autour | 1 à 64 | bloc d'os | laisse |
 | Portée d'activation | +8 blocs | 4 à 64 | œil de l'Ender | boule de slime |
 | Rayon d'apparition | +2 blocs | 1 à 16 | boussole | ficelle |
 | Vie des monstres | bonus : +50 % de vie par cran (jusqu'à x 3,5) ; malus : -20 % par cran, et au niveau -5 un demi-cœur (1 point de vie) | min. 1 point | nourriture crue (étiquette `astralpack:raw_food` : bœuf, porc, poulet, mouton, lapin, morue, saumon, poisson tropical, pomme de terre) | spéléothème (stalactite de dripstone) |
 
-Les objets sont dans `spawner/SpawnerStat` (un seul endroit à modifier, avec les effets). Le bonus de quantité utilise une ressource du Nexus (éclat de nébuleuse) ; la cadence utilise du quartz du Nether.
+Les objets sont dans `spawner/SpawnerStat` (un seul endroit à modifier, avec les effets). La console n'utilise plus de ressource du Nexus : la cadence demande du quartz du Nether et la quantité un paratonnerre.
 
 **Fonctionnement technique** : `SpawnerControl` garde les valeurs d'origine du spawner (`ForgeData.AstralBase`) à la première application et recalcule toujours à partir d'elles ; la console repasse sur les spawners du chunk toutes les 40 ticks (les spawners posés plus tard sont pris en compte) ; casser la console, ou décrocher le spawner avec la clé, remet les valeurs d'origine. Un spawner qui a quitté le chunk de la console n'est plus contrôlé.
 
