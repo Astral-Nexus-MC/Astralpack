@@ -3,6 +3,7 @@ package fr.astralnexus.astralpack.spawner;
 import fr.astralnexus.astralpack.Astralpack;
 import fr.astralnexus.astralpack.block.entity.SpawnerConsoleBlockEntity;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -50,6 +51,9 @@ public final class SpawnerEvents {
     private static final String HEALTH_MARK = "AstralHealthLevel";
     private static final String STACK = "AstralStack";
     private static final String FRESH = "AstralFresh";
+    /** Probabilité de rafale par cran de bonus de cadence, et taille de la rafale en multiples de la quantité. */
+    private static final float BURST_CHANCE_PER_LEVEL = 0.10F;
+    private static final int BURST_FACTOR = 5;
     private static final Map<String, Set<BlockPos>> PENDING = new HashMap<>();
 
     private SpawnerEvents() {
@@ -133,6 +137,33 @@ public final class SpawnerEvents {
                 mob.discard();
             }
         }
+        if (!fresh.isEmpty()) {
+            burst(level, spawner, fresh.get(0).getType(), groups, totals, limit, data.getShort("SpawnCount"));
+        }
+    }
+
+    /**
+     * Rafale de la cadence : à chaque cycle d'apparition d'un spawner à fusion, une probabilité (10 % par cran de
+     * bonus de cadence) d'ajouter d'un coup tout un groupe de monstres (cinq fois la quantité du spawner) au groupe du
+     * spawner, dans la limite de la population max.
+     */
+    private static void burst(ServerLevel level, SpawnerBlockEntity spawner, EntityType<?> type, Map<EntityType<?>, Mob> groups,
+                              Map<EntityType<?>, Integer> totals, int limit, int count) {
+        SpawnerConsoleBlockEntity console = SpawnerControl.findConsole(level, spawner.getBlockPos());
+        int cadence = console == null ? 0 : console.level(SpawnerStat.CADENCE);
+        Mob group = groups.get(type);
+        if (cadence <= 0 || group == null || level.random.nextFloat() >= BURST_CHANCE_PER_LEVEL * cadence) {
+            return;
+        }
+        int room = limit - totals.getOrDefault(type, 0);
+        int extra = Math.min(room, BURST_FACTOR * Math.max(1, count));
+        if (extra <= 0) {
+            return;
+        }
+        setStack(group, group.getPersistentData().getInt(STACK) + extra);
+        totals.put(type, totals.getOrDefault(type, 0) + extra);
+        level.sendParticles(ParticleTypes.POOF, spawner.getBlockPos().getX() + 0.5D, spawner.getBlockPos().getY() + 1.0D,
+                spawner.getBlockPos().getZ() + 0.5D, 25, 0.4D, 0.4D, 0.4D, 0.05D);
     }
 
     private static void setStack(Mob mob, int size) {
