@@ -12,7 +12,7 @@ import net.minecraftforge.registries.ForgeRegistries;
  */
 public enum SpawnerStat {
     /** Délai entre deux apparitions : x 0,75 par cran de bonus (minimum 10 ticks), x 1,33 par cran de malus. */
-    CADENCE("cadence", "MinSpawnDelay", "MaxSpawnDelay", "astralpack:astralite", "minecraft:cobweb"),
+    CADENCE("cadence", "MinSpawnDelay", "MaxSpawnDelay", "minecraft:quartz", "minecraft:cobweb"),
     /** Nombre de monstres par apparition : +1 par cran (de 1 à 12). */
     COUNT("count", "SpawnCount", null, "astralpack:nebula_shard", "minecraft:iron_bars"),
     /** Monstres autour du spawner avant qu'il s'arrête : +4 par cran (de 1 à 64). */
