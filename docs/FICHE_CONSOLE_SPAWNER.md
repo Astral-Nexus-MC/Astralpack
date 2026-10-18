@@ -16,6 +16,6 @@ Les objets sont dans `spawner/SpawnerStat` (un seul endroit à modifier, avec le
 
 **Fonctionnement technique** : `SpawnerControl` garde les valeurs d'origine du spawner (`ForgeData.AstralBase`) à la première application et recalcule toujours à partir d'elles ; la console repasse sur les spawners du chunk toutes les 40 ticks (les spawners posés plus tard sont pris en compte) ; casser la console, ou décrocher le spawner avec la clé, remet les valeurs d'origine. Un spawner qui a quitté le chunk de la console n'est plus contrôlé.
 
-**Recette** (provisoire) : 3 lingots de fer, 1 perle de l'Ender, 3 redstone, 3 obsidienne (`IEI` / `RRR` / `OOO`).
+**Recette** (provisoire) : 4 lingots de fer, 1 perle de l'Ender, 1 redstone, 3 obsidienne (`IEI` / `IRI` / `OOO`).
 
 **Visuel** : modèle et textures faits dans Blockbench (`blockbench/block/spawner_console.bbmodel`) : socle sombre, écran incliné qui affiche cinq barres (une par réglage), deux antennes de cristal et une balise d'astralite.
