@@ -53,6 +53,8 @@ public final class SpawnerEvents {
     private static final String HEALTH_MARK = "AstralHealthLevel";
     private static final String STACK = "AstralStack";
     private static final String FRESH = "AstralFresh";
+    /** Identifiant, dans les données d'un spawner, du groupe de monstres qu'il alimente. */
+    private static final String GROUP = "AstralGroup";
     /** Probabilité de rafale par cran de bonus de cadence, et taille de la rafale en multiples de la quantité. */
     private static final float BURST_CHANCE_PER_LEVEL = 0.10F;
     private static final int BURST_FACTOR = 5;
@@ -152,7 +154,15 @@ public final class SpawnerEvents {
             limit += Math.max(1, member.saveWithoutMetadata().getShort("MaxNearbyEntities"));
             box = box.minmax(zone(member));
         }
-        List<Mob> mobs = level.getEntitiesOfClass(Mob.class, box, Entity::isAlive);
+        List<Mob> mobs = new ArrayList<>(level.getEntitiesOfClass(Mob.class, box, Entity::isAlive));
+        // Un groupe qui s'est éloigné reste le groupe de ses spawners : on le retrouve par son identifiant mémorisé.
+        for (SpawnerBlockEntity member : cluster) {
+            CompoundTag memory = member.getPersistentData();
+            if (memory.hasUUID(GROUP) && level.getEntity(memory.getUUID(GROUP)) instanceof Mob far && far.isAlive()
+                    && far.getPersistentData().contains(STACK) && !mobs.contains(far)) {
+                mobs.add(far);
+            }
+        }
         Map<EntityType<?>, Mob> groups = new HashMap<>();
         Map<EntityType<?>, Integer> totals = new HashMap<>();
         List<Mob> fresh = new ArrayList<>();
@@ -186,6 +196,12 @@ public final class SpawnerEvents {
             }
         }
         if (!fresh.isEmpty()) {
+            Mob kept = groups.get(fresh.get(0).getType());
+            if (kept != null) {
+                for (SpawnerBlockEntity member : cluster) {
+                    member.getPersistentData().putUUID(GROUP, kept.getUUID());
+                }
+            }
             burst(level, spawner, fresh.get(0).getType(), groups, totals, limit, data.getShort("SpawnCount"));
         }
     }
