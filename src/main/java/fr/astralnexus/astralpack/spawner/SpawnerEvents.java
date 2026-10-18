@@ -286,7 +286,7 @@ public final class SpawnerEvents {
         }
     }
 
-    /** Un groupe qui meurt laisse le butin de tous ses monstres, regroupé en piles complètes. */
+    /** Un groupe qui meurt laisse le butin de tous ses monstres, regroupé en piles complètes (sauf l'équipement). */
     @SubscribeEvent
     public static void onDrops(LivingDropsEvent event) {
         int size = groupSize(event.getEntity());
@@ -296,6 +296,10 @@ public final class SpawnerEvents {
         List<ItemEntity> extra = new ArrayList<>();
         for (ItemEntity drop : event.getDrops()) {
             ItemStack stack = drop.getItem();
+            if (stack.getMaxStackSize() == 1) {
+                // Équipement (armure, arme, outil) : jamais multiplié, un seul exemplaire pour tout le groupe.
+                continue;
+            }
             long total = (long) stack.getCount() * size;
             int max = stack.getMaxStackSize();
             int first = (int) Math.min(total, max);
