@@ -18,7 +18,10 @@ public enum SpawnerStat {
     CADENCE("cadence", "MinSpawnDelay", "MaxSpawnDelay", "minecraft:quartz", "minecraft:cobweb"),
     /** Nombre de monstres par apparition : +1 par cran (de 1 à 12). */
     COUNT("count", "SpawnCount", null, "minecraft:lightning_rod", "minecraft:iron_bars"),
-    /** Monstres autour du spawner avant qu'il s'arrête : +4 par cran (de 1 à 64). */
+    /**
+     * Monstres autour du spawner avant qu'il s'arrête : x 4 par cran de bonus (jusqu'à 32 000), x 0,5 par cran de
+     * malus. Sur un spawner posé avec la clé à molette, les monstres fusionnent (voir {@link SpawnerEvents}).
+     */
     POPULATION("population", "MaxNearbyEntities", null, "minecraft:bone_block", "minecraft:lead"),
     /** Distance d'un joueur qui active le spawner : +8 blocs par cran (de 4 à 64). */
     RANGE("range", "RequiredPlayerRange", null, "minecraft:ender_eye", "minecraft:slime_ball"),
@@ -26,7 +29,7 @@ public enum SpawnerStat {
     RADIUS("radius", "SpawnRange", null, "minecraft:compass", "minecraft:string"),
     /**
      * Vie des monstres à l'apparition : +50 % par cran de bonus (jusqu'à x 3,5) ; en malus -20 % par cran, et au
-     * niveau -5 les monstres n'ont plus qu'un demi-cœur (1 point de vie). Ce réglage n'est pas écrit dans le spawner :
+     * niveau -5 les monstres n'ont plus que 0,5 point de vie (un quart de cœur). Ce réglage n'est pas écrit dans le spawner :
      * il s'applique aux monstres au moment où ils apparaissent (voir {@link SpawnerEvents}). Un objet commençant par
      * # est une étiquette d'objets (ici la nourriture crue).
      */
@@ -106,15 +109,19 @@ public enum SpawnerStat {
         return this.secondKey == null ? new String[]{this.key} : new String[]{this.key, this.secondKey};
     }
 
-    /** Vie maximale d'un monstre qui apparaît avec ce niveau de réglage (au moins 1 point, soit un demi-cœur). */
+    /**
+     * Vie d'un monstre qui apparaît avec ce niveau de réglage, en points (2 points = 1 cœur) : au niveau -5, 0,5 point,
+     * soit un quart de cœur. L'attribut de vie maximale ne descend pas sous 1 : le monstre a alors 1 de vie maximale et
+     * une vie actuelle de 0,5.
+     */
     public static double health(double base, int level) {
         if (level >= 0) {
             return base * (1.0D + 0.5D * level);
         }
         if (level <= -MAX_LEVEL) {
-            return 1.0D;
+            return 0.5D;
         }
-        return Math.max(1.0D, base * (1.0D + 0.2D * level));
+        return Math.max(0.5D, base * (1.0D + 0.2D * level));
     }
 
     /** Valeur modifiée à partir de la valeur d'origine du spawner. */
@@ -122,7 +129,8 @@ public enum SpawnerStat {
         return switch (this) {
             case CADENCE -> (int) Math.max(10, Math.round(base * Math.pow(0.75D, level)));
             case COUNT -> Math.max(1, Math.min(12, base + level));
-            case POPULATION -> Math.max(1, Math.min(64, base + 4 * level));
+            case POPULATION -> level >= 0 ? (int) Math.min(32000L, Math.round(base * Math.pow(4.0D, level)))
+                    : Math.max(1, (int) Math.round(base * Math.pow(0.5D, -level)));
             case RANGE -> Math.max(4, Math.min(64, base + 8 * level));
             case RADIUS -> Math.max(1, Math.min(16, base + 2 * level));
             case HEALTH -> base;

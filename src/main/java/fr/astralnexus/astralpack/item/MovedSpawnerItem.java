@@ -40,6 +40,7 @@ public class MovedSpawnerItem extends BlockItem {
         }
         if (!level.isClientSide && level.getBlockEntity(pos) instanceof SpawnerBlockEntity spawner) {
             spawner.load(data.copy());
+            spawner.getPersistentData().putBoolean(fr.astralnexus.astralpack.spawner.SpawnerEvents.STACKING, true);
             spawner.setChanged();
             level.sendBlockUpdated(pos, state, state, 3);
         }
