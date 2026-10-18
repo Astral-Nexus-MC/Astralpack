@@ -51,5 +51,10 @@
   "item.astralpack.nebula_shard": "Éclat de nébuleuse",
   "block.astralpack.abyssal_stone": "Pierre abyssale",
   "block.astralpack.lumen_moss": "Mousse lumineuse",
-  "commands.astralpack.nexus.hub.built": "Construction du hub : %s étape(s) effectuée(s), %s ignorée(s) (terrain inadapté)"
+  "commands.astralpack.nexus.hub.built": "Construction du hub : %s étape(s) effectuée(s), %s ignorée(s) (terrain inadapté)",
+  "item.astralpack.spawner_wrench": "Clé à molette à spawner",
+  "item.astralpack.spawner_wrench.tooltip": "Clic droit sur un spawner à monstres pour le décrocher",
+  "item.astralpack.moved_spawner": "Spawner décroché",
+  "item.astralpack.moved_spawner.mob": "Monstre : %s",
+  "item.astralpack.moved_spawner.empty": "aucun"
 }

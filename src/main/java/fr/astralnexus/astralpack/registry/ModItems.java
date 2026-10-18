@@ -5,6 +5,8 @@ import fr.astralnexus.astralpack.item.DeathScytheItem;
 import fr.astralnexus.astralpack.item.FennecArmorItem;
 import fr.astralnexus.astralpack.item.FennecArmorSlot;
 import fr.astralnexus.astralpack.item.FennecArmorTier;
+import fr.astralnexus.astralpack.item.MovedSpawnerItem;
+import fr.astralnexus.astralpack.item.SpawnerWrenchItem;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Rarity;
@@ -57,6 +59,14 @@ public class ModItems {
 
     public static final RegistryObject<Item> LUMEN_MOSS = ITEMS.register("lumen_moss",
             () -> new BlockItem(ModBlocks.LUMEN_MOSS.get(), new Item.Properties()));
+
+    /** Clé à molette : décroche un spawner à monstres sans le casser. */
+    public static final RegistryObject<Item> SPAWNER_WRENCH = ITEMS.register("spawner_wrench",
+            () -> new SpawnerWrenchItem(new Item.Properties().stacksTo(1).durability(64)));
+
+    /** Spawner décroché : garde son monstre et ses réglages jusqu'à sa pose. */
+    public static final RegistryObject<Item> MOVED_SPAWNER = ITEMS.register("moved_spawner",
+            () -> new MovedSpawnerItem(new Item.Properties().stacksTo(1)));
 
     public static final RegistryObject<Item> DEATH_SCYTHE =
             ITEMS.register("death_scythe",

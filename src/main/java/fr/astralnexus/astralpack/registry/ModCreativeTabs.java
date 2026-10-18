@@ -15,7 +15,8 @@ public class ModCreativeTabs {
             () -> CreativeModeTab.builder()
                     .title(Component.translatable("itemGroup." + Astralpack.MOD_ID + ".main"))
                     .icon(() -> ModItems.FENNEC_SPAWN_EGG.get().getDefaultInstance())
-                    .displayItems((params, output) -> ModItems.ITEMS.getEntries()
+                    .displayItems((params, output) -> ModItems.ITEMS.getEntries().stream()
+                            .filter(item -> item != ModItems.MOVED_SPAWNER)
                             .forEach(item -> output.accept(item.get())))
                     .build());
 }
