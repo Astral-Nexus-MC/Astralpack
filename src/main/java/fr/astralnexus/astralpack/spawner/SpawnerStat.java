@@ -129,7 +129,8 @@ public enum SpawnerStat {
         return switch (this) {
             case CADENCE -> (int) Math.max(10, Math.round(base * Math.pow(0.75D, level)));
             case COUNT -> Math.max(1, Math.min(12, base + level));
-            case POPULATION -> level >= 0 ? (int) Math.min(32000L, Math.round(base * Math.pow(2.0D, level + 1)))
+            case POPULATION -> level == 0 ? base
+                    : level > 0 ? (int) Math.min(32000L, Math.round(base * Math.pow(2.0D, level + 1)))
                     : Math.max(1, (int) Math.round(base * Math.pow(0.5D, -level)));
             case RANGE -> Math.max(4, Math.min(64, base + 8 * level));
             case RADIUS -> Math.max(1, Math.min(16, base + 2 * level));
