@@ -1,6 +1,9 @@
 package fr.astralnexus.astralpack.spawner;
 
+import net.minecraft.core.registries.Registries;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -20,7 +23,14 @@ public enum SpawnerStat {
     /** Distance d'un joueur qui active le spawner : +8 blocs par cran (de 4 à 64). */
     RANGE("range", "RequiredPlayerRange", null, "minecraft:ender_eye", "minecraft:slime_ball"),
     /** Rayon dans lequel les monstres apparaissent : +2 blocs par cran (de 1 à 16). */
-    RADIUS("radius", "SpawnRange", null, "minecraft:compass", "minecraft:string");
+    RADIUS("radius", "SpawnRange", null, "minecraft:compass", "minecraft:string"),
+    /**
+     * Vie des monstres à l'apparition : +50 % par cran de bonus (jusqu'à x 3,5) ; en malus -20 % par cran, et au
+     * niveau -5 les monstres n'ont plus qu'un demi-cœur (1 point de vie). Ce réglage n'est pas écrit dans le spawner :
+     * il s'applique aux monstres au moment où ils apparaissent (voir {@link SpawnerEvents}). Un objet commençant par
+     * # est une étiquette d'objets (ici la nourriture crue).
+     */
+    HEALTH("health", null, null, "#astralpack:raw_food", "minecraft:pointed_dripstone");
 
     public static final int MAX_LEVEL = 5;
 
@@ -46,24 +56,41 @@ public enum SpawnerStat {
         return "spawner_stat.astralpack." + this.id;
     }
 
-    /** Objet de bonus de ce réglage. */
-    public Item bonusItem() {
-        return ForgeRegistries.ITEMS.getValue(new ResourceLocation(this.bonusItem));
+    private static boolean matches(ItemStack stack, String spec) {
+        if (spec.startsWith("#")) {
+            return stack.is(TagKey.create(Registries.ITEM, new ResourceLocation(spec.substring(1))));
+        }
+        Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(spec));
+        return item != null && stack.is(item);
     }
 
-    /** Objet de malus de ce réglage. */
-    public Item malusItem() {
-        return ForgeRegistries.ITEMS.getValue(new ResourceLocation(this.malusItem));
+    private static Component name(String spec) {
+        if (spec.startsWith("#")) {
+            ResourceLocation tag = new ResourceLocation(spec.substring(1));
+            return Component.translatable("tag.item." + tag.getNamespace() + "." + tag.getPath());
+        }
+        Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(spec));
+        return item == null ? Component.literal(spec) : item.getDescription();
+    }
+
+    /** Nom de l'objet (ou de la catégorie d'objets) de bonus. */
+    public Component bonusName() {
+        return name(this.bonusItem);
+    }
+
+    /** Nom de l'objet (ou de la catégorie d'objets) de malus. */
+    public Component malusName() {
+        return name(this.malusItem);
     }
 
     /** Le réglage que cet objet améliore (+1) ou dégrade (-1), ou {@code null}. */
     public static SpawnerStat forItem(ItemStack stack, boolean[] bonus) {
         for (SpawnerStat stat : values()) {
-            if (stack.is(stat.bonusItem())) {
+            if (matches(stack, stat.bonusItem)) {
                 bonus[0] = true;
                 return stat;
             }
-            if (stack.is(stat.malusItem())) {
+            if (matches(stack, stat.malusItem)) {
                 bonus[0] = false;
                 return stat;
             }
@@ -73,7 +100,21 @@ public enum SpawnerStat {
 
     /** Clés NBT du spawner modifiées par ce réglage. */
     public String[] keys() {
+        if (this.key == null) {
+            return new String[0];
+        }
         return this.secondKey == null ? new String[]{this.key} : new String[]{this.key, this.secondKey};
+    }
+
+    /** Vie maximale d'un monstre qui apparaît avec ce niveau de réglage (au moins 1 point, soit un demi-cœur). */
+    public static double health(double base, int level) {
+        if (level >= 0) {
+            return base * (1.0D + 0.5D * level);
+        }
+        if (level <= -MAX_LEVEL) {
+            return 1.0D;
+        }
+        return Math.max(1.0D, base * (1.0D + 0.2D * level));
     }
 
     /** Valeur modifiée à partir de la valeur d'origine du spawner. */
@@ -84,6 +125,7 @@ public enum SpawnerStat {
             case POPULATION -> Math.max(1, Math.min(64, base + 4 * level));
             case RANGE -> Math.max(4, Math.min(64, base + 8 * level));
             case RADIUS -> Math.max(1, Math.min(16, base + 2 * level));
+            case HEALTH -> base;
         };
     }
 }

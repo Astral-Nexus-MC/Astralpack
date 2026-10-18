@@ -111,7 +111,7 @@ public class SpawnerConsoleBlockEntity extends BlockEntity {
         for (SpawnerStat stat : SpawnerStat.values()) {
             player.sendSystemMessage(Component.translatable("message.astralpack.spawner_console.line",
                     Component.translatable(stat.translationKey()), signed(this.level(stat)),
-                    stat.bonusItem().getDescription(), stat.malusItem().getDescription()));
+                    stat.bonusName(), stat.malusName()));
         }
     }
 

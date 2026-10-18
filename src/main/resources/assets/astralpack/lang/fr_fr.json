@@ -67,5 +67,7 @@
   "message.astralpack.spawner_console.changed": "%s : niveau %s (%s spawner(s) dans ce chunk)",
   "message.astralpack.spawner_console.limit": "%s est déjà au niveau limite (%s)",
   "message.astralpack.spawner_console.status": "Console des spawners : %s spawner(s) dans ce chunk",
-  "message.astralpack.spawner_console.line": "%s : niveau %s | bonus : %s | malus : %s"
+  "message.astralpack.spawner_console.line": "%s : niveau %s | bonus : %s | malus : %s",
+  "spawner_stat.astralpack.health": "Vie des monstres",
+  "tag.item.astralpack.raw_food": "nourriture crue"
 }

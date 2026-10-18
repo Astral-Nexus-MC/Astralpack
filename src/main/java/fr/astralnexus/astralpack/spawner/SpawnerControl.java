@@ -35,6 +35,17 @@ public final class SpawnerControl {
         return found;
     }
 
+    /** Console du chunk qui contient cette position, ou {@code null}. */
+    public static fr.astralnexus.astralpack.block.entity.SpawnerConsoleBlockEntity findConsole(Level level, BlockPos pos) {
+        for (BlockEntity entity : level.getChunkAt(pos).getBlockEntities().values()) {
+            if (entity instanceof fr.astralnexus.astralpack.block.entity.SpawnerConsoleBlockEntity console
+                    && !console.isRemoved()) {
+                return console;
+            }
+        }
+        return null;
+    }
+
     /** Applique les niveaux ; renvoie vrai si le spawner a changé. */
     public static boolean apply(SpawnerBlockEntity spawner, int[] levels) {
         boolean neutral = true;

@@ -11,6 +11,7 @@ Statut : sur `dev`, non publiée (2026-10-18). Testée sur serveur de développe
 | Population max | +4 monstres autour | 1 à 64 | bloc d'os | laisse |
 | Portée d'activation | +8 blocs | 4 à 64 | œil de l'Ender | boule de slime |
 | Rayon d'apparition | +2 blocs | 1 à 16 | boussole | ficelle |
+| Vie des monstres | bonus : +50 % de vie par cran (jusqu'à x 3,5) ; malus : -20 % par cran, et au niveau -5 un demi-cœur (1 point de vie) | min. 1 point | nourriture crue (étiquette `astralpack:raw_food` : bœuf, porc, poulet, mouton, lapin, morue, saumon, poisson tropical, pomme de terre) | spéléothème (stalactite de dripstone) |
 
 Les objets sont dans `spawner/SpawnerStat` (un seul endroit à modifier, avec les effets). Le bonus de quantité utilise une ressource du Nexus (éclat de nébuleuse) ; la cadence utilise du quartz du Nether.
 
@@ -19,3 +20,5 @@ Les objets sont dans `spawner/SpawnerStat` (un seul endroit à modifier, avec le
 **Recette** (provisoire) : 4 lingots de fer, 1 perle de l'Ender, 1 redstone, 3 obsidienne (`IEI` / `IRI` / `OOO`).
 
 **Visuel** : modèle et textures faits dans Blockbench (`blockbench/block/spawner_console.bbmodel`) : socle sombre, écran incliné qui affiche cinq barres (une par réglage), deux antennes de cristal et une balise d'astralite.
+
+**Vie des monstres** : ce réglage n'est pas écrit dans le spawner, il s'applique à chaque monstre au moment où il apparaît (`spawner/SpawnerEvents` : le spawner qui le provoque est repéré à la fin de l'initialisation du monstre, puis sa vie maximale est réglée quand il entre dans le monde, après que le jeu a fini de l'initialiser). Limite : les spawners dont les données d'apparition contiennent plus que le simple type de monstre (monstres nommés, équipement imposé) ne déclenchent pas l'événement d'initialisation du jeu : leur vie n'est pas modifiée. Non testé avec un joueur (il faut un joueur à portée pour qu'un spawner tourne).

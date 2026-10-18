@@ -67,5 +67,7 @@
   "message.astralpack.spawner_console.changed": "%s: level %s (%s spawner(s) in this chunk)",
   "message.astralpack.spawner_console.limit": "%s is already at its limit (%s)",
   "message.astralpack.spawner_console.status": "Spawner Console: %s spawner(s) in this chunk",
-  "message.astralpack.spawner_console.line": "%s: level %s | bonus: %s | malus: %s"
+  "message.astralpack.spawner_console.line": "%s: level %s | bonus: %s | malus: %s",
+  "spawner_stat.astralpack.health": "Mob health",
+  "tag.item.astralpack.raw_food": "raw food"
 }
