@@ -66,7 +66,7 @@ public final class SpawnerEvents {
     private static final float BURST_CHANCE_PER_LEVEL = 0.10F;
     private static final int BURST_FACTOR = 5;
     /** Part des autres monstres d'un groupe dont le butin est réellement tiré à sa mort. */
-    private static final double LOOT_EFFICIENCY = 0.5D;
+    private static final double LOOT_EFFICIENCY = 0.3D;
     private static final Map<String, Set<BlockPos>> PENDING = new HashMap<>();
 
     private SpawnerEvents() {
