@@ -8,6 +8,7 @@
     "astralpack:astralite_ore",
     "astralpack:nebula_ore",
     "astralpack:astralite_block",
-    "astralpack:abyssal_stone"
+    "astralpack:abyssal_stone",
+    "astralpack:spawner_console"
   ]
 }

@@ -60,6 +60,9 @@ public class ModItems {
     public static final RegistryObject<Item> LUMEN_MOSS = ITEMS.register("lumen_moss",
             () -> new BlockItem(ModBlocks.LUMEN_MOSS.get(), new Item.Properties()));
 
+    public static final RegistryObject<Item> SPAWNER_CONSOLE = ITEMS.register("spawner_console",
+            () -> new BlockItem(ModBlocks.SPAWNER_CONSOLE.get(), new Item.Properties().rarity(Rarity.RARE)));
+
     /** Clé à molette : décroche un spawner à monstres sans le casser. */
     public static final RegistryObject<Item> SPAWNER_WRENCH = ITEMS.register("spawner_wrench",
             () -> new SpawnerWrenchItem(new Item.Properties().stacksTo(1).durability(10)));

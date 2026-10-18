@@ -57,5 +57,15 @@
   "item.astralpack.moved_spawner": "Spawner décroché",
   "item.astralpack.moved_spawner.mob": "Monstre : %s",
   "item.astralpack.moved_spawner.empty": "aucun",
-  "item.astralpack.spawner_wrench.unrepairable": "Irréparable : 10 utilisations"
+  "item.astralpack.spawner_wrench.unrepairable": "Irréparable : 10 utilisations",
+  "block.astralpack.spawner_console": "Console des spawners",
+  "spawner_stat.astralpack.cadence": "Cadence",
+  "spawner_stat.astralpack.count": "Quantité",
+  "spawner_stat.astralpack.population": "Population max",
+  "spawner_stat.astralpack.range": "Portée d'activation",
+  "spawner_stat.astralpack.radius": "Rayon d'apparition",
+  "message.astralpack.spawner_console.changed": "%s : niveau %s (%s spawner(s) dans ce chunk)",
+  "message.astralpack.spawner_console.limit": "%s est déjà au niveau limite (%s)",
+  "message.astralpack.spawner_console.status": "Console des spawners : %s spawner(s) dans ce chunk",
+  "message.astralpack.spawner_console.line": "%s : niveau %s | bonus : %s | malus : %s"
 }

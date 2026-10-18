@@ -52,6 +52,7 @@ public class SpawnerWrenchItem extends Item {
         if (!(entity instanceof SpawnerBlockEntity spawner)) {
             return InteractionResult.FAIL;
         }
+        fr.astralnexus.astralpack.spawner.SpawnerControl.restore(spawner);
         CompoundTag data = spawner.saveWithoutMetadata();
         ItemStack moved = new ItemStack(ModItems.MOVED_SPAWNER.get());
         moved.getOrCreateTag().put(MovedSpawnerItem.DATA_TAG, data);

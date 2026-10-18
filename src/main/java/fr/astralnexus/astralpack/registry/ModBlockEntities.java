@@ -2,6 +2,7 @@ package fr.astralnexus.astralpack.registry;
 
 import fr.astralnexus.astralpack.Astralpack;
 import fr.astralnexus.astralpack.block.entity.NexusConsoleBlockEntity;
+import fr.astralnexus.astralpack.block.entity.SpawnerConsoleBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -14,4 +15,8 @@ public class ModBlockEntities {
     public static final RegistryObject<BlockEntityType<NexusConsoleBlockEntity>> NEXUS_CONSOLE =
             BLOCK_ENTITIES.register("nexus_console", () -> BlockEntityType.Builder
                     .of(NexusConsoleBlockEntity::new, ModBlocks.NEXUS_CONSOLE.get()).build(null));
+
+    public static final RegistryObject<BlockEntityType<SpawnerConsoleBlockEntity>> SPAWNER_CONSOLE =
+            BLOCK_ENTITIES.register("spawner_console", () -> BlockEntityType.Builder
+                    .of(SpawnerConsoleBlockEntity::new, ModBlocks.SPAWNER_CONSOLE.get()).build(null));
 }

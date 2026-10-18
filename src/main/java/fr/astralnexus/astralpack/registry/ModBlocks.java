@@ -6,6 +6,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import fr.astralnexus.astralpack.block.NexusConsoleBlock;
 import fr.astralnexus.astralpack.block.NexusPortalBlock;
+import fr.astralnexus.astralpack.block.SpawnerConsoleBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraftforge.registries.DeferredRegister;
@@ -118,4 +119,14 @@ public class ModBlocks {
                     .strength(0.1F)
                     .lightLevel(state -> 6)
                     .sound(SoundType.MOSS)));
+
+    /** Console de contrôle des spawners : règle les spawners de son chunk contre des objets précis. */
+    public static final RegistryObject<Block> SPAWNER_CONSOLE = BLOCKS.register("spawner_console",
+            () -> new SpawnerConsoleBlock(BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.COLOR_PURPLE)
+                    .strength(4.0F, 12.0F)
+                    .requiresCorrectToolForDrops()
+                    .lightLevel(state -> 6)
+                    .sound(SoundType.DEEPSLATE_TILES)
+                    .noOcclusion()));
 }

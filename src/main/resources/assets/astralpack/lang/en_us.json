@@ -57,5 +57,15 @@
   "item.astralpack.moved_spawner": "Detached Spawner",
   "item.astralpack.moved_spawner.mob": "Mob: %s",
   "item.astralpack.moved_spawner.empty": "none",
-  "item.astralpack.spawner_wrench.unrepairable": "Cannot be repaired: 10 uses"
+  "item.astralpack.spawner_wrench.unrepairable": "Cannot be repaired: 10 uses",
+  "block.astralpack.spawner_console": "Spawner Console",
+  "spawner_stat.astralpack.cadence": "Rate",
+  "spawner_stat.astralpack.count": "Quantity",
+  "spawner_stat.astralpack.population": "Max population",
+  "spawner_stat.astralpack.range": "Activation range",
+  "spawner_stat.astralpack.radius": "Spawn radius",
+  "message.astralpack.spawner_console.changed": "%s: level %s (%s spawner(s) in this chunk)",
+  "message.astralpack.spawner_console.limit": "%s is already at its limit (%s)",
+  "message.astralpack.spawner_console.status": "Spawner Console: %s spawner(s) in this chunk",
+  "message.astralpack.spawner_console.line": "%s: level %s | bonus: %s | malus: %s"
 }

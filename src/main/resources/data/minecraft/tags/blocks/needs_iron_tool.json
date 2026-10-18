@@ -5,6 +5,7 @@
     "astralpack:nexus_console",
     "astralpack:astralite_ore",
     "astralpack:nebula_ore",
-    "astralpack:astralite_block"
+    "astralpack:astralite_block",
+    "astralpack:spawner_console"
   ]
 }
