@@ -195,11 +195,8 @@ public final class SpawnerEvents {
                 mob.discard();
             }
         }
-        // Un groupe est un simple « plot » à tuer : sans IA, il ne coûte presque rien au serveur.
         for (Mob group : groups.values()) {
-            if (!group.isNoAi()) {
-                group.setNoAi(true);
-            }
+            idle(group);
         }
         if (!fresh.isEmpty()) {
             Mob kept = groups.get(fresh.get(0).getType());
@@ -244,9 +241,27 @@ public final class SpawnerEvents {
         }
     }
 
+    /**
+     * Un groupe est un simple « plot » à tuer : on lui retire tous ses comportements (déplacement, ciblage, attaque),
+     * ce qui ne coûte presque rien au serveur. Contrairement à {@code NoAI}, la physique reste active : gravité,
+     * courant d'eau, recul.
+     */
+    private static void idle(Mob mob) {
+        if (mob.isNoAi()) {
+            mob.setNoAi(false);
+        }
+        mob.goalSelector.removeAllGoals(goal -> true);
+        mob.targetSelector.removeAllGoals(goal -> true);
+        mob.setTarget(null);
+    }
+
     @SubscribeEvent
     public static void onJoin(EntityJoinLevelEvent event) {
         Entity entity = event.getEntity();
+        if (!event.getLevel().isClientSide && entity instanceof Mob group && group.getPersistentData().contains(STACK)) {
+            // Les comportements sont recréés à chaque chargement du monstre : on les retire à nouveau.
+            idle(group);
+        }
         if (event.getLevel().isClientSide || !(entity instanceof Mob mob)
                 || !mob.getPersistentData().contains(HEALTH_MARK)) {
             return;
