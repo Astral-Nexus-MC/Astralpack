@@ -7,6 +7,12 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.storage.loot.LootParams;
+import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -42,8 +48,8 @@ import java.util.Set;
  *   <li>vie des monstres réglée par la console (marqué à l'initialisation, appliqué à l'entrée dans le monde, après
  *   que le jeu a fini d'initialiser le monstre : un slime, par exemple, règle lui-même sa vie) ;</li>
  *   <li>fusion des monstres des spawners posés avec la clé à molette : au lieu d'une foule d'entités, un seul monstre
- *   porte un nombre ({@code AstralStack}) affiché devant son nom ; il emporte tout le groupe en mourant (butin et
- *   expérience multipliés). Chaque spawner a sa population max ; les spawners à fusion du même monstre
+ *   porte un nombre ({@code AstralStack}) affiché devant son nom ; il emporte tout le groupe en mourant (butin tiré
+ *   pour chaque monstre à rendement réduit, expérience multipliée). Chaque spawner a sa population max ; les spawners à fusion du même monstre
  *   dont les zones se touchent partagent un groupe dont la limite est la somme de leurs populations max.</li>
  * </ul>
  */
@@ -59,6 +65,8 @@ public final class SpawnerEvents {
     /** Probabilité de rafale par cran de bonus de cadence, et taille de la rafale en multiples de la quantité. */
     private static final float BURST_CHANCE_PER_LEVEL = 0.10F;
     private static final int BURST_FACTOR = 5;
+    /** Part des autres monstres d'un groupe dont le butin est réellement tiré à sa mort. */
+    private static final double LOOT_EFFICIENCY = 0.5D;
     private static final Map<String, Set<BlockPos>> PENDING = new HashMap<>();
 
     private SpawnerEvents() {
@@ -294,35 +302,56 @@ public final class SpawnerEvents {
         }
     }
 
-    /** Un groupe qui meurt laisse le butin de tous ses monstres, regroupé en piles complètes (sauf l'équipement). */
+    /**
+     * Un groupe qui meurt laisse le butin d'un monstre (ce qu'il porte compris, jamais multiplié) plus un tirage
+     * indépendant de la table de butin du monstre pour une partie des autres : jamais de copie d'un objet, donc pas
+     * de duplication, et les objets rares restent rares. Les résultats sont regroupés en piles complètes.
+     */
     @SubscribeEvent
     public static void onDrops(LivingDropsEvent event) {
         int size = groupSize(event.getEntity());
-        if (size <= 1) {
+        if (size <= 1 || !(event.getEntity().level() instanceof ServerLevel level) || !(event.getEntity() instanceof Mob mob)) {
             return;
         }
-        List<ItemEntity> extra = new ArrayList<>();
-        for (ItemEntity drop : event.getDrops()) {
-            ItemStack stack = drop.getItem();
-            if (stack.getMaxStackSize() == 1) {
-                // Équipement (armure, arme, outil) : jamais multiplié, un seul exemplaire pour tout le groupe.
-                continue;
-            }
-            long total = (long) stack.getCount() * size;
-            int max = stack.getMaxStackSize();
-            int first = (int) Math.min(total, max);
-            stack.setCount(first);
-            drop.setItem(stack);
-            total -= first;
-            while (total > 0) {
-                int part = (int) Math.min(total, max);
-                ItemStack copy = stack.copy();
-                copy.setCount(part);
-                extra.add(new ItemEntity(drop.level(), drop.getX(), drop.getY(), drop.getZ(), copy));
-                total -= part;
+        LootTable table = level.getServer().getLootData().getLootTable(mob.getType().getDefaultLootTable());
+        DamageSource source = event.getSource();
+        LootParams.Builder builder = new LootParams.Builder(level)
+                .withParameter(LootContextParams.THIS_ENTITY, mob)
+                .withParameter(LootContextParams.ORIGIN, mob.position())
+                .withParameter(LootContextParams.DAMAGE_SOURCE, source)
+                .withOptionalParameter(LootContextParams.KILLER_ENTITY, source.getEntity())
+                .withOptionalParameter(LootContextParams.DIRECT_KILLER_ENTITY, source.getDirectEntity());
+        if (event.isRecentlyHit() && mob.getKillCredit() instanceof Player player) {
+            builder.withParameter(LootContextParams.LAST_DAMAGE_PLAYER, player).withLuck(player.getLuck());
+        }
+        LootParams params = builder.create(LootContextParamSets.ENTITY);
+        int rolls = (int) Math.floor((size - 1) * LOOT_EFFICIENCY);
+        List<ItemStack> total = new ArrayList<>();
+        for (int i = 0; i < rolls; i++) {
+            for (ItemStack rolled : table.getRandomItems(params)) {
+                boolean merged = false;
+                for (ItemStack known : total) {
+                    if (ItemStack.isSameItemSameTags(known, rolled) && known.getMaxStackSize() > 1) {
+                        known.grow(rolled.getCount());
+                        merged = true;
+                        break;
+                    }
+                }
+                if (!merged) {
+                    total.add(rolled.copy());
+                }
             }
         }
-        event.getDrops().addAll(extra);
+        for (ItemStack stack : total) {
+            int max = stack.getMaxStackSize();
+            int left = stack.getCount();
+            while (left > 0) {
+                ItemStack part = stack.copy();
+                part.setCount(Math.min(left, max));
+                left -= part.getCount();
+                event.getDrops().add(new ItemEntity(level, mob.getX(), mob.getY(), mob.getZ(), part));
+            }
+        }
     }
 
     private static int groupSize(Entity entity) {
