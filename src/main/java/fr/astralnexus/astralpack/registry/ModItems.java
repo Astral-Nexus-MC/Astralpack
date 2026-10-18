@@ -62,7 +62,7 @@ public class ModItems {
 
     /** Clé à molette : décroche un spawner à monstres sans le casser. */
     public static final RegistryObject<Item> SPAWNER_WRENCH = ITEMS.register("spawner_wrench",
-            () -> new SpawnerWrenchItem(new Item.Properties().stacksTo(1).durability(64)));
+            () -> new SpawnerWrenchItem(new Item.Properties().stacksTo(1).durability(10)));
 
     /** Spawner décroché : garde son monstre et ses réglages jusqu'à sa pose. */
     public static final RegistryObject<Item> MOVED_SPAWNER = ITEMS.register("moved_spawner",
