@@ -18,6 +18,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BaseSpawner;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.SpawnerBlockEntity;
+import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
@@ -41,7 +42,8 @@ import java.util.Set;
  *   que le jeu a fini d'initialiser le monstre : un slime, par exemple, règle lui-même sa vie) ;</li>
  *   <li>fusion des monstres des spawners posés avec la clé à molette : au lieu d'une foule d'entités, un seul monstre
  *   porte un nombre ({@code AstralStack}) affiché devant son nom ; il emporte tout le groupe en mourant (butin et
- *   expérience multipliés). La population max du spawner limite le total du groupe.</li>
+ *   expérience multipliés). Chaque spawner a sa population max ; les spawners à fusion du même monstre
+ *   dont les zones se touchent partagent un groupe dont la limite est la somme de leurs populations max.</li>
  * </ul>
  */
 @Mod.EventBusSubscriber(modid = Astralpack.MOD_ID)
@@ -104,11 +106,52 @@ public final class SpawnerEvents {
         }
     }
 
+    private static AABB zone(SpawnerBlockEntity spawner) {
+        return new AABB(spawner.getBlockPos()).inflate(Math.max(1, spawner.saveWithoutMetadata().getShort("SpawnRange")));
+    }
+
+    private static String entityId(SpawnerBlockEntity spawner) {
+        return spawner.saveWithoutMetadata().getCompound("SpawnData").getCompound("entity").getString("id");
+    }
+
+    /**
+     * Spawners à fusion du même monstre dont la zone touche celle de ce spawner (lui compris). Chacun apporte sa
+     * propre population max : le groupe commun peut atteindre leur somme.
+     */
+    private static List<SpawnerBlockEntity> sameKind(ServerLevel level, SpawnerBlockEntity spawner) {
+        AABB own = zone(spawner);
+        String id = entityId(spawner);
+        List<SpawnerBlockEntity> cluster = new ArrayList<>();
+        cluster.add(spawner);
+        // Zone de recherche : assez large pour toucher les spawners voisins (leur rayon est petit, 16 blocs au plus).
+        AABB search = own.inflate(16.0D);
+        for (int cx = (int) Math.floor(search.minX) >> 4; cx <= (int) Math.floor(search.maxX) >> 4; cx++) {
+            for (int cz = (int) Math.floor(search.minZ) >> 4; cz <= (int) Math.floor(search.maxZ) >> 4; cz++) {
+                LevelChunk chunk = level.getChunkSource().getChunkNow(cx, cz);
+                if (chunk == null) {
+                    continue;
+                }
+                for (BlockEntity entity : chunk.getBlockEntities().values()) {
+                    if (entity != spawner && entity instanceof SpawnerBlockEntity other && !other.isRemoved()
+                            && other.getPersistentData().getBoolean(STACKING) && zone(other).intersects(own)
+                            && entityId(other).equals(id)) {
+                        cluster.add(other);
+                    }
+                }
+            }
+        }
+        return cluster;
+    }
+
     private static void mergeNear(ServerLevel level, SpawnerBlockEntity spawner) {
         CompoundTag data = spawner.saveWithoutMetadata();
-        int limit = Math.max(1, data.getShort("MaxNearbyEntities"));
-        int range = Math.max(1, data.getShort("SpawnRange"));
-        AABB box = new AABB(spawner.getBlockPos()).inflate(range);
+        List<SpawnerBlockEntity> cluster = sameKind(level, spawner);
+        int limit = 0;
+        AABB box = zone(spawner);
+        for (SpawnerBlockEntity member : cluster) {
+            limit += Math.max(1, member.saveWithoutMetadata().getShort("MaxNearbyEntities"));
+            box = box.minmax(zone(member));
+        }
         List<Mob> mobs = level.getEntitiesOfClass(Mob.class, box, Entity::isAlive);
         Map<EntityType<?>, Mob> groups = new HashMap<>();
         Map<EntityType<?>, Integer> totals = new HashMap<>();
