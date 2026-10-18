@@ -9,6 +9,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
@@ -249,6 +250,13 @@ public final class SpawnerEvents {
     private static void idle(Mob mob) {
         if (mob.isNoAi()) {
             mob.setNoAi(false);
+        }
+        // Un groupe ne ramasse rien, et ce qu'il tient déjà (objet empilable ramassé) serait multiplié à sa mort.
+        mob.setCanPickUpLoot(false);
+        for (EquipmentSlot slot : new EquipmentSlot[] {EquipmentSlot.MAINHAND, EquipmentSlot.OFFHAND}) {
+            if (mob.getItemBySlot(slot).getMaxStackSize() > 1) {
+                mob.setItemSlot(slot, ItemStack.EMPTY);
+            }
         }
         mob.goalSelector.removeAllGoals(goal -> true);
         mob.targetSelector.removeAllGoals(goal -> true);
