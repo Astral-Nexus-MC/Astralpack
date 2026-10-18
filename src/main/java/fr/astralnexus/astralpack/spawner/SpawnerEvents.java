@@ -160,8 +160,13 @@ public final class SpawnerEvents {
             if (mob.getPersistentData().getBoolean(FRESH)) {
                 fresh.add(mob);
             } else if (mob.getPersistentData().contains(STACK)) {
-                groups.putIfAbsent(mob.getType(), mob);
                 totals.merge(mob.getType(), mob.getPersistentData().getInt(STACK), Integer::sum);
+                Mob group = groups.putIfAbsent(mob.getType(), mob);
+                if (group != null) {
+                    // Deux groupes du même monstre dans la zone commune (ex. un par spawner) : le second rejoint le premier.
+                    setStack(group, group.getPersistentData().getInt(STACK) + mob.getPersistentData().getInt(STACK));
+                    mob.discard();
+                }
             }
         }
         for (Mob mob : fresh) {
