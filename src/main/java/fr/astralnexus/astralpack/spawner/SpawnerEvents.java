@@ -23,7 +23,6 @@ import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.living.LivingExperienceDropEvent;
 import net.minecraftforge.event.entity.living.MobSpawnEvent;
-import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -54,27 +53,6 @@ public final class SpawnerEvents {
     private static final Map<String, Set<BlockPos>> PENDING = new HashMap<>();
 
     private SpawnerEvents() {
-    }
-
-    /**
-     * Rayon d'apparition réduit à 1 : le jeu tire la hauteur d'apparition entre un bloc sous le spawner et un bloc
-     * au-dessus ; les monstres qui tomberaient sous le spawner sont refusés (la tentative est perdue), ils n'apparaissent
-     * donc qu'à sa hauteur ou au-dessus.
-     */
-    @SubscribeEvent
-    public static void onPositionCheck(MobSpawnEvent.PositionCheck event) {
-        if (event.getSpawnType() != MobSpawnType.SPAWNER) {
-            return;
-        }
-        BaseSpawner baseSpawner = event.getSpawner();
-        BlockEntity entity = baseSpawner == null ? null : baseSpawner.getSpawnerBlockEntity();
-        if (!(entity instanceof SpawnerBlockEntity spawner)
-                || spawner.saveWithoutMetadata().getShort("SpawnRange") > 1) {
-            return;
-        }
-        if (event.getEntity().getBlockY() < spawner.getBlockPos().getY()) {
-            event.setResult(Event.Result.DENY);
-        }
     }
 
     @SubscribeEvent
