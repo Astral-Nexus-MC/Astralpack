@@ -56,5 +56,6 @@
   "item.astralpack.spawner_wrench.tooltip": "Clic droit sur un spawner à monstres pour le décrocher",
   "item.astralpack.moved_spawner": "Spawner décroché",
   "item.astralpack.moved_spawner.mob": "Monstre : %s",
-  "item.astralpack.moved_spawner.empty": "aucun"
+  "item.astralpack.moved_spawner.empty": "aucun",
+  "item.astralpack.spawner_wrench.unrepairable": "Irréparable : 10 utilisations"
 }

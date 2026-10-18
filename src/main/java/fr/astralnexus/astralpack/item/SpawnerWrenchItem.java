@@ -68,8 +68,30 @@ public class SpawnerWrenchItem extends Item {
         return InteractionResult.CONSUME;
     }
 
+    /** Irréparable : ni enclume, ni meule, ni Raccommodage ; elle se casse après ses dix utilisations. */
+    @Override
+    public boolean isRepairable(ItemStack stack) {
+        return false;
+    }
+
+    @Override
+    public boolean isEnchantable(ItemStack stack) {
+        return false;
+    }
+
+    @Override
+    public boolean isBookEnchantable(ItemStack stack, ItemStack book) {
+        return false;
+    }
+
+    @Override
+    public boolean canApplyAtEnchantingTable(ItemStack stack, net.minecraft.world.item.enchantment.Enchantment enchantment) {
+        return false;
+    }
+
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flag) {
         tooltip.add(Component.translatable("item.astralpack.spawner_wrench.tooltip").withStyle(ChatFormatting.GRAY));
+        tooltip.add(Component.translatable("item.astralpack.spawner_wrench.unrepairable").withStyle(ChatFormatting.DARK_GRAY));
     }
 }

@@ -56,5 +56,6 @@
   "item.astralpack.spawner_wrench.tooltip": "Right-click a monster spawner to detach it",
   "item.astralpack.moved_spawner": "Detached Spawner",
   "item.astralpack.moved_spawner.mob": "Mob: %s",
-  "item.astralpack.moved_spawner.empty": "none"
+  "item.astralpack.moved_spawner.empty": "none",
+  "item.astralpack.spawner_wrench.unrepairable": "Cannot be repaired: 10 uses"
 }
