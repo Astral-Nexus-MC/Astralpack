@@ -76,6 +76,40 @@ public enum SpawnerStat {
         return item == null ? Component.literal(spec) : item.getDescription();
     }
 
+    /** Un objet de bonus ({@code true}) ou de malus : l'identifiant, ou {@code #étiquette} pour une catégorie d'objets. */
+    public String spec(boolean bonus) {
+        return bonus ? this.bonusItem : this.malusItem;
+    }
+
+    public boolean matchesItem(ItemStack stack, boolean bonus) {
+        return matches(stack, spec(bonus));
+    }
+
+    public Component itemName(boolean bonus) {
+        return name(spec(bonus));
+    }
+
+    /** Un exemplaire de l'objet demandé (le premier de l'étiquette pour une catégorie), pour le créatif. */
+    public ItemStack sampleStack(boolean bonus) {
+        String spec = spec(bonus);
+        if (spec.startsWith("#")) {
+            TagKey<Item> tag = TagKey.create(Registries.ITEM, new ResourceLocation(spec.substring(1)));
+            return ForgeRegistries.ITEMS.tags().getTag(tag).stream().findFirst().map(ItemStack::new).orElse(ItemStack.EMPTY);
+        }
+        Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(spec));
+        return item == null ? ItemStack.EMPTY : new ItemStack(item);
+    }
+
+    /** Le réglage qui porte cet identifiant ({@link #id()}), ou {@code null}. */
+    public static SpawnerStat byId(String id) {
+        for (SpawnerStat stat : values()) {
+            if (stat.id.equals(id)) {
+                return stat;
+            }
+        }
+        return null;
+    }
+
     /** Nom de l'objet (ou de la catégorie d'objets) de bonus. */
     public Component bonusName() {
         return name(this.bonusItem);

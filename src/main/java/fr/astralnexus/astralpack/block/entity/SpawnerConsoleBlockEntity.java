@@ -5,6 +5,12 @@ import fr.astralnexus.astralpack.registry.ModBlockEntities;
 import fr.astralnexus.astralpack.spawner.SpawnerControl;
 import fr.astralnexus.astralpack.spawner.SpawnerStat;
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.StringTag;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -102,6 +108,108 @@ public class SpawnerConsoleBlockEntity extends BlockEntity {
                 Component.translatable(stat.translationKey()), signed(next), count),
                 bonus[0] ? Notify.Kind.SUCCESS : Notify.Kind.INFO);
         return true;
+    }
+
+    /** Clic sur un bouton de l'écran de la console : prend l'objet dans le sac (ou un exemplaire en créatif) et monte ou descend le réglage d'un cran. */
+    public void tryUpgradeFromScreen(ServerPlayer player, SpawnerStat stat, boolean bonus) {
+        ItemStack found = null;
+        Inventory inventory = player.getInventory();
+        for (ItemStack stack : inventory.items) {
+            if (stat.matchesItem(stack, bonus)) {
+                found = stack;
+                break;
+            }
+        }
+        if (found == null && stat.matchesItem(player.getOffhandItem(), bonus)) {
+            found = player.getOffhandItem();
+        }
+        if (found == null && player.getAbilities().instabuild) {
+            found = stat.sampleStack(bonus);
+        }
+        if (found == null || found.isEmpty()) {
+            Notify.send(player, Component.translatable("message.astralpack.spawner_console.missing", stat.itemName(bonus)), Notify.Kind.WARNING);
+            return;
+        }
+        this.tryUpgrade(player, found);
+    }
+
+    private static String json(Component component) {
+        return Component.Serializer.toJson(component);
+    }
+
+    private Component valueOf(SpawnerStat stat, List<SpawnerBlockEntity> spawners) {
+        String prefix = "message.astralpack.spawner_console.value.";
+        int level = this.level(stat);
+        if (stat == SpawnerStat.HEALTH) {
+            if (level == 0) {
+                return Component.translatable(prefix + "health.same");
+            }
+            if (level <= -SpawnerStat.MAX_LEVEL) {
+                return Component.translatable(prefix + "health.min");
+            }
+            double factor = SpawnerStat.health(1.0D, level);
+            return Component.translatable(prefix + "health", factor == Math.floor(factor)
+                    ? Integer.toString((int) factor) : String.format(java.util.Locale.ROOT, "%.1f", factor));
+        }
+        if (spawners.isEmpty()) {
+            return Component.translatable(prefix + "none");
+        }
+        SpawnerBlockEntity first = spawners.get(0);
+        String[] keys = stat.keys();
+        StringBuilder before = new StringBuilder();
+        StringBuilder after = new StringBuilder();
+        for (int i = 0; i < keys.length; i++) {
+            int base = SpawnerControl.baseValue(first, keys[i]);
+            before.append(i > 0 ? "-" : "").append(base);
+            after.append(i > 0 ? "-" : "").append(stat.apply(base, level));
+        }
+        return level == 0 ? Component.translatable(prefix + stat.id() + ".same", before.toString())
+                : Component.translatable(prefix + stat.id(), before.toString(), after.toString());
+    }
+
+    /** Les données de l'écran de la console (format de {@code FordixConsoles}, de Fordix) : niveaux, objets demandés, valeurs, monstres des spawners. */
+    public CompoundTag screenData() {
+        CompoundTag tag = new CompoundTag();
+        tag.putString("kind", fr.astralnexus.astralpack.network.ConsoleBridge.KIND);
+        tag.putIntArray("pos", new int[]{this.worldPosition.getX(), this.worldPosition.getY(), this.worldPosition.getZ()});
+        List<SpawnerBlockEntity> spawners = this.level == null ? List.of() : SpawnerControl.spawnersInChunk(this.level, this.worldPosition);
+        ChunkPos chunk = new ChunkPos(this.worldPosition);
+        tag.putString("title", json(Component.translatable("block.astralpack.spawner_console")));
+        tag.putString("subtitle", json(Component.translatable("message.astralpack.spawner_console.subtitle", chunk.x, chunk.z)));
+        tag.putString("pill", json(spawners.isEmpty() ? Component.translatable("message.astralpack.spawner_console.pill_none")
+                : Component.translatable("message.astralpack.spawner_console.pill", spawners.size())));
+        tag.putString("footer", json(Component.translatable("message.astralpack.spawner_console.footer")));
+        tag.putInt("max", SpawnerStat.MAX_LEVEL);
+        ListTag chips = new ListTag();
+        List<String> seen = new java.util.ArrayList<>();
+        for (SpawnerBlockEntity spawner : spawners) {
+            String id = spawner.saveWithoutMetadata().getCompound("SpawnData").getCompound("entity").getString("id");
+            if (!id.isEmpty() && !seen.contains(id) && seen.size() < 8) {
+                seen.add(id);
+                chips.add(StringTag.valueOf(json(EntityType.byString(id).map(EntityType::getDescription).orElse(Component.literal(id)))));
+            }
+        }
+        tag.put("chips", chips);
+        ListTag rows = new ListTag();
+        for (SpawnerStat stat : SpawnerStat.values()) {
+            CompoundTag row = new CompoundTag();
+            row.putString("id", stat.id());
+            row.putString("name", json(Component.translatable(stat.translationKey())));
+            row.putString("effect", json(Component.translatable(stat.translationKey() + ".effect")));
+            row.putInt("level", this.level(stat));
+            row.putString("value", json(valueOf(stat, spawners)));
+            CompoundTag malus = new CompoundTag();
+            malus.putString("item", stat.spec(false));
+            malus.putString("name", json(stat.malusName()));
+            CompoundTag bonus = new CompoundTag();
+            bonus.putString("item", stat.spec(true));
+            bonus.putString("name", json(stat.bonusName()));
+            row.put("malus", malus);
+            row.put("bonus", bonus);
+            rows.add(row);
+        }
+        tag.put("rows", rows);
+        return tag;
     }
 
     /** Résumé dans le chat : niveaux, objets demandés, nombre de spawners sous contrôle. */

@@ -35,6 +35,15 @@ public final class SpawnerControl {
         return found;
     }
 
+    /** Valeur d'origine d'une clé du spawner : celle d'avant la console si elle a déjà touché ce spawner, sinon sa valeur actuelle. */
+    public static int baseValue(SpawnerBlockEntity spawner, String key) {
+        CompoundTag persistent = spawner.getPersistentData();
+        if (persistent.contains(BASE)) {
+            return persistent.getCompound(BASE).getInt(key);
+        }
+        return spawner.saveWithoutMetadata().getInt(key);
+    }
+
     /** Console du chunk qui contient cette position, ou {@code null}. */
     public static fr.astralnexus.astralpack.block.entity.SpawnerConsoleBlockEntity findConsole(Level level, BlockPos pos) {
         for (BlockEntity entity : level.getChunkAt(pos).getBlockEntities().values()) {

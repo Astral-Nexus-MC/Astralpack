@@ -79,7 +79,8 @@ public class SpawnerConsoleBlock extends HorizontalDirectionalBlock implements E
             return InteractionResult.PASS;
         }
         if (held.isEmpty()) {
-            if (!level.isClientSide) {
+            if (!level.isClientSide && !(player instanceof net.minecraft.server.level.ServerPlayer serverPlayer
+                    && fr.astralnexus.astralpack.network.ConsoleBridge.open(serverPlayer, console))) {
                 console.sendStatus(player);
             }
             return InteractionResult.sidedSuccess(level.isClientSide);
